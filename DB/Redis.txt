@@ -1,0 +1,19 @@
+Redis
+
+- in-memory 방식의 No-SQL 기반 DBMS
+    디스크, SSD 저장소에 저장하는 일반 DBMS 와 달리 in-memory 방식으로 서버의 주 메모리에 저장
+- 속도 빠름
+- 영속성
+    메모리 활용하지만 데이터의 영속적 보존 가능하다. 스냅샷 기능 제공하여 메모리 내용을 *.rdb 파일로 저장
+    시점 데이터 복구 가능
+    스냅샷을 통해 디스크에 백업하는 기능 사용 가능
+    명령어로 삭제
+    expire 가 없으면 데이터가 삭제되지 않음
+- key 와 Value(키-값) 구조의 데이터를 저장, 관리
+- Single-Thread 기반
+
+단점
+- 장애 발생시 데이터 유실
+
+지원 데이터
+String, Hash, List, Set, Sorted Set, Bitmaps, streams 등
