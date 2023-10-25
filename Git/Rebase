@@ -1,0 +1,28 @@
+여러 브랜치를 사용할 때 브랜치를 하나로 합치는 방법에는 merge, rebase 가 있다.
+지금까지 주로 사용했던 것은 merge
+
+예시)
+
+master : A - B - C - D - E
+Dev :                  - F - G (master 에서 나온 브랜치)
+
+1. merge
+
+master :
+                  - F - G -
+A - B - C - D - E     -    'H'
+
+F, G 커밋이 병합되서 병합하는 커밋로그가 master에 Head로 새로 추가됨
+
+2. rebase
+
+                  - F - G -
+A - B - C - D - E           'H'
+
+F, G 를 가지고 있는 Dev 브랜치를 base로 커밋을 재정렬한다.
+
+#주의사항
+
+master 에서 rebase 는 조심해야 한다. rebase 를 하게 되면 커밋, 정렬이 새로 되어 기존의 커밋트리가 달라지기 때문에
+(해시값이 변경)
+rebase를 하기전에 master 에서 따온 브랜치를 rebase 한 master에 병합시 예전과 다른 master 이기 떄문에 충돌이 많이 일어날 수 있음
