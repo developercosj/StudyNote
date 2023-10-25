@@ -9,10 +9,12 @@ Dev :                  - F - G (master 에서 나온 브랜치)
 1. merge
 
 master :
-                  - F - G -
+              - F - G -
 A - B - C - D - E     -    'H'
 
 F, G 커밋이 병합되서 병합하는 커밋로그가 master에 Head로 새로 추가됨
+E, F, G 가 함께 공통 조상인 H를 만듬
+
 
 2. rebase
 
@@ -20,9 +22,23 @@ F, G 커밋이 병합되서 병합하는 커밋로그가 master에 Head로 새�
 A - B - C - D - E           'H'
 
 F, G 를 가지고 있는 Dev 브랜치를 base로 커밋을 재정렬한다.
+E 에서 변경된 사항을 Patch로 만들고 이를 다시 F, G 에 적용 (rebase)
+두 브랜치가 나뉘기 전인 공통 커밋인 D 로 이동하고 그 커밋부터 지금 Checkout한 브랜치가 가리키는 커밋까지 diff를 차례로 만들어 임시 저장해 놓고
+Rebase 할 브랜치인 Dev가 master가 가리키는 커밋을 가리키게 하고 아까저장해놓았던 변경사항을 차례대로 적용한다.
+$ git checkout Dev
+$ git Rebase Master
+그리고 나서 master 브랜치를 Fast-forward 시킨다.
+$ git checkout master
+$ git merge Dev
 
-#주의사항
-
-master 에서 rebase 는 조심해야 한다. rebase 를 하게 되면 커밋, 정렬이 새로 되어 기존의 커밋트리가 달라지기 때문에
+#참고 사항
+- merge 와 rebase 모두 합치는 것 최종결과물은 같다. 하지만 rebase 가 더 깔끔한 히스토리를 만든다.
+- rebase는 브랜치의 변경사항을 순서대로 다른 브랜치에 적용하면서 합치고, merge 의 경우는 두 브랜치의 최종결과만을 가지고 합친다.
+- master 에서 rebase 는 조심해야 한다. rebase 를 하게 되면 커밋, 정렬이 새로 되어 기존의 커밋트리가 달라지기 때문에
 (해시값이 변경)
 rebase를 하기전에 master 에서 따온 브랜치를 rebase 한 master에 병합시 예전과 다른 master 이기 떄문에 충돌이 많이 일어날 수 있음
+- 이미 공개 저장소에 Push 한 커밋을 Rebase 하지 마라!!! (중요)
+    Rebase 는 기존의 커밋을 그대로 사용하는 것이 아닌 내용은 같으나 다른 커밋을 새로 만듬
+    다른 사람 A가 커밋을 pull 해서 작업할 때 내가 그 커밋을 git rebase 로 바꿔 push 를 할 시에 A는 다시 merge 해야하며 그 merge 한것을 내것으로 pull 한다면 엉망이됨
+- 로컬 브랜치에서 작업할 때는 히스토리를 정리하기 위해서 Rebase 를 할 수도 있지만, 리모트 등 어딘가에 Push 한 커밋에 대해서는 절대 Rebase 하지 말아야 한다.
+
