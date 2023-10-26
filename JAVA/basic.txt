@@ -12,3 +12,15 @@ StringBuilder stringBuilder = new StringBuilder();
 stringBuilder.append("문자열 예시A").append("문자열 예시B");
 String str = stringBuilder.toString();
 
+
+2. Serializable
+
+- Serializable 을 구현(implements)하는 이유
+객체를 직력화 할 수 있다. 서버 사이의 데이터 전송이 가능해진다. 원격지 서버에 데이터를 전송하거나
+파일로 객체를 저장할 경우 이 인터페이스를 구현해야 한다.
+- 구현해야 할 메소드는 없음
+- 직렬화 : 자바 시스템 내부에서 사용되는 객체 또는 데이터를 외부의 자바 시스템에서 사용할 수 있도록 바이트 형태로 데이터 변환 AND 변환된 데이터를
+ 다시 객체로 변환하는 기술
+ (JVM 의 메모리에 상주되 있는 객체 데이터를 -> 바이트 형태로 변환하는 기술 및 직렬화된 바이트 형태의 데이터를 객체로 변환 기술)
+- serialVersionUID : 서버가 해당 객체가 같은지 다른지 구분 가능
+- 부모클래스가 직렬화 구현하지 않았다면 자식 클래스 직력화 시 부모클래스 변수는 직렬화 대상 제외
