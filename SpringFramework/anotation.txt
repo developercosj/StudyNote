@@ -18,6 +18,21 @@
     }
 
 3. @RestController
-@Controller 와는 다르게 @RestController는 리턴값에 자동으로 @ResponseBodt가 붙게됨
+@Controller 와는 다르게 @RestController는 리턴값에 자동으로 @ResponseBody가 붙게됨
 별도 어노테이션 없이 HTTP 응답데이터에 자바 객체가 매핑되어 전달된다.
 즉 @Controller + @ResponseBody 어노테이션의 역할
+
+4. @RequestParam vs @RequestBody
+@RequestParam 으로 데이터를 받을때는 데이터를 저장하는 이름으로 메서드의 변수명을 설정해야 한다.
+url 상에서 데이터를 찾는다.
+객체 자동 생성 불가능
+    public String person(@RequestBody Person person)
+form 태그 사용하여 url 상에서 데이터 전달시 이용
+*Json 형식 데이터 전달시 데이터는 Body에 포함하여 전달하기 때문에 @RequestParam 으로는 받을 수 없다.
+
+@RequestBody 로 데이터를 받을 때는 String 형태로 받아서 메서드의 변수명이 상관 없음
+객체 자동 생성가능
+    public String person(@RequestBody Person person)
+
+
+
