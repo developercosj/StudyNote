@@ -1,0 +1,23 @@
+클라이언트 -> 서버 (Request 요청)
+서버 -> 클라이언트 (Response 응답)
+비동기 통신을 위해 요청 메시지를 Body 에 담아서 전달
+@RequestBody 어노테이션과 @ResponseBody 어노테이션이 각각 HTTp 요청 바디를 -> 자바 객체로 변환 -> HTTP 응답 바디로 변환
+
+
+1. @RequestBody : 요청본문
+- xml, json 기반의 메시지를 사용하는 요청의 경우 사용
+- http 요청의 바디내용을 통째로 자바객체로 변환해서 전달
+    예시) @RequestMapping(value= "")
+    public String ajaxRequest(@RequestBody String param){}
+
+2. @ResponseBody : 응답본문
+- 자바 객체를 http 요청의 바디내용으로 매핑하여 클라이언트로 전송
+예시 ) @ResponseBody
+    @RequestMapping(value= "/RequestTest")
+    public String ajaxRequest() {}
+    }
+
+3. @RestController
+@Controller 와는 다르게 @RestController는 리턴값에 자동으로 @ResponseBodt가 붙게됨
+별도 어노테이션 없이 HTTP 응답데이터에 자바 객체가 매핑되어 전달된다.
+즉 @Controller + @ResponseBody 어노테이션의 역할
