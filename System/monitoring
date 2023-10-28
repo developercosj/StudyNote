@@ -1,0 +1,32 @@
+시스템 성능 개선시 병목지점 파악 필요
+
+1. 프로파일링 툴
+- 개발자용 툴
+- 느린 메서드, 클래스 찾기
+ex) JProbe, JProfiler, YourKit,
+ex) TPTP
+- 종류
+    응답 시간 프로파일링(CPU 시간, 대기시간 측정)
+    메모리 프로파일링(GC 대상 부분 찾기, memory leak 부분 찾기)
+
+2. APM(Application Performance Monitoring) 툴
+운영 환경용 툴
+시스템 모니터링, 운영
+
+
+
+3. System 클래스 사용
+System/TimeMeasure.java 파일 참고
+
+- System.currentTimeMillis
+static long currentTimeMillis() : 현재 시간을 ms로 리턴(1/1,000초)
+결과값은 ms
+1970년 1월 1일부터 현재까지의 시간을 long 타입으로 리턴
+
+
+- System.nanoTime
+
+
+4. 메서드 성능 측정 라이브러리 종류
+JMH, Caliper, JUnitPerf, JUnitBench, ContiPerf
+
