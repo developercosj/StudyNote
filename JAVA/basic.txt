@@ -186,6 +186,9 @@ String str = stringBuilder.toString();
             this.code = code;
         }
     }
+- enum 객체로 값 가져오거나 valueOf() 메소드 사용해서 가져온다.
+    StatusEnum se1 = StatusEnum.OK;
+    StatusEnum se2 = StatusEnum.valueOf("OK");
 
 
 
