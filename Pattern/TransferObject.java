@@ -4,7 +4,7 @@
 // 아무나 마음대로 수정을 못하도록 하는 방법을 사용할 수 있다.
 // getExamName() 처럼 examName 값이 null 값일 때 null 리턴을 하지 않고 길이가 0인 String 값 리턴하기 때문에 null 체크가 필요없어진다.
 
-public class ExamTo implements Serializable{
+public class TransferObject implements Serializable{
 
     private String examName;
     private String examId;
@@ -14,7 +14,7 @@ public class ExamTo implements Serializable{
         super();
     }
 
-    public ExamTo(String examName, String examId, String examAddress) {
+    public TransferObject(String examName, String examId, String examAddress) {
         super();
         this.examName = examName;
         this.examId = examId;
