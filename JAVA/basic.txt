@@ -2,7 +2,7 @@
 
 - StringBuilder 를 사용하는 이유
 
-자바는 String 객체 변경이 불가능하기 때문에 문자열 결합시 "A" + "B" 시 "C" 로 되고 이전 문자열은 가비지 컬렉터로 들어간다.
+**자바는 String 객체 변경이 불가능하기 때문에 문자열 결합시 "A" + "B" 시 "C" 로 되고 이전 문자열은 가비지 컬렉터로 들어간다. 응답시간도 길다.
 문자열을 많이 결합하게 되면 메모리가 많이 쓰게 된다.
 String 객체끼리 더하는 방법은 메모리 할당과 해제가 되며 연산이 많아지면 성능이 저하된다.
 따라서 String은 변경 불가능한 문자열을 생성하지만 StringBuilder는 변경 가능한 문자열을 만든다.
@@ -11,6 +11,25 @@ String 객체끼리 더하는 방법은 메모리 할당과 해제가 되며 연
 StringBuilder stringBuilder = new StringBuilder();
 stringBuilder.append("문자열 예시A").append("문자열 예시B");
 String str = stringBuilder.toString();
+
+- StringBuffer 클래스와 StringBuilder 클래스 차이
+StringBuffer는 ThreadSafe : 여러개의 스레드에서 하나의 StringBuffer 객체를 처리해도 괜찮다.
+                            Static 선언한 문자열 변경시 또는 Singleton 선언된 클래스에 선언된 문자열일 경우 사용
+하지만 StringBuilder는 단일 스레드에서만 안전성이 보장된다. (여러개의 스레드에서 하나의 StringBuilder 객체 처리 에러발생)
+
+- 생성자의 4가지 종류
+StringBuffer() : 기본 객체 생성 (값 x) 16 char
+StringBuffer(CharSequence seq) : CharSequence는 인터페이스이며 CharSequence를 구현한 클래스는 CharBuffer, String, StringBuffer, StringBuilder 가 있다.
+                                 StringBuffer나 StringBuilder 로 생성한 객체를 전달할 때 사용한다.
+                                 예시 JAVA/StringBufferTest.java 파일 참고
+StringBuffer(int capacity) : capacity 에 지정한 만큼의 용량을 갖는 StringBuffer 생성
+StringBuffer(String str) : str의 값을 갖는 StringBuffer를 생성한다.
+
+- 메서드 종류 : append(), insert()
+- StringIndexOutOfBoundsException : insert() 메서드를 사용할 때 index 값을 지정해주는데 만약 이 값까지 할당이 안되어 있으면 발생하니 주의 필요
+- 배치로 작성시 반복문 안에서 String 결합이 많이 발생할 수 있기 때문에 StringBuffer, StringBuilder 사용 고려하기
+- 스트링객체 생성하여 새로만들어진 String 객체가 아닌 결합한 String 객체들은 GC 에 의해 사라지는 과정이 있으나 StringBuffer, StringBuilder는 객체를 한번만 만들기 때문에 메모리 사용량이 많은 차이가 나게 된다.
+- JDK 5.0 이상부터는 컴파일러에서 자동으로 StringBuilder 로 변환시켜 줌
 
 
 2. Serializable
