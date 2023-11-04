@@ -1,0 +1,31 @@
+*'[]'는 인터페이스
+1. Collection
+- [Set] : 중복 허용 x
+    - [SortedSet] : 오름차순을 갖는 Set 인터페이스
+    - Set 을 구현한 클래스 : HashSet, TreeSet, LinkedHashSet
+        - HashSet : 데이터를 해쉬 테이블에 담는 클래스 순서 보장 x
+        - TreeSet : red-black 트리에 데이터를 담는다. 데이터를 담으면서 정렬을 동시에 진행
+            *red-black 트리 : 이진 트리 구조
+        - LinkedHashSet : 해쉬 테이블에 데이터를 담으며 저장된 순서에 따라 결정
+- [List] : 순서가 있는 집합 처리, 중복 허용,
+    - List를 구현한 클래스 : ArrayList, LinkedList, Vector
+        - Vector : 객체 생성시 크기 지정 필요 없는 배열 클래스
+        - ArrayList : Vector 와 비슷하지만 동기화 처리가 안됨
+        - LinkedList : ArrayList와 비슷하지만 Queue 인터페이스를 구현해서 FIFO
+- [Queue] : FIFO
+    - 데이터를 담아 두었다가 먼저 들어온 데이터 부터 처리
+    - Queue 인터페이스를 구현한 클래스 : LinkedList, PriorityQueue, concurrent 패키지 내부 클래스 (컨커런트 큐 클래스)
+        - PriorityQueue : 큐에 추가된 순서가 아니라 먼저 생성된 객체가 먼저 나오는 클래스
+        - LinkedBlockingQueue : 저장할 데이터의 크기를 선택적으로 정할 수 있음
+        - ArrayBlockingQueue : 데이터의 크기가 정해져 있는 큐
+        - PriorityBlockingQueue : 저장되는 데이터의 크기가 정해져있지 않음 객체 생성 순서에 따라 저장
+        - DelayQueue : 대기 시간 지정하여 처리하는 큐
+        - SynchronousQueue: put() 메서드 호출시 다른 스레드에서 take() 메서드가 호출될 때까지 대가하여 동기화 처리
+2. Map
+- [SortedMap] : 키를 오름차순으로 정렬
+- Map 을 구현한 클래스 : HashMap, TreeMap, LinkedHashMap, HashTable
+    - Hashtable : 데이터를 해쉬 테이블에 담는 클래스 내부에서 관리하는 해쉬 테이블 (객체 동기화 가능)
+    - HashMap : 데이터를 해쉬 테이블에 담는 클래스 (Hashtable 과의 차이는 null 값 허용, 동기화 x)
+    - TreeMap : red-black 트리에 데이터를 저장
+    - LinkedHashMap : HashMap 과 비슷하나 이중 연결 리스트 방식으로 데이터 저장)
+
