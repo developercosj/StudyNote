@@ -41,3 +41,12 @@
 
     *API 설계 측면에서는 타입 파라미터를 이용하는 것보다 명시적으로 사용자 객체를 지정하는 것이 더 좋다. (직관적)
 
+
+3. Controller 메서드의 리턴 타입 정리
+
+- String : jsp 사용 시 뷰로 반환할 jsp 파일의 이름
+- void : 호출하는 URL 과 동일한 이름의 jsp
+- VO, DTO, Map등의 객체 : json 타입의 데이터를 생성하여 반환
+- ResponseEntity : Http 헤더 정보, 내용을 가공하여 반환
+- Model, ModelAndView : Model로 데이터를 반환하며 View를 통해 어떤 화면으로 반환할 것인지 설정
+- HttpHeaders : 응답에 내용없이 HTTP 헤더 메시지만 전달
