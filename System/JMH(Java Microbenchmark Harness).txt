@@ -1,0 +1,63 @@
+JMH
+
+1. 기본
+- 성능측정을 위해 사용하는 JMH 도구
+- JMH 에서 지원하는 어노테이션 사용하여 작성
+
+2. Anotation
+
+    1) @State(Scope.Thread)
+        - 벤치마크에 사용되어지는 Argument 의 상태 지정
+        - SCOPE
+            Thread : Thread 별로 인스턴스 생성
+            Benchmark : 동일 테스트 내 모든 Thread에서 인스턴를 공유(Multi-Threading)
+            Group : Thread 그룹마다 Instance를 생성
+        - 주의사항
+            반드시 public 클래스로 생성(중첩 클래스인 경우 Static 선언)
+            Argument가 없는 생성자 1개 필요
+
+    2) @BenchmarkMode(Mode.AverageTime)
+        - 벤치마크 모드 설정
+            Throughput : 초당 작업수 측정, 기본값
+            AverageTime : 작업 수행 평균 시간 측정
+            SampleTime : 최대, 최소 시간등 작업 수행 시간 측정
+            SingleShotTime : 단일 작업 수행 소요 시간 측정 (JVM 사용 x Cold Start 측정 가능)
+            All : 위 모든 시간 측정
+        - 클래스에 한번에 줄 수도 있고 메서드 별로 따로 설정도 가능
+
+    3) @OutputTimeUnit(TimeUnit.MINUTES)
+        - 벤치마크 결과 출력시 시간의 단위를 설정 가능
+        - 설정 가능한 단위(SCOPE)
+            NANOSECONDS(디폴트값), MICROSECONDS, MILLISECONDS, SECONDS, MINUTES, HOURS, DAYS
+        - 클래스에 한번에 줄 수도 있고 메서드 별로 따로 설정도 가능
+
+    4) @Setup
+        - 메소드에 적용 가능
+        - 벤치마크가 시작 되기전에 JMH에게 미리 설정할 Object 를 알려줌(Junit 의 @Before 같은 역할)
+        - 벤치마크 시간에 포함되지 않은 메소드
+        - Scope (Level.Trial, Level.Iteration 등으로 사용)
+            Trial : 벤치마크 실행시 마다 한번씩 호출
+            Iteration : 벤치마크 반복할 때마다 한번씩 호출
+            Invocation : 벤치마크를 메소드 호출할 때마다 호출
+
+    5) @TearDown
+        - 메소드에 적용 가능
+        - 벤치마크가 종료된 이후 사용 (Junit의 @After 와 같은 역할)
+        - 벤치마크 시간에 포함되지 않은 메소드
+        - @Setup과 Scope 동일
+
+
+    6) @Benchmark
+
+
+3. Dead Code
+- 메소드에서 계산된 결과를 반환하거나 사용되지 않을 때 코드를 제거를 함
+이때 이 코드는 정확한 시간 벤치마킹이 되지 않기 때문에 이런 코드를 작성하지 않도록 해야함
+- 예) 연산을 하여 변수에 저장은 했으나 그 변수를 사용하지 않는 경우등
+- 메소드가 결과 값을 Return 하도록 작성하기
+- 계산된 값을 Black Hole 함수를 통해 전달하기
+
+
+4. Black Hole
+- 벤치마크 코드에서 계산된 값을 반환하지 않고 JVM 에서 사용하는것처럼 인식
+- 3번의 Dead Code 로 되지 않기 위해 blackhole.consum(변수등); 메소드를 사용하여 JVM 에 계산된 값을 사용한 것처럼 하여 측정을 가능하게 함
