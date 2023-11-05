@@ -209,6 +209,27 @@ StringBuffer(String str) : str의 값을 갖는 StringBuffer를 생성한다.
     StatusEnum se1 = StatusEnum.OK;
     StatusEnum se2 = StatusEnum.valueOf("OK");
 
+5. Static
+- Static 선언 변수는 클래스 변수
+- Static 초기화 블록
+    1) 형태 :
+    static {
+        ...
+    }
+    2) static 블록은 클래스 최초 로딩 시 수행되며 생성자와 상관없이 실행된다. 여러번 사용할 수 있으나 마지막 저장된 값이 된다.
+       static 블록은 순차적으로 읽혀진다.
+- GC의 대상이 아님
+- 사용빈도가 높으며 변하지 않는 값은 final static 으로 선언하여 변경에 대비
+- 한번만 올라간 뒤에 변하지 않는 템플릿등을 읽어 오는 부분에서 걸리는 시간이 길 때 static 으로 만들어 놓으면 서버의 CPU에 부하를 줄일 수 있다.
+    ex) Velocity 사용시
+- 설정 파일 정보도 static 관리 시 성능 향상 가능
+- 변경이 되는 객체를 static 으로 선언시 여러 스레드에서 접근과 값 대입이 여러번 이루어지면 문제가 발생한다.
+- Collection 객체를 static 으로 발생시 GC 대상이 되지 않아서 데이터가 객체에 계속해서 쌓이다가 메모리를 초과시 OutOfMemoryError 가 발생 할 수 있다.
+*Memory leak : 가용 메모리가 없을때 발생
+
+
+5. Hibernate 데이터 매핑 프레임워크
+
 
 
 
