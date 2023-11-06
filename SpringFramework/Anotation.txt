@@ -49,12 +49,17 @@ UUID 타입이라도 자동으로 생성 가능
 - 기본키 자동 생성시 @Id와 둘다 사용되어야함
 - 종류
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-        기본키 생성을 데이터베이스에게 위임 AUTO_INCREMENT로 키 생성
+        기본키 생성을 데이터베이스에게 위임(DB설정으로 인해 AUTO_INCREMENT로 키 생성)
         *전체 프로세스에 적용 방법 : hibernate: use-new-id-generator-mappings: false (application.yml)
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-        테이블 시퀀스 전략으느 모든 엔티티에 대한 id값을 시퀀스 테이블 하나에서 통합적 관리 전략
+        테이블 시퀀스 전략은 모든 엔티티에 대한 id값을 시퀀스 테이블 하나에서 통합적 관리 전략
         모든 엔티티의 id 값이 하나의 엔티티처럼 증가됨
+    @GeneratedValue(strategy = GenerationType.ATUO)
+        선택한 DB에따라 dialect 에 따른 방식을 자동으로 선택
+    @GeneratedValue(strategy = GenerationType.Table)
+        키 생성 테이블 사용
+
 
 7. @CreationTimestamp
 - insert 쿼리가 발생 시 현재 시간 값 적용
