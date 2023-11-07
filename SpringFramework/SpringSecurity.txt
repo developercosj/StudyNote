@@ -1,0 +1,81 @@
+1. 스프링 시큐리티(Spring security) : 스프링 기반의 애플리케이션 보안(인증, 인가, 권한)을 담당하는 스프링 하위 프레임워크
+
+- 공격 방어 : CSRF 공격 방어, 세션 고정 공격 방어, 요청 헤더도 보안 처리함
+- 필터기반으로 동작 : 다양한 필터로 이루어져 있으며 각 필터에서 인증, 인가와 관련된 작업 처리
+- 필터 종류 (각 필터에서 인증, 인가와 관련된 작업을 처리하며 아래로 내려가며 순서대로(A -> K) 필터를 거친다. [각 필터마다 사용 클래스]
+    A.SecurityContextPersistenceFilter [1)]
+        SecurityContextRepository('1)')에서 SecurityContext(접근 주체와 인증에 대한 정보를 담고 있는 객체)를 가져오거나 저장하는 역할
+    B.LogoutFilter(인증관리) : 아이디와 패스워드로 인증 요청을 위임하는 인증 관리자 역할 2)
+        설정된 로그아웃 URL로 오는 요청을 확인해 해당 사용자를 로그아웃 처리
+    C.UsernamePasswordAuthenticationFilter [3), 4), 5), 6)]
+        인증관리자. 폼 기반 로그인시 사용되는 필터 아이디, 패스워드 데이터를 파싱하여 인증 요청을 위임하며 성공시 AuthenticationSuccessHandler를 인증에 실패하면
+        AuthenticationFailureHandler 실행
+    D.DefaultloginPageGeneratingFilter
+        사용자가 로그인 페이지를 따로 지정하지 않았을 떄 기본으로 설정하는 로그인 페이지 관련 필터
+    E.BasicAuthenticationFilter [3), 8)]
+        요청 헤더에 있는 아이디와 패스워드를 파싱해서 인증 요청 위임 인증 성공시 AuthenticationSuccessHandler를 인증에 실패하면
+        AuthenticationFailureHandler 실행
+    F.RememberMeAuthenticationFilter [7)]
+        로그인 성공 후, 관련 있는 캐시 요청이 있는지 확인하고 캐시 요청을 처리해줌
+        로그인하지 않은 상태에서 방문한 페이지를 로그인 후에 이동하는 것등
+    G.SecurityContextHolderAwareRequestFilter
+        HttpServletRequest 정보를 감싸고 필터 체인 상의 다음 필터들에게 부가 정보를 제공
+    H.AnonymousAuthenticationFilter
+        필터가 호출되는 시점까지 인증되지 않았다면 익명 사용자 전용 객체인 Anonymous Authentication을 만들어 SecurityContext에 넣음
+    I.SessionManagementFilter [1), 5), 6)]
+        인증된 사용자와 관련된 세션 관련 작업을 진행한다 세션 변조 방지 전략 설정하고, 유효하지 않은 세션에 대한 처리를 하며 세션 생성전략 세우는 등의 작업을 처리
+    J.ExceptionTranslationFilter [8), 9)]
+        요청 처리 중에 발생할 수 있는 예외를 위임하거나 전달
+    K.FilterSecurityInterceptor(접근결정) : 권한 부여 처리를 위임해 접근 제어 결정을 쉽게 하는 접근 결정 관리자 역할 : 3), 10), 11)
+        접근 결정 관리자로 AccessDecisionManager로 권한 부여 처리를 위임함으로써 접근 제어 결정을 쉽게 해준다. 이미 사용자가 인증되어 있으므로 유효한 사용자인지 파악 가능
+- 필터를 실행 시 여러 클래스를 거친다.
+    1) SecurityContextRepository -> SecurityContextHolder -> SecurityContext -> Authentication
+    2) LogoutSuccess Handler
+    3) Authentication Manager -> AuthenticationProvider
+    4) AuthenticationSuccessHandler
+    5) AuthenticationFailureHandler
+    6) SessionAuthentication Strategy -> SessionRegistry
+    7) RequestCache
+    8) Authentication EntryPoint
+    9) AccessDenied Handler
+    10) AccessDecisionManager -> DecisionVoters
+    11) SecurityMetadataSource
+
+    12) AffirmativeBased -> RoleVoter
+    13) UserDetailService -> UserDetails
+    14) GrantedAuthority
+- 특정필터 제거 또는 커스텀 필터 추가가 가능하다.
+
+2. 로그인 처리 예시
+
+                                 -> UsernamePasswordAuthentication Token
+Http 요청 -> AuthenticationFilter -> AuthenticationManager <<interface>>  -> AuthenticationProvider(s) -> UserDetailService - UserDetails <<interface>>  <-(implements) User
+                                 <-                                      <-                           <-
+                                 -> [SecurityContextHolder ∋ SecurityContext ∋ Authentication]
+
+상세 설명
+    1) 사용자가 아이디, 패스워드를 입력해 전송하면 HTTPServletRequest에 아이디와 비밀번호 정보가 전달
+    2) AuthenticationFilter가 아이디와 비밀번호 유효성 검사
+    3) 2번이 끝나면 실제 구현체인 UsernamePasswordAuthentication Token을 만들어 넘겨준다. (입력된 ID, Pass 로 인해 만들어졌기 때문에 인증전)
+    4) 전달받은 인증용 객체인 UsernamePasswordAuthenticationToken을 AuthenticationManager -> AuthenticationProvider 에 보낸다.
+    5) 사용자의 아이디를 UserDetailService에 보내 사용자 아이디로 찾은 사용자 정보를 UserDetails 객체로 만들어 AuthenticationProvider 에 전달하여 DB 사용자 정보를 가져옴
+    6) 입력정보와 UserDetails 정보를 비교해 실제 인증 처리
+    7) AuthenticationProviders -> AuthenticationManager  -> AuthenticationFilter -> SecurityContextHolder 까지 인증 완료 시 SecurityContextHolder에 Authentication 객체 저장한다.
+        -> 인증 성공 : AuthenticationSuccessHandler 실패 시 AuthenticationFailureHandler 핸들러 실행
+
+    추가 설명
+        실제 인증 과정은 사용자가 입력한 데이터(ID, PW 등) 와 UserDetailsService의 loadUserByUsername() 메서드가 반환하는 UserDetails객체를 비교
+        UserDetailsService와 UserDetails 구현방식에 따라서 인증의 세부 과정이 달라진다.
+
+
+
+3. 인증 정보
+- Spring Security 에서 사용자 인증 정보를 세션에 담아놓고 사용하기 위해 SecurityContextHolder 내부의 SecurityContext에 Authentication 객체로 저장해두고 참조하여 사용한다.
+- 사용 방법
+    1) 컨트롤러에서 Principal 객체 주입받아 사용(자바에 정의 되어 있는 Principal 객체 바인딩, 제약 존재, name 정보만 받음)
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User)authentication.getPrincipal();
+    2) 컨트롤러에 @AuthenticationPrincipal 선언하여 엔티티 객체 받기 or 엔티티 어댑터 객체 받기
+    @AuthenticationPrincipal 이 가지고 있는 UserDetails 타입을 구현한 PrincipalDetails 클래스를 받아서 User의 Object 사용
+    userDetails(PrincipalDetails 타입).getUser()
+
