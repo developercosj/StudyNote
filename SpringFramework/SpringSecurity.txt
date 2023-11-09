@@ -61,9 +61,45 @@
             해시된 비밀번호는 고유한 솔트의 해시와 사용자가 입력한 비밀번호와 비교한다.
               * 적응형 단방향 기능 활용하여 비밀번호 저장 추천
                 적응형 단방향 함수의 예) bcrypt, PBKDF2, scrypt, argon2
-                의도적으로 리소스 사용을 많이 하기 때문에 성능 저하가 발생할 수 있다.
+                (의도적으로 리소스 사용을 많이 하기 때문에 성능 저하가 발생할 수 있다.)
                 장기자격증명(사용자의 이름, 비밀번호등의 정보)를 단기자격증명(세션, OAuth 토큰)으로 교환  -> 단기 자격 증명은 보안 손실 없이 빠르게 검증 가능
 
+    - Spring Security는 DelegatingPasswordEncoder 방식을 제공하여 암호화 알고리즘 변경에 유연하게 대처 가능
+        - 장점
+            - Ensuring that passwords are encoded by using the current password storage recommendations
+            - Allowing for validating passwords in modern and legacy formats
+            - Allowing for upgrading the encoding in the future
+        - 방법
+            - PasswordEncoderFactories 를 사용해서 DelegatingPasswordEncoder 인스턴스를 만든다.
+            PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+            public static PasswordEncoder createDelegatingPasswordEncoder() {
+                  String encodingId = "bcrypt";
+                  Map<String, PasswordEncoder> encoders = new HashMap<>();
+                  encoders.put(encodingId, new BCryptPasswordEncoder());
+                  encoders.put("ldap", new LdapShaPasswordEncoder());
+                  encoders.put("MD4", new Md4PasswordEncoder());
+                  encoders.put("MD5", new MessageDigestPasswordEncoder("MD5"));
+                  encoders.put("noop", NoOpPasswordEncoder.getInstance());
+                  encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
+                  encoders.put("scrypt", new SCryptPasswordEncoder());
+                  encoders.put("SHA-1", new MessageDigestPasswordEncoder("SHA-1"));
+                  encoders.put("SHA-256", new MessageDigestPasswordEncoder("SHA-256"));
+                  encoders.put("sha256", new StandardPasswordEncoder());
+
+                  return new DelegatingPasswordEncoder(encodingId, encoders);
+               }
+
+        - DelegatingPasswordEncoder 포맷 저장소 형식 : {id}encodedPassword
+            id는 사용할 PasswordEncoder 식별값
+            encodedPassword는 선택한 PasswordEncoder에서 사용할 인코딩된 비밀번호
+
+        - DelegatingPasswordEncoder 인코딩 예제
+            {bcrypt}$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG
+
+        - 유연하게 대처 방법
+            bcript로 현재 알고리즘 방식이 지정되어 있는 상태에서 DB의 저장 알고리즘이 sha-1 이라면 sha-1 으로 복호화를 하여 매칭하고
+            현재 방식인 bcript로 바꿔서 DB에 새롭게 덮어쓴다.
 
 5. 로그인 처리 예시
 
