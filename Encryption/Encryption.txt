@@ -1,0 +1,114 @@
+1. 일부 단방향 암호화 한계
+    - 같은 해시 알고리즘은 동일한 평문에 대하여 동일한 해시값을 갖기 때문에 특정 평문의 해시 값이 무엇인지 알아 내어
+    해시값들을 대량으로 정리한 레인보우 테이블을 생성할 수 있다.
+    - 해시함수의 장점인 빠른속도로 인해 공격자 유리하게 작용
+    - GPU의 연산속도가 빠를 수록 공격자의 하드웨어를 통한 오프라인 brute-force에 더 취약해진다.
+    - SHA는 GPU 연산에 유리한 32비트 논리 및 산술 연산만 사용하기 때문에 공격자가 빠른 연산으로 공격이 쉬워진다.
+    - 문제(빠른속도로 임의문자열과 실제 데이터를 비교, 레인보우테이블)를 해결하기 위해 솔팅과 키 스트레칭을 사용
+        - 솔팅(Salting)
+            단방향 해시 암호화에서 데이터에 추가되는 랜덤 데이터이다. 추가 데이터가 있기 때문에 해시값을 공격자가 사용하기가 더 어렵다.
+        - 키스트래칭(key Stretching)
+            단방향 해시값을 계산 한 후 그 해시값을 또 해시하는 과정을 반복한다.
+            하드웨어 성능의 상승이 도리어 처리속도를 빠르게 하게 되는데 키 스트레칭을 적용하여 비교횟수를 줄일 수 있다.
+    - sha-1은 NIST에 의해 폐기되었음
+
+2. 전자 서명
+    - 전자문서의 위/변조사실을 알 수 있도록 전자문서에 부착하는 특수한 형태의 디지털 정보
+    - 비대칭키 암호화를 통해 구현 가능
+    - 비대칭 암호화의 key pair가 종이문서의 인감도장과 인감증명의 역할을 하며 private key(인감도장)는 서명자만 보관해 사용하고
+        공개된 private key 를 통해 서명이 진짜인지 아닌지 파악 가능
+
+3. Bcrypt
+    - 키(key)방식의 대칭형 블록 암호에 기반을 둔 암호화 해시 함수
+    - 레인보우 테이블 공격을 방지하기 위해 솔팅과 키 스트레칭을 적용한 예
+    - Bcrypt는 단방향 해시 알고리즘(복호화 불가능)
+    - 입력 데이터 평문을 암호화된 데이터가 적용된 알고리즘, Cost Factor, Salt 를 이용해 해시를 진행하여
+      암호화된 데이터와 확인하여 검증한다.
+    - 반복횟수를 늘려 연산 속도를 늦출 수 있다.
+    - 패스워드 해싱 시 내부적으로 랜덤 한 salt를 생성하기 때문에 매번 다른 해싱 결과를 반환한다.
+    - 해싱 결과로 반환되는 String 의 길이는 매번 60으로 동일하다.
+    - Bcrypt 는 여러 언어(java 포함)로 구현된 구현체가 있다.
+    - Blowfish 암호를 기반으로 설계된 암호화 함수
+    - 반복횟수를 늘려 연산속도를 늦출 수 있어 연산능력이 증가하더라도 brute-force 공격에 대비 가능
+    - OpenBSD에서 사용중
+    - 입력 암호 크기는 51자로 제한되며 더 긴 암호를 처리하려면 bcrypt를 해시 함수와 결합
+
+    ** KISA 에서 Bcrypt 사용을 결함으로 본 후기가 있음 -> sha - 256을 권고하고 있음
+       NIST는 PBKDF2
+       sha-256 보다 Bcrypt 사용이 더 좋은 이유 참고 : https://security.stackexchange.com/questions/4781/do-any-security-experts-recommend-bcrypt-for-password-storage
+       안전한 키 암호화 관련 설명 참고 : https://security.stackexchange.com/questions/211/how-to-securely-hash-passwords
+
+4. Scrypt
+    - brute force 공격에 강력하지만 많은 메모리와 CPU 사용
+    - OpenSSL 1.1 이상 제공 시스템에서만 작동
+    - 비용이 많이듬
+    - This dramatically increases the cost of brute-force attacks, because both running-time and memory requirements are increased
+    - new
+
+5. PBKDF2
+    - 해시 함수의 컨테이너 역할
+    - 검증된 해시 함수만 사용
+    - 해시함수와 Sqlt를 적용 후 해시 함수의 반복횟수를 지정하여 암호화
+    - ISO-27001 보안 규정 준수 필요시 사용
+    - NIST (미국 국립표준기술연구소 : National Institute of Standards and Technology) 에서 추천함
+
+6. 좋은 암호화 방식 선정하기
+    - 갖춰야 할 조건
+        - Cryptographic hash functions
+        - Slowness
+        - Salt
+
+    - Spring Security
+        Java 는 PBKDF2 및 SHA 해싱 알고리즘 지원, BCrypt, SCrypt 알고리즘 지원하지 않음
+        Spring Security 에서 PasswordEncoder 인터페이스를 통해 여러가지 알고리즘 지원가능
+        MessageDigestPasswordEncoder : MD5 및 SHA-512 제공
+        Pbkdf2PasswordEncoder : PBKDF2 제공
+        BCryptPasswordEncoder : BCrypt 제공
+        SCryptPasswordEncoder : SCrypt 제공
+
+    - Bcrypt 가 PBKDF2보다 더 나은 이유
+        Bcrypt happens to heavily rely on accesses to a table which is constantly altered throughout the algorithm execution.
+        This is very fast on a PC, much less so on a GPU, where memory is shared and all cores compete for control of the internal memory bus.
+        Thus, the boost that an attacker can get from using GPU is quite reduced, compared to what the attacker gets with PBKDF2 or similar designs.
+        The designers of bcrypt were quite aware of the issue, which is why they designed bcrypt out of the block cipher Blowfish and not a SHA-* function.
+        They note in their article the following:
+        That means one should make any password function as efficient as possible for the setting in which it will operate.
+        The designers of crypt failed to do this.
+        They based crypt on DES, a particularly inefficient algorithm to implement in software because of many bit transpositions.
+        They discounted hardware attacks, in part because crypt cannot be calculated with stock DES hardware.
+        Unfortunately, Biham later discovered a software technique known as bitslicing that eliminates the cost of bit transpositions in computing many simultaneous DES encryptions.
+        While bitslicing won't help anyone log in faster, it offers a staggering speedup to brute force password searches.
+        which shows that the hardware and the way it can be used is important.
+        Even with the same PC as the honest system, an attacker can use bitslicing to try several passwords in parallel and get a boost out of it, because the attacker has several passwords to try, while the honest system has only one at a time.
+
+    - 결론
+        개발시 비용이 적게 들면서 안전한 PBKDF2, Bcrypt, SHA-256 중에서 Bcrypt는 한국의 기관들의 결함사항으로 지적되거나 권고사항이 아닌 Bcrypt는 보안사항에 걸리게 되는
+        중요한 암호를 저장할때는 제외하고 PBKDF2와 SHA-256 + SALT 를 결합해서 작업하는 것이 좋으나
+        간단한 어드민 비밀번호 제작시에는 내부망안에서 접근이 가능하고 회원이나 좀 더 보안에 중요시되는
+        데이터여서 결함사항에 걸리게되는 것이 아니기 때문에 Bcrypt도 사용할 수 있다고 생각함
+        (Bcrypt 는 강력하고 SHA-256, PBKDF2 보다 더 좋다고 여겨지기도 함)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
