@@ -87,6 +87,7 @@
         간단한 어드민 비밀번호 제작시에는 내부망안에서 접근이 가능하고 회원이나 좀 더 보안에 중요시되는
         데이터여서 결함사항에 걸리게되는 것이 아니기 때문에 Bcrypt도 사용할 수 있다고 생각함
         (Bcrypt 는 강력하고 SHA-256, PBKDF2 보다 더 좋다고 여겨지기도 함)
+        출처 : https://security.stackexchange.com/questions/4781/do-any-security-experts-recommend-bcrypt-for-password-storage
 
 
 
