@@ -209,7 +209,7 @@ StringBuffer(String str) : str의 값을 갖는 StringBuffer를 생성한다.
     StatusEnum se1 = StatusEnum.OK;
     StatusEnum se2 = StatusEnum.valueOf("OK");
 
-5. Static
+6. Static
 - Static 선언 변수는 클래스 변수
 - Static 초기화 블록
     1) 형태 :
@@ -226,6 +226,24 @@ StringBuffer(String str) : str의 값을 갖는 StringBuffer를 생성한다.
 - 변경이 되는 객체를 static 으로 선언시 여러 스레드에서 접근과 값 대입이 여러번 이루어지면 문제가 발생한다.
 - Collection 객체를 static 으로 발생시 GC 대상이 되지 않아서 데이터가 객체에 계속해서 쌓이다가 메모리를 초과시 OutOfMemoryError 가 발생 할 수 있다.
 *Memory leak : 가용 메모리가 없을때 발생
+
+7. reflection 클래스
+       - JVM에 로딩되어 있는 클래스, 메서드 정보를 읽어올 수 있음
+       - Class 클래스
+           - 클래스에 대한 정보를 얻을 때 사용
+           - 생성자 없음
+           - 사용법(패키지정보, 클래스 이름조회)
+               - String currentClassName = this.getClass().getName();
+           - 메서드 정보얻기
+               - getMethods(), getDeclaredMethod()
+       - Object 클래스에 있는 getClass() 로 클래스 정보를 알 수 있다.
+       - Field 클래스
+           - 클래스에 있는 변수들의 정보 제공
+           - 생성자 존재 x
+           - class 클래스의 getField() 메서드나 gerDeclaredFields() 메서드 사용 해야함
+
+
+
 
 
 5. Hibernate 데이터 매핑 프레임워크
