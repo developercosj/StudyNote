@@ -1,0 +1,14 @@
+1. OAuth(OpenID Authentication) 2.0
+- 타사의 사이트에 대한 접근 권한을 얻어서 로그인 등을 이용할 수 있게 개발할 수 있도록 해주는 프레임워크
+- 예시) 카카오, 구글, 네이버등의 사이트에서 로그인을 하면 개발 하고 있는 사이트에서도 로그인 인증을 받을 수 있게 될 수 있음
+- Access Token을 발급 받고 그 토큰을 기반으로 원하는 기능을 개발할 수 있다.
+- OAuth : Access Token 발급 과정 인터페이스로 정의한 것
+    Resource Owner : 개인 정보의 소유자
+    Client : Resource Server 로부터 인증받고자 하는 직접 개발을 하고 있는 서버를 가리킴
+    Resource Server : 개인정보 저장하고 있는 구글,카카오등의 서버
+
+- 로그인 사용시 UsernamePasswordAuthenticationFilter 필터 대신 OAuth2LoginAuthenticationFilter 필터 호출
+- 두 필터의 상위 클래스는 AbstractAuthenticationProcessingFilter 이며 스프링 시큐리티가 AbstractAuthenticationProcessingFilter 를 호출하면
+- 로그인 방식에 따라 구현체인 UsernamePasswordAuthenticationFilter 또는 OAuth2LoginAuthenticationFilter 가 동작한다.
+
+
