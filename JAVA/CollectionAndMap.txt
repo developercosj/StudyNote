@@ -27,10 +27,23 @@
 - Map 을 구현한 클래스 : HashMap, TreeMap, LinkedHashMap, HashTable
     - Hashtable : 데이터를 해쉬 테이블에 담는 클래스 내부에서 관리하는 해쉬 테이블 (객체 동기화 가능)
     - HashMap : 데이터를 해쉬 테이블에 담는 클래스 (Hashtable 과의 차이는 null 값 허용, 동기화 x)
+                HashMap 클래스는 synchronized 키워드가 존재하지 않아서 멀티 스레드 환경이 아니면 성능상 사용하기 적합하나 Multi-Thread 환경에서는 사용할 수 없다.
+                대안 : ConcurrentHashMap 클래스
+                HashMap 에서 버킷안 노드가 로드팩터값에 도달하면 resize() 메서드 사용하여 새로운 배열을 만들어 copy
+    - ConcurrentHashMap : JDK 1.5에 검색과 업데이트시 동시성 성능을 높이기 위해 나온 클래스
+                          읽기에서는 synchronized 적용이 안되나 쓰기에서는 synchronized가 적용되서 Thread-safe하게 사용가능하도록 함
+                          버킷이 가득차게 되면 기존 테이블을 새로운 테이블로 전송(transfer) -> 크기가 2배인 새로운 테이블로 변경됨
+
     - TreeMap : red-black 트리에 데이터를 저장
     - LinkedHashMap : HashMap 과 비슷하나 이중 연결 리스트 방식으로 데이터 저장)
 
 3. Collection Class 의 동기화
-- 동기화 되어 있는 클래스 : Vector, Hashtable
-- 동기화 되어 있지 않은 클래스 : HashSet, TreeSet, LinkedHashSet, ArrayList, LinkedList, HashMap, TreeMap, LinkedHashMap
-    #동기화 가능한 메서드 존재함 : Set s = Collections.synchronizedSet(new HashSet(...)),List list =  Collections.synchronizedList(new ArrayList(...)) 등등
+    - 동기화 되어 있는 클래스 : Vector, Hashtable
+    - 동기화 되어 있지 않은 클래스 : HashSet, TreeSet, LinkedHashSet, ArrayList, LinkedList, HashMap, TreeMap, LinkedHashMap
+        #동기화 가능한 메서드 존재함 : Set s = Collections.synchronizedSet(new HashSet(...)),List list =  Collections.synchronizedList(new ArrayList(...)) 등등
+
+4. Hashtable 클래스
+    - 메서드 전체에 synchronized 키워드가 존재한다.
+    - Muiti-Thread 환경에서는 Thread-safe 할 수도 있으나 Lock 을 가지고 있기 때문에 병목현상이 발생한다.
+      멀티스레드 환경에서는 속도적으로 느릴 수 있다.
+
