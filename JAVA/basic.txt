@@ -243,6 +243,36 @@ StringBuffer(String str) : str의 값을 갖는 StringBuffer를 생성한다.
            - class 클래스의 getField() 메서드나 gerDeclaredFields() 메서드 사용 해야함
 
 
+9. 병렬 스트림
+- 자바 8 버전 이후부터 stream 사용 시 병렬 스트림을 생성하여 처리가능하다.
+- .parallel() 사용
+- 병렬 처리 중 공유 자원에 대한 동시 접근 문제 발생 가능
+- 내부적으로 ForkJoinPoll 사용하여 여러 스레드에 분배하고 환경에 따라 이 스레드 수를 결정하는데 ForJoinPool.commonPool() 로 스레드 수를 변경 가능하나 모든 전역 설정이 변경되어서
+  모든 병렬 스트림 작업의 스레드 수가 변경되게 된다.
+
+*ConcurrentModificationException 발생 막기
+    - 역순으로 for loop 사용 ( 좋지않음 )
+    - 반복문을 돌때는 삭제할 요소를 임시 리스트에 추가하여 removeAll() 로 한꺼번에 삭제
+
+10. CompletableFuture
+- 자체 지정 executor 를 통해 스레드 풀을 더 섬세하게 직접 제어가능
+- 다른 스레드에 영향을 주지 않고 각 비동기 작업 흐름을 구성 가능
+
+
+11. AtomicBoolean
+- boolean 자료형을 가지고 있는 wrapping 클래스
+- 멀티 쓰레드 환경에서 동시성 보장
+- synchronized 보다 적은 비용으로 동시성 보장
+
+12. Java volatile
+- Java keyword 이며 변수 선언시 붙일 수 있다.
+    public volatile int 변수이름 = 0;
+- Java 변수를 Main Memory에 저장하도록 함
+- 변수 값 read 시 cpu cache가 아닌 Main memory 에서 읽음
+- 변수 값 write 할 때 Main memory에 까지 저장
+
+
+
 
 
 
