@@ -5,3 +5,4 @@ control + t : refactoring 관련 기능 사용
     option + command + m : 함수로 뽑아내는 기능
 command + shift + t : 테스트클래스 바로 생성하기
 control + R : 이전에 실행했던 내용을 실행하줌
+command + option + n : inline 결과로 합쳐줌
