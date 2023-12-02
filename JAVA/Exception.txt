@@ -1,0 +1,72 @@
+Exception Handling
+
+1. 오류는 발생 시점에 따라 구분한다.
+    - 컴파일 에러 (compile error) : 컴파일 시에 발생
+    - 런타임 에러 (runtime error) : 실행 시에 발생하는 에러 (error, Exception )
+    - 논리적 에러 (logical error) : 실행은 되지만 의도와 다르게 동작하는 것
+
+2. runtime error
+    - 에러(error) : OutOfMemoryError 나 StackOverflowError 와 같이 심각한 오류
+    - 예외(Exception) : 코드에 의해 처리 가능한 오류 ex) arithmetic exception, class cast exception, null pointer exception
+                        프로그래머가 이 예외들을 관리하는 handler 를 구현 가능
+
+3. Throwable
+    - 자바는 에러와 예외를 클래스로 정의하며 Throwable(Object 가 상위클래스)이라는 클래스의 subclass 이다.
+    - 예외 클래스
+        - RuntimeException (프로그래머의 실수)
+        - 기타 환경, 사용자 에러로 인한 발생
+    - 계층
+    Object - Throwable - Exception
+                       - Error
+
+3. Exception Handling
+    - try - catch 문
+        - 프로그램 실행 시 발생 가능한 예외에 대비해 코드 작성
+        - 프로그램의 비정상적인 종료 방지하며 정상적인 실행 상태 유지
+        - try 블럭에서 예외 발생시 발생한 에러를 핸들링할 수 있는 catch 블럭을 찾아 수행 후 빠져나가나 일치하는 catch 블럭을 찾지 못할 때는 예외처리가 되지 못함
+        - catch 블럭
+            예외가 발생하면 해당 클래스의 인스턴스 생성 -> catch 블럭 순서대로 내려가며 catch 블럭의 () 에 선언된 참조변수의 종류와 생성된 예외 클래스의 instance 에
+            instanceof 를 허용하여 검사 결과가 true 일때 예외처리를 한다.
+            Exception 클래스는 예외클래스의 가장 상위 클래스이므로 모든 예외 처리가 된다.
+        - 예외가 발생하면 JVM이 예외 객체를 생성해서 catch 블록에 인자로 넘긴다.
+
+4. printStackTrace(), getMessage()
+    - printStackTrace()
+        예외가 있을 때 콜 스택에 있던 메서드 출력
+    - getMessage()
+        예외 인스턴스에 저장돼 있던 메시지를 가져온다.
+
+5. 예외 발생
+    - throw 키워드를 사용해서 의도적으로 발생 가능하며 예외 메시지를 생성자 매개변수에 설정가능
+        Exception e = new Exception("원하는 예외메시지 작성");
+        throw e;
+
+6. Checked Exception, Unchecked Exception
+    - Unchecked Exception
+        -  RuntimeException 하위 클래스
+        - 에러 처리를 강제하지 않고 실행중에 발생할 수 있는 예외
+        - 예시 : ArrayIndexOutOfBoundsException, NullPointerException
+        - 개발자들의 실수로 발생 경우 많음
+        - 확인 시점 : 실행 단계
+       *- 예외 발생시 트랜잭션 처리 : roll-back
+    - checked Exception
+        - RuntimeException 의 하위 클래스가 아닌 Exception 클래스의 하위 클래스들
+        - 반드시 에러 처리를 해야함 (try-catch 또는 throw)
+        - 예시 : FileNotFoundException, ClassNotFoundException
+        - 시스템이나 사용자들의 실수로 발생하는 경우가 많음
+        - 확인 시점 : 컴파일 단계
+       *- 예외 발생시 트랜잭션 처리 : roll-back 하지 않음
+
+7. Method throws exceptions
+    - 메서드가 예외를 던질수 있도록 throws Exception 등으로 메서드 이름 뒤에 작성
+    - throws 뒤에 작서한 예외의 모든 subclass 발생 가능
+    - 예외를 던지도록 작성된 (throws 예외) 메서드를 호출하는 메서드는 예외를 처리하거나 예외를 던져야 한다.
+
+8. try-with-resources
+    - java7 버전에 추가
+    - try 이후 괄호에 리소스를 생성하는 문장 추가 (AutoCloseable interface 구현)
+    - 프로그램이 try 블록을 모두 수행한 뒤 자동으로 close() 메서드가 호출된다.
+    - close()는 catch 블록이나 finally 블록이 실행되기 전에 호출
+
+9. Custom Exception
+    - 예외 클래스를 extends 하여 Custom Exception 을 생성 가능
