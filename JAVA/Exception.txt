@@ -19,7 +19,7 @@ Exception Handling
     Object - Throwable - Exception
                        - Error
 
-3. Exception Handling
+4. Exception Handling
     - try - catch 문
         - 프로그램 실행 시 발생 가능한 예외에 대비해 코드 작성
         - 프로그램의 비정상적인 종료 방지하며 정상적인 실행 상태 유지
@@ -30,18 +30,18 @@ Exception Handling
             Exception 클래스는 예외클래스의 가장 상위 클래스이므로 모든 예외 처리가 된다.
         - 예외가 발생하면 JVM이 예외 객체를 생성해서 catch 블록에 인자로 넘긴다.
 
-4. printStackTrace(), getMessage()
+5. printStackTrace(), getMessage()
     - printStackTrace()
         예외가 있을 때 콜 스택에 있던 메서드 출력
     - getMessage()
         예외 인스턴스에 저장돼 있던 메시지를 가져온다.
 
-5. 예외 발생
+6. 예외 발생
     - throw 키워드를 사용해서 의도적으로 발생 가능하며 예외 메시지를 생성자 매개변수에 설정가능
         Exception e = new Exception("원하는 예외메시지 작성");
         throw e;
 
-6. Checked Exception, Unchecked Exception
+7. Checked Exception, Unchecked Exception
     - Unchecked Exception
         -  RuntimeException 하위 클래스
         - 에러 처리를 강제하지 않고 실행중에 발생할 수 있는 예외
@@ -57,16 +57,16 @@ Exception Handling
         - 확인 시점 : 컴파일 단계
        *- 예외 발생시 트랜잭션 처리 : roll-back 하지 않음
 
-7. Method throws exceptions
+8. Method throws exceptions
     - 메서드가 예외를 던질수 있도록 throws Exception 등으로 메서드 이름 뒤에 작성
     - throws 뒤에 작서한 예외의 모든 subclass 발생 가능
     - 예외를 던지도록 작성된 (throws 예외) 메서드를 호출하는 메서드는 예외를 처리하거나 예외를 던져야 한다.
 
-8. try-with-resources
+9. try-with-resources
     - java7 버전에 추가
     - try 이후 괄호에 리소스를 생성하는 문장 추가 (AutoCloseable interface 구현)
     - 프로그램이 try 블록을 모두 수행한 뒤 자동으로 close() 메서드가 호출된다.
     - close()는 catch 블록이나 finally 블록이 실행되기 전에 호출
 
-9. Custom Exception
+10. Custom Exception
     - 예외 클래스를 extends 하여 Custom Exception 을 생성 가능
