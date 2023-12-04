@@ -1,0 +1,31 @@
+1. JPA
+    - JPA 는 인터페이스의 모음
+    - JPA 2.1 구현체 : 하이버네이트, EclipseLink, DataNucleus
+
+    - 1.0 : 초기버전으로 복합 키와 연관관계 기능등이 부족
+    - 2.0 : 대부분의 ORM 기능 포함, JPA Criteria 추가
+
+2. JAP 사용 이유
+    - SQL 중심적 개발에서 객체 중심 개발 가능
+    - 생산성 및 유지보수 향상
+    - 패러다임의 불일치 해결
+    - 성능 향상 부분도 존재
+    - 데이터 접근 추상화와 벤더 독립성
+    - 표준
+
+3.  JAP 동작
+    JPA는 JAVA 애플리케이션과 JDBC 사이에서 동작
+    - Entity 분석
+    - INSERT SQL 생성
+    - JDBC API 사용
+    - ResultSet 매핑
+    - 패러다임 불일치 해결
+        상속, 연관관계, 객체 그래프 탐색, 비교
+    - 쿼리를 DB -> JDBC API 반환 후 Entity Object를 만들어서 DAO 에 반환
+
+4. CRUD
+    - 저장 : jap.persist(객체)
+    - 조회 : jpa.find(객체)
+    - 수정 : member.setName("변경이름")
+        **트랜잭션 안에서 조회하여 변경하면 트랜잭션 끝날때 update 쿼리가 자동으로 실행
+    - 삭제 : jpa.remove(객체)
