@@ -29,3 +29,36 @@
     - 수정 : member.setName("변경이름")
         **트랜잭션 안에서 조회하여 변경하면 트랜잭션 끝날때 update 쿼리가 자동으로 실행
     - 삭제 : jpa.remove(객체)
+
+5. 비교
+    - 동일한 트랜잭션에서 조회한 엔티티는 같음을 보장
+    - 예시
+        String memberId = "100";
+        Member member1 = jpa.find(Member.class, memberId);
+        Member member2 = jpa.find(Member.class, memberId);
+        member1 == member2; // 같게 결과가 나온다.
+6. JPA 의 성능 최적화 기능
+    - 1) 1차 캐시와 동일성(identity) 보장
+        JPA 는 같은 트랜잭션 내부에서는 항상 같은 Entity를 반환해준다.
+        DB Isolation level이 Read Commit이어도 애플리케이션에서 Repeatable Read 보장
+        5번과 같은 경우는 member1은 SQL 을 처리하는 거고 member2는 캐시가 적용된 것이다.
+    - 2) 트랜잭션을 지원하는 쓰기 지연(transactional write-behind)
+        - 트랜잭션을 커미할 때까지 INSERT SQL 을 모아둬서 한번에 처리
+        - JDBC BATCH SQL 기능을 사용해서 한번에 SQL 을 전송
+        - 예시
+            transaction.begin();
+            em.persist(memberA);
+            em.persist(memberC);
+            transaction.commit(): // 커밋하는 순간 데이터베이스에 INSERT SQL 을 모아서 한번에 커밋한다.
+    - 3) 지연 로딩(lazy loading)
+        - 지연 로딩 : 객체가 실제 사용될 때 로딩
+            - 예시
+                Member member = memberDAO.find(memberId); //select * from MEMBER;
+                Team team = member.getTeam();
+                String teamName = team.getName(); // select * from TEAM;
+        - 즉시 로딩 : JOIN SQL로 한번에 연관된 객체까지 미리 조회
+            - 예시
+                Member member = memberDAO.find(memberId); // SELECT M.*, T.* FROM MEMBER JOIN TEAM ...
+                Team team = member.getTeam();
+                String teamName = team.getName();
+
