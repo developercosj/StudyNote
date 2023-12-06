@@ -1,0 +1,94 @@
+1. JPA(Java Persistence API)/ORM : 자바 객체와 데이터베이스를 연결해 자바언어로만 데이터 베이스를 다룰 수 있게 하는 도구
+    장점 : SQL을 직접 작성하지 않고 사용하는 언어로 DB 접근, 객체지향적으로 코드 작성하여 비즈니스 로직에 집중, 데이터베이스 시스템에 대한 종속성 감소,
+    ERD 의존도 낮추고 유지보수 유리 (매핑 정보가 코드로 작성되어져 명확함)
+    단점 : 프로젝트의 규모에 따라 복잡도가 상승, 복잡한 쿼리의 ORM 사용 불가
+2. Hibernate :  JPA는 인터페이스이고 이것을 구현하여 사용하기 위한 구현체, 자바용 ORM 프레임워크, 데이터베이스 종류에 상관없이 이용가능하도록 함, 내부적으로 JDBC API 사용,
+3. 구조 : 애플리케이션 <-> JPA <-> 하이버네이트 <-> JDBC <-> 데이터베이스
+4. Entity Manager
+    1) Entity : 데이터 베이스의 테이블과 매핑되는 객체를 다른 일반 객체(본질적으로 동일)와 구분하여 Entity라고 부름
+    2) Entity Manager : Entity를 관리해 DB와 애플리케이션 사이에서 객체를 생성, 수정, 삭제 역할
+                        Entity Manager Factory 에서 만들어짐
+                        스프링 부트에서는 엔티티 매니저 팩토리를 하나만 생성해서 관리하며 @PersistenceContext 또는 @Autowired 를 사용하여 엔티티 매니저를 사용한다.
+                        스프링 부트는 기본적으로 하나의 빈을 생성하여 공유하기 때문에 동시성 문제 발생 가능 실제로 엔티티 매니저가 아닌 실제 엔티티 매니저와 연결하는 프록시 엔티티 매니저 사용
+    3) 엔티티 매니저는 엔티티를 영속성 컨텍스트에 저장
+    4) 엔티티는 반드시 기본생성자가 있어야 하고 접근제어자는 public 또는 protected 여야 한다.
+    5) 고객의 요청이 올때마다 생성, close -> 쓰레드간에 공유가 불가(*중요)
+
+5. 영속성 컨텍스트
+    1) 정의 : 엔티티를 관리하는 가상의 공간 (엔티티를 영구 저장하는 환경)
+    2) 특징 (DB 접근 최소화역할)
+        1차 캐시 : 영속성 컨텍스트는 내부에 1차 캐시를 가지고 있다. 키는 @Id 어노테이션이 달린 pk 식별자, 값은 엔티티
+                 엔티티 조회 시 1차 캐시에서 데이터 조회후 있으면 반환 없으면 DB 조회후 1차 캐시에 저장되어 다음번 조회시 사용
+        쓰기 지연 : 트랜잭션 커밋 전까지 DB에 질의문을 보내지 않고 쿼리를 모아서 한번에 실행 DB 성능 부하 줄임
+        변경 감지 : 트랜잭션 커밋 시 1차 캐시에 저장되어 있는 엔티티 값과 현재 엔티티 값을 비교해서 변경 사항 감지 후 DB에 자동 반영
+        지연 로딩 : 쿼리로 요청한 데이터를 애플리케이션에 바로 로딩하지 않고 필요할 때 쿼리를 날려 조회
+            *즉시로딩 : 조회 시 쿼리를 보내 연관된 모든 데이터를 가져옴
+    3) EntityManager.persist(entity) -> 엔티티를 DB에 저장한다기보다는 엔티티를 영속성 컨텍스트에 저장한다는 뜻
+    4) 눈에 보이지 않는 논리적의미
+    5) 엔티티 메니저를 통해서 영속성 컨텍스트에 저장
+
+6. Entity의 상태
+    1) 비영속 상태 : 영속성 컨텍스트와 전혀 관계없는 transient 상태 엔티티 매니저가 엔티티 관리하지 않음 엔티티 처음 생성시 비영속 상태임
+        ex) Member member = new Member(1L, "이름");
+    2) 관리상태(persist()) : 영속성 컨텍스트가 관리하는 managed 상태
+        ex) EntityManager인스턴스.persist(member);
+    3) 분리상태(detach()) : 영속성 컨텍스트가 관리하고 있지 않는 detached 상태
+        ex) EntityManager인스턴스.detach(member);
+    4) 삭제된 상태(remove()) : removed 상태
+        ex) EntityManager인스턴스.remove(member);
+7. 스프링 데이터 JPA
+    스프링 데이터의 인터페이스인 PagingAndSortingRepository를 상속받아 JpaRepository 인터페이스를 만들었다.
+    JPA 를 더 편리하게 사용하는 메서드 제공하기 때문에 JpaRepository 인터페이스를 우리가 만든 인터페이스에서 상속받고 제네릭에 엔티티객체를 입력하여 CRUD 사용
+
+
+8. Update
+- 수정방법 : 전달받은 데이터의 Key 로 Entity를 조회후 해당 Entity를 파라미터로 받은 데이터들로 Set 해주고 JPA 의 변경 감지를 이용해 update 한다.
+- 모든 컬럼을 대상으로 update 를 시행한다.
+- JPA 스펙으로 일부 컬럼만 수정하는 ㅡ기능이 없기 때문에 하이버네이트 기능인 @DynamicUpdate 어노테이션을 사용해 준다.
+- @DynamicUpdate Vs 전체 컬럼 Update
+    1) JDBC를 이용하여 SQL 작성을 할 때 사용했던 PreparedStatement 클래스는 SQL 구문을 캐시로 저장해 놓고 '?'로 작성된 파라미터 부분만 변경하여 재사용한다.
+    2) JPA 도 내부적으로 JDBC와 PreparedStatement 를 사용한다. 따라서 변경된 컬럼에 대해서만 update 쿼리를 사용하게 되면 캐시기능을 사용하지 않아 SQL 캐시 히트율이 낮아진다.
+
+        #Cash
+        - Caching을 통해 Computer의 처리 성능 향상을 한다. Cpu와 Memory 간 속도 차이로 발생하는 병목현상을 완화
+        - CPU는 Memory에 접근하기 전에 먼저 Cache 확인 후 찾는 Data 가 있으면 hit, Data가 없으면 miss 가 된다.
+        - hit ratio = hit / (hit + miss) = 캐시 메모리의 적중 횟수/ 전체 메모리의 참조 횟수
+        - hit ratio를 높이기 위해서는 cashing 하고자하는 대상을 설정하는 것이 중요하다.
+          Locality에 의해 hit ratio 가 올라간다.
+            temporal : 한번 참조한 Data의 재참조 가능성이 높음
+            spatial : 참조한 Data와 인접한 Data의 참조 가능성이 높음
+            sequential : 분기발생하지 않으면 메모리에 저장된 순서대로 실행
+
+    3) @DynamicUpdate를 사용하면 추가적이니 연산이 필요하다. 모든 컬럼 수정시에는 엔티티 객체의 변경을 추적하지만 @DynamicUpdate 실행시 필드 추적이 필요
+- @DynamicUpdate 사용 권장시
+    1) 테이블에 인덱스 숫자가 많을 때(update 컬럼 숫자가 많다면 전부다 update 하는것보다는 일부 컬럼만 업데이트 하는것이 유리)
+    2) 트랜잭션간 비동기 처리시 같은 쿼리 사용해야 할 때 컬럼별로 @DynamicUpdate 사용시 트랜잭션 경함시 이슈발생 줄어들 수 있음
+
+9. JPQL
+- 테이블 대상이 아니라 객체 대상으로 쿼리를 요청하면 SQL으로 번역됨
+- 쿼리 예시
+    "select m from Member m"
+- SQL은 데이터베이스 테이블을 대상으로 하지만 JPQL 은 객체대상으로 하여 SQL 에 의존적이지 않다는 차이점이 있다.
+- 객체지향 SQL
+
+10. 엔티티의 생명주기
+- 비영속(new/transient)
+    : 영속성 컨텍스트와 전혀 관계가 없는 새로운 상태
+    - ex) 객체를 생성한 상태(비영속)
+        Member member = new Member();
+        member.setId("member1");
+
+- 영속(managed)
+    : 영속성 컨텍스트에 관리되는 상태
+    - ex)
+        Member member = new Member();
+        member.setId("member1");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        // 객체를 저장한 상태(영속)
+        em.persist(member);
+
+- 준영속(detached)
+    : 영속성 컨텍스트에 저장되었다가 분리된 상태
+- 삭제(removed)
+    : 삭제된 상태
