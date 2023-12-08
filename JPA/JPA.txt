@@ -26,6 +26,7 @@
     3) EntityManager.persist(entity) -> 엔티티를 DB에 저장한다기보다는 엔티티를 영속성 컨텍스트에 저장한다는 뜻
     4) 눈에 보이지 않는 논리적의미
     5) 엔티티 메니저를 통해서 영속성 컨텍스트에 저장
+    6) EntityManager 를 생성하면 PersistenceContext 생성됨
 
 6. Entity의 상태
     1) 비영속 상태 : 영속성 컨텍스트와 전혀 관계없는 transient 상태 엔티티 매니저가 엔티티 관리하지 않음 엔티티 처음 생성시 비영속 상태임
@@ -33,7 +34,7 @@
     2) 관리상태(persist()) : 영속성 컨텍스트가 관리하는 managed 상태
         ex) EntityManager인스턴스.persist(member);
     3) 분리상태(detach()) : 영속성 컨텍스트가 관리하고 있지 않는 detached 상태
-        ex) EntityManager인스턴스.detach(member);
+        ex) EntityManager인스턴스.detach(member); -> 영속성 컨텍스트에서 객체를 지움
     4) 삭제된 상태(remove()) : removed 상태
         ex) EntityManager인스턴스.remove(member);
 7. 스프링 데이터 JPA
@@ -85,11 +86,17 @@
         member.setId("member1");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        // 객체를 저장한 상태(영속)
+        // 객체를 저장한 상태(영속상태) 영속성 컨텍스트에서 객체가 관리
         em.persist(member);
-
+    - em.persist(member); 을 한다고 해서 바로 DB가 저장되는 것이 아니라 영속성 컨텍스트에 객체가 관리되는 것이며 EntityTransaction 이 커밋되는 순가에 쿼리가 저장되는 것임
+    - em.find(객체) 를 통해 find 를 하여 DB에서 조회한 후 1차 캐시에 넣어놓으며 그때도 영속성 컨텍스트에 관리상태가 된다.
 - 준영속(detached)
     : 영속성 컨텍스트에 저장되었다가 분리된 상태
+    - 영속성 상태에 있을때 사용가능한 기능을 사용하지 못함
+    - 사용방법
+      .detatch(객체); // 특정 엔티티만 준영속 상태로 전환
+      .clear(); // 엔티티 메니저 안에 있는 모든 컨텍스트를 초기화
+      .close(); // 영속성 컨텍스트를 종료
 - 삭제(removed)
     : 삭제된 상태
 
