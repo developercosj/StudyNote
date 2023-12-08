@@ -92,3 +92,25 @@
     : 영속성 컨텍스트에 저장되었다가 분리된 상태
 - 삭제(removed)
     : 삭제된 상태
+
+11. 영속성 컨텍스트의 장점
+- 1차 캐시
+    1.  1차 캐시에 저장되며 commit 전에는 DB에 작성이 되지 않음
+    em.persist(객체);
+    2. 따라서 아래처럼 find 시 db가 아닌 1차 캐시에서 조회한다.
+    em.find(객체.class, id key 값)
+    3. 1차 캐시에 없는 Entity는 DB 에서 가져와서 1차 캐시에 저장후 반환한다.
+    4. 같은 트랜잭션 내에서만 가능하며 트랜잭션이 하나 끝나면 영속 컨텍스트(entityManager) 를 지운다.
+- 영속 엔티티의 동일성 보장
+    // 동일한 PK값으로 find()를 했을때 객체는 동일하다
+    Member a = em.find(Member.class, "PK값");
+    Member b = em.find(Member.class, "PK값");
+    a == b // true
+
+    *1차 캐시로 반복 가능한 읽기(REPEATABLE READ) 등급의 트랜잭션 격리 수준을 DB가 아니라 애플리케이션에서 보장해줌
+- 트랜잭션을 지원하는 쓰기 지연
+    JPA 가 모아서 commit 하는 순간에 DB에서 Insert 함
+
+- 변경 감지(Dirty Checking)
+- 지연 로딩(lazy loading)
+
