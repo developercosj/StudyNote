@@ -1,0 +1,89 @@
+- @Column : 컬럼매핑
+    - name : 필드와 매핑할 테이블의 컬럼 이름
+    - insertable, updatable : 등록, 변경 가능 여부, 기본이 true 이나 컬럼에 반영되면 안되는 데이터 설정시 사용
+    - nullable(DDL) : null 값의 허용 여부 설정 (false : not null 제약 조건)
+    - unique(DDL) : @Table 의 uniqueConstraints 와 같은 기능이며 한 컬럼에 간단히 유니크 제약조건을 설정
+        (이름이 복잡하게 설정되기 때문에 실무에서 사용하기 어렵고 복합 unique 키도 불가하여 @Table 의 uniqueConstraints 를 사용하여 이름도 직접 설정가능)
+    - columnDefinition(DDL) : 데이터 베이스 컬럼 정보를 직접 줄 수 있다. ex) "varchar(100) default 'Empty'" 이렇게 아예 수동적으로 설정 가능
+    - length(DDL) : 문자 길이 제약조건이며 String 타입에서만 사용가능
+    - precisionscale(DDL) : BigDecimal 또는 BigInteger 타입에서 사용
+
+- @Temporal : 날짜 타입 매핑
+- @Enumerated : enum 타입 매핑
+    - EnumType.ORDINAL(기본값) : enum 순서를 데이터베이스에 저장
+        사용했을때 문제가 발생할 소지가 있음
+        enum이 변경될때 히스토리를 모르는 개발자들이 enum 타입 추가를 하게 되면 순서보장이 안되기 때문에 운영에서는 절대 쓰지 말것
+    - EnumType.STRING : enum 이름을 데이터베이스에 저장
+
+- @Lob : BLOB, CLOB 매핑
+    문자 String, char[] 등 : CLOB
+    기타 byte[]등 : BLOB
+
+- @Transient : 필드매핑을 하고 싶지 않고 데이터베이스에 저장 조회도 하지 않고 주로 메모리상에서만 임시 값을 보관하고 싶을 때 사용
+
+- @ID, @GeneratedValue
+    - 기본 키 매핑 어노테이션
+    - @ID : 직접 할당
+    - @GeneratedValue : 자동생성
+        - 식별자 전략
+            - IDENTITY : 데이터베이스에 위임, MYSQL의 Auto Increment
+                - 기본키 생성을 데이터 베이스에 위임
+                - 기본적으로는 commit() 하는 시점에 insert 쿼리가 적용된다 따라서 ID값을 알려면 insert 쿼리가 저장하는 시점인 .commit() 시점에 알게 되기 때문에
+                  IDENTITY 전략을 사용하면 ID를 받아오기 힘들다.
+                  따라서 IDENTITY 전략은 예외적으로 .persist() 할 때 insert 쿼리가 생성
+                  따라서 .persist() 시점에 id 값을 얻어올 수 있음
+            - SEQUENCE : 데이터베이스 시퀀스 오브젝트 사용하여 id를 생성한 것을 가지고 와서 사용, ORACLE에서 주로 사용, @SequenceGenerator 필요
+                - 테이블마다 시퀀스를 다르게 관리하기 위해서는 @SequenceGenerator를 사용한다.
+                    // A class 에 설정
+                    @Entity
+                    @SequenceGenerator (
+                        name = "A_SEQ_GENERATOR" // 식별자 생성기 이름인 필수값
+                        ,sequenceName = "A_SEQ" // 매핑할 데이터베이스 시퀀스 이름
+                        ,initialValue = 1 // DDL 생성시에만 사용하며 시퀀스 DDL 을 생성할때 처음 (1) 시작하는 수를 지정
+                        , allocationSize = 1 // 시퀀스 한 번 호출에 증가하는 수 기본값은 50
+                    )
+                    public class A {
+                        @ID
+                        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "A_SEQ_GENERATOR")
+                        private Long id;
+                    }
+                - 특징
+                    - 'call next value for 시퀀스이름'을 하여 DB에서 id 값을 얻어와서 영속성 컨텍스트에 저장
+                    - IDENTITY 전략이 persist() 때 쿼리를 날려서 ID 값을 가져오는것과는 다르게 실제 commit() 할때 쿼리를 날림
+
+            - TABLE : 키 생성용 테이블 사용, 모든 DB에서 사용, @TableGenerator(name="", table="", pkColumnValue="", allocationSize = 1, initialValue=0) 필요
+                - 데이터베이스 시퀀스를 흉내내며 키 생성 전용 테이블을 하나 만들어서 관리하는 전략으로 모든 데이터베이스에 적용이 가능해진다.
+                - 성능문제가 있음
+                - 사용 예시
+                    @TableGenerator (
+                        name = "B_SEQ_GENERATOR" // 식별자 생성기 이름
+                        ,table = "B_SEQUENCE_TABLE" // 생성되는 table명(시퀀스)
+                        ,pkColumnValue = "" // 키로 사용할 값 이름
+                        ,allocationSize = 1
+                    )
+
+            - AUTO : DB에 따라 자동 지정 (기본값)
+        - 권장 : Long 형 + 대체키 + 키 생성전략 사용
+            - ID 타입으로 Long 을 추천 (Integer -> Long 성능 영향이 별로 없다고 할 수 있으며 10억이 넘어가면 Integer 에서 타입변경을 해줘야 하기 때문에 Long 추천)
+        - allocationSize
+            - SEQUENCE 전략을 예로 들어보자면 SEQUENCE 전략을 사용하면 3개의 객체를 따로 만들었을때 persist할 때 next call 로 시퀀스값을 DB에서 조회해서 가져와야 하는데 그럼 객체생성마다
+              DB 접근을 계속해야 한다.
+                  Member member1 = new Member();
+                  member1.setUserName("A");
+                  Member member2 = new Member();
+                  member1.setUserName("B");
+                  Member member3 = new Member();
+                  member1.setUserName("C");
+
+                  em.persist(member1);
+                  em.persist(member2);
+                  em.persist(member3);
+              allocationSize 를 사용하면 -> next call 했을때 미리 size 만큼 DB에 올려놓고 메모리에서는 1씩 사용하다가 size 만큼 다 쓰면 DB에 + size 를 또 해놓고 다시 메모리에서 size 만큼 가져와서 사용하는 것을 반복한다
+            - 기본값은 50
+            - 문제 설명
+                - 1) 처음 호출했을때 시퀀스값 : 1 호출 , 두번째 호출 시퀀스 : 51 (사이즈 50을 기준)
+                - 2) application 은 시퀀스 1,2,3,4,... 로 사용하며 DB를 호출하지 않고 계속 메모리에서 시퀀스얻어서 사용하며 51사이즈까지 가기 전까지는 DB 시퀀스는 계속 51 이고 application 시퀀스는 계속 늘어난다.
+                - 3) application 시퀀스가 51이 되면 다시 DB에서 50만큼을 얻어오고 DB 시퀀스는 101이 되며 이것이 반복된다.
+            - next call 할 때 미리 50개의 값을 DB에 올려놓고 DB에는
+            - 동시성 문제 없음
+
