@@ -19,6 +19,43 @@
     - 주인으로 지정하는 객체
         - 외래키가 있는 곳으로 주인을 정할것(성능이슈등 다양한 이유로)
         - 1:N 일때 N 일때 연관관계의 주인이 된다.
+        - 양방향 매핑시 연관과계의 주인에 값을 입력해야 한다.
+          mappedBy 속성을 사용한 객체는 주인이 아니기때문에 update 등이 불가하고 읽기만 가능하다. 따라서 값을 넣어도 DB에 값이 입력되지 않는다.
+          그렇기 때문에 양방향 매핑시
+        - 결론 : 모든 객체에 양방향에 다 넣어준다. (순수 객체 상태고려)
+            - Test Case 사용시 객체가 다 있어야 무리 없이 작동
+- 주의점
+    - 1) 연관관계의 주인에 값을 입력하지 않을때 문제가 발생
+        - 예시) Team 은 1개 Member 는 여러개
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
+
+            Member member = new Member();
+            member.setName("member1");
+
+            team.getMembers().add(member);
+
+            em.persist(member);
+
+            // 역방향만 연관관계를 설정하고 연관관계 주인의 값을 입력하지 않을때 문제 발생할 소지 잇음
+            // Member 객체에는 team 객체를 넣어 놓지 않음
+
+- 연관관계 작성 방법(필수는 아니나 추천)
+    - 연관관계 편의 메소드 사용 (개발자의 실수를 줄여줌)
+        - 예시
+        @Entity
+        public class A {
+            // 연관관계 B 세팅시 B 객체에도 A 객체를 넣어주는 것을 동시에 함
+            // getter setter 의 setter 이름이 아닌 구분가능하도록 다른 이름으로 사용해주면 인식하기 편함
+            public void  changeB(B b)/* setB(B b) */ {
+                this.b = b;
+                b.getAs().add(this);
+            }
+        }
+
+
+
 
 
 
