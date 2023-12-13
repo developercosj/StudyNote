@@ -1,0 +1,44 @@
+- 상속관계 매핑
+    - 객체는 상속관계가 있으나 데이터베이스의 상속관계는 없다고 할 수 있다.
+    - 슈퍼타입 & 서브타입 관계라는 모델링 기법이 객체 상속과 유사하다.
+    - 따라서 상속관계 매핑은 객체의 상속의 구조를 DB의 슈퍼타입 & 서브타입 관계와 매핑하는 것
+    - 구현 방법
+        - 슈퍼타입 & 서브타입 논리 모델을 실제 물리 모델로 구현방법
+            - 1. 조인 : @Inheritance(strategy = InheritanceType.JOINED)
+                    A
+                a   b   c
+                - A 테이블인 슈퍼타입 테이블에 a,b,c 공통인 데이터는 저장하고 a 테이블에는 특수한 데이터를 저장함
+                - insert 시에도 A,a 두개에 저장해야함
+                - select 시 join 해서 데이터 가져옴
+                - A 에 a,b,c 구분컬럼이 존재
+                - A 테이블에  @Inheritance(strategy = InheritanceType.JOINED) 추가해줘야함
+                - a,b,c 등 하위 테이블 조회시 A 테이블과 Inner join 으로 데이터를 조회함
+                - @DiscriminatorColumn(name="원하는 컬럼명") 를 작성하면 하위 a,b,c 테이블을 구분하는 타입구분컬럼이 생성됨
+                - @DiscriminatorValue("원하는 데이터 이름") 을 a,b,c Entity에 작성하면 A테이블의 DTYPE 컬럼에 들어가는 구분 데이터가 생성된다. Default 값은 Entity 이름
+                - 장점 : 테이블 정규화, 외래키 참조 무결성 (주문등 조회할 때 a,b,c 말고 A 하나만 보면 됨), 저장공간의 효율화
+                - 단점 : 조회시 조인을 많이 사용하여 성능저하, 조회 쿼리가 복잡, 데이터 저장시 insert 2번 (A, 자식테이블)
+
+            - 2. 단일 테이블 전략 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+                - A 테이블만 존재하고 a,b,c 에 있었던 모든 컬럼이 다 들어가 있으며 구분 컬럼이 존재
+                - @Inheritance(strategy = InheritanceType.SINGLE_TABLE) 설정으로 지정함
+                - 성능적인 장점 존재함
+                - @DiscriminatorColumn 없어도 DTYPE 컬럼이 자동 생성됨
+                - 장점 : 조인필요 없고 조회 쿼리가 단순함
+                - 단점 : 자식 Entity 매핑 컬럼은 (a,b,c 의 모든 컬럼) NULL 이 허용되어야 한다, 하나의 테이블 크기가 커짐
+
+            - 3. 구현클래스마다 테이블 전략 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+                - a,b,c 테이블을 만들고 각각정보를 가지고 있는것 (A 테이블은 없음)
+                - @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) 작성
+                - A 테이블은 abstract 클래스 (추상클래스) 로 만들어야 한다. 그렇지 않으면 a,b,c 와 관계없는 그냥 A 클래스가 또 만들어짐
+                - @DiscriminatorColumn 은 필요없어짐
+                - 사용하지 마세요..!
+                - 단점 : 서브타입을 명확히 구분하고 a,b,c 컬럼 하위에 NOT NULL 제약 조건 사용가능
+                        입력시는 편하나 A타입 (부모타입) 으로 조회시 모든 a,b,c 테이블을 UNION ALL 로 조회하게 되는 단점이 있다.
+                        여러 테이블 함께 조회시 UNION 사용되어 성능이 느려질 수 있음
+                        자식 테이블 통합하여 쿼리사용이 어려움
+                        테이블 컬럼 추가등이 발생할때 유지보수가 어려움
+
+
+
+
+
