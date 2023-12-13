@@ -87,3 +87,20 @@
             - next call 할 때 미리 50개의 값을 DB에 올려놓고 DB에는
             - 동시성 문제 없음
 
+- @JoinColumn
+    - 외래키를 매핑할 때 사용
+    - name : 매핑할 외래 키 이름 (기본값 : 필드명_참조하는테이블의 FK 컬럼명)
+    - referencedColumnName : 외래 키가 참조하는 대상 테이블의 컬럼명 (기본값 : 참조하는 테이블의 기본 키 컬럼명)
+    - foreignKey : 외래 키 제약조건 지정가능, 테이블 생성때만 사용
+
+- @ManyToOne 속성
+    - 연관관계 주인이 되어야함
+    - optional : false는 연관 엔티티가 항상 존재해야함 true : 기본값
+    - fetch : 글로벌 패치 전략 설정
+        - FetchType.EAGER : 즉시 로딩
+        - FetchType.LAZY : 지연 로딩
+   - cascade : 영속성 전이 기능 사용
+   - targetEntity : 연관된 엔티티 타입 정보 설정, 현재는 사용하지 않음, 컬렉션 사용시 제네릭으로 타입정보 알 수 있음
+- @OneToMany 속성
+    - mappedBy : 연관관계의 주인 필드를 선택해줌
+    - fetch, cascade, targetEntity
