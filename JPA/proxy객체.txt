@@ -1,0 +1,93 @@
+프록시
+- em.find()
+    - DB에서 직접 객체를 가져오는 것
+- em.getReference()
+    - 하이버네이트가 내부 라이브러리를 써서 가져옴
+    - 데이터 베이스 조회를 미루는 가짜(프록시) 엔티티 조회
+    - DB 에 쿼리가 나가지 않는데 조회가 됨
+    - 이것만 했을때는 DB에서 객체정보가 가지고 오진 않고 (target 이 null) 만약 get필드가 되면 그때 DB에서 값을 가져옴(쿼리가 보내짐)
+- 프록시 객체
+    - 껍데기는 동일한데 안에는 비어 있음
+    - 프록시 객체는 실제 객체의 참조(target)을 보관
+    - Entity target = null 형태
+    - 실제 클래스를 상속받아서 만들어짐 (겉모양 동일)
+    - 진짜 객체인지 프록시 객체인지 구분하지 않고 이론적으로는 사용 가능
+    - 프록시 객체를 호출시 프록시 객체는 실제 객체의 메서드 호출함
+    - 객체를 가져오는 것
+    - 특징
+        - 프록시 객체는 처음 사용할 때 한번만 초기화
+        - 프록시 객체를 처음 초기화 하는 것은 실제 엔티티로 바뀌는 것이 아니라 프록시 객체를 통해서 실제 엔티티에 접근이 가능하게 됨 내부에 타겟에만 값이 채워짐
+        - 프록시 객체는 원본 엔티티를 상속받고 타입 체크시 == 비교로 할 수 없고 instance of 를 사용해야 한다. (객체 비교 참고)
+        - 영속성 컨텍스트에 찾는 엔티티가 있으면 em.getReference()를 호출 시 실제 엔티티 반환
+
+            Member member1 = new Member();
+            member1.setUsername("member1")
+            em.persist(member1);
+            em.flush();
+            em.clear();
+            Member m1 = em.find(Member.class, member1.getId());
+            System.out.println(m1.getClass);  //  Member 객체가 찍힌다.
+            Member instance = em.getReference(Member.class, member1.getId());
+            System.out.println(instance.getClass);  // 프록시 객체가 찍히지 않고 Member 객체가 찍힌다.
+            System.out.println(m1 == instance);  // true -> 영속성 컨텍스트 안에서 가져오는 객체는 == 이 맞게 된다.
+
+
+        - getReference()로 조회를 처음에 해버리면 .find() 도 또한 proxy 로 반환된다... (주의)
+    - proxy 인지 find인지 상관없이 객체를 맞추는 것이 중요함
+    - 준영속 상태일 때 프록시 초기화(DB요청)시 문제 발생 () 왜냐하면 프록시 요청은 영속성 컨텍스트를 통해 DB에 요청하는 것임
+        Member member1 = new Member();
+        member1.setUsername("member1");
+        em.persist(member1);
+
+        em.flush();
+        em.clear();
+
+        Member reference = em.getReference(Member.class, member1.getId());
+        em.detach(reference); // 또는 em.close()
+        reference.getUsername() // 영속성 컨텍스트를 통해 DB 에서 데이터를 불러와야 하는데 LazyInitializationException 발생
+
+- 객체 비교
+
+    1. 기본 동일
+        Member member1 = new Member();
+        member1.setUsername("member1");
+        em.persist(member1);
+
+        Member member2 = new Member();
+        member2.setUsername("member2");
+        em.persist(member2);
+
+        em.flush();
+        em.clear();
+
+    2. 첫번째 경우
+
+        Member m1 = em.find(Member.class, member1.getId());
+        Member m2 = em.find(Member.class, member2.getId());
+
+        System.out.println(m1.getClass() == m2.getClass()); // true
+
+    3. 두번째 경우
+
+        Member m1 = em.find(Member.class, member1.getId());
+        Member m2 = em.getReference(Member.class, member2.getReference());
+
+        System.out.println(m1.getClass() == m2.getClass()); // false
+        System.out.println(m1 instanceof Member); // true
+        System.out.println(m2 instanceof Member); // true
+
+    4. 같은 프록시로 가져오면 == 비교에 성립됨
+        Member m1 = em.getReference(Member.class, member1.getId());
+        Member m2 = em.getReference(Member.class, member2.getId());
+
+        System.out.println(m1.getClass() == m2.getClass()); // true
+
+
+- 프록시 확인
+
+    - EntityManagerFactory_인스턴스.getPersistenceUnitUtil().isLoaded(Object entity);
+        프록시 인스턴스 초기화 여부 확인
+    - entity.getClass();
+        프록시 클래스 확인
+    - Hibernate.initialize(엔티티);
+        강제 초기화
