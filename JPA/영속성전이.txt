@@ -18,3 +18,19 @@
             - 1) Child, Parent 라이프사이클이 유사할때(삭제, 업데이트 등)
             - 2) Parent 가 하나일때 즉 Child 를 소유하고 있는 부모가 1개일때
                 - 예로 들면 게시판 - 첨부파일테이블 데이터 (경로등의 데이터) 가능하지만 파일을 여러곳에서 여러 Entity에서 관리할 때 사용이 어려움
+
+- 고아 객체
+    - 고아 객체 제거 : 부모 엔티티와 연관관계가 끊긴 자식 엔티티를 삭제해줌
+    - orphanRemoval = true
+    - 예시
+        @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+        private List<Child> childList = new ArrayList<>();
+        설정해 놓았을떄
+        persist()한 부모객체.자식객체리스트.remove(0); 했을 때 false(디폴트) 로 할때와 달리(영속성 컨텍스트에서만 지워짐) 실제 DB에 관련 자식 데이터를 DELETE 시킴
+
+    - 주의점
+        - 참조가 제거된 엔티티는 다른곳에서도 참조하지 않는 고아객체라고 생각하여 삭제
+        - 참조하는 곳이 하나일 때 사용
+        - 특정 엔티티가 개인소유일때 사용
+        - @OneToOne, @OneToMany만 가능
+    - 부모 제거 -> 자식제거가 되어야 함 (고아가됨) 객체 제거 기능을 활성화시 부모 제거시 자식도 함께 제거가 되며 CascadeType.REMOVE 와 동작이 같다.
