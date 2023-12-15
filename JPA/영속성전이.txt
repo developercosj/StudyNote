@@ -1,0 +1,20 @@
+- 영속성 전이 CASCADE
+    - 특정 엔티티(부모)를 영속 상태로 만들 때 연관된 엔티티(상속받은 자식)도 함께 영속 상태로 만들때 사용(편리함)
+    - cascade = CascadeType.ALL 를 설정해서 사용
+        예시)
+            @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+            private List<Child> childList = new ArrayList<>();
+
+    - Cascade 종류
+        CascadeType.ALL : 모두 적용
+        CascadeType.PERSIST : 영속 (저장할떄만 사용)
+        CascadeType.REMOVE : 삭제
+        CascadeType.MERGE : 병합
+        CascadeType.REFRESH : 리프레시
+        CascadeType.DETACH : DETACH
+    - 주의점
+        - 하나의 부모가 자식들을 관리할 때 의미가 있음
+        - 사용해야 할 경우
+            - 1) Child, Parent 라이프사이클이 유사할때(삭제, 업데이트 등)
+            - 2) Parent 가 하나일때 즉 Child 를 소유하고 있는 부모가 1개일때
+                - 예로 들면 게시판 - 첨부파일테이블 데이터 (경로등의 데이터) 가능하지만 파일을 여러곳에서 여러 Entity에서 관리할 때 사용이 어려움
