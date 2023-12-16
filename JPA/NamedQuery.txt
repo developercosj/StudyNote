@@ -1,0 +1,23 @@
+Named 쿼리
+- 미리 정의하고 이름을 정해서 사용
+- 정적쿼리에서만 가능
+- 애플리케이션 로딩 시점에 초기화 해서 재사용하며 파싱해서 캐싱해 놓음
+- 로딩시점에 쿼리 문제를 검사
+- 예시
+    - 설정
+    @Entity
+    @NamedQuery (
+        name = "Member.findUserName"
+        query = "select M from Member m where m......"
+    )
+    public class Member {...}
+
+    - 사용
+    em.createNamedQuery("정해놓은 이름", Member.class)
+        .setParameter("이름", 데이터)
+        .getResultList();
+
+- XML 에 정의 가능
+    - named 쿼리를 여러개 xml 파일에 저장해 놓는 것이 가능
+    - xml 우선순위 상
+- Spring Data JAP 에서 @Query("쿼리") -> 이것도 NamedQuery로 등록이 됨
