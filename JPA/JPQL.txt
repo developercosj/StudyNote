@@ -1,0 +1,103 @@
+JPQL 기본
+    - JPA 를 사용해서 엔티티 객체 중심의 개발을 할 수 있으나 검색시에도 엔티티 객체를 대상으로 검색해야 하기 때문에 검색조건이 포함된 SQL 이 필요하다.
+    - JPA는 SQL을 추상화한 JPQL 객체지향 쿼리언어 제공
+    - JPA Criteria
+        - 컴파일시점에 오류 파악 가능
+        - 코드로 작성하여 동적 쿼리 작성이 가능
+        - 표준스펙이나 잘 사용하지 않음 (유지보수의 어려움, 복잡함)
+        - QueryDSL을 사용하는 것이 더 편한
+
+
+#참고 : QueryDSL
+    - 네이티브 SQL
+    - 동적쿼리 작성 가능
+    - 단순한 장점이 있어서 실무 사용시 사용
+
+JPQL 문법
+    - 엔티티와 속성은 대소문자 구분해서 작성
+    - JPQL 키워드는 대소문자 구분하지 않음
+    - 별칭 필수 (as 생략 가능)
+    - TypeQuery<객체>
+        : 반환 타입이 명확할 때 return 타입
+         TypedQuery<String> query1 = em.createQuery("select m.userName from Member m ", String.class);
+    - Query
+        : 반환 타입이 명확하지 않을 때 return
+        Query query2 = em.createQuery("select m.userName, m.age from Member m ");
+    - 컬렉션 객체로 반환
+        TypedQuery<Member> query3 = em.createQuery("select m from Member m", Member.class);
+                List<Member> resultList = query3.getResultList();
+    - 값이 한개일 때 반환
+        - 값이 없으면 NoResultException
+        - 값이 2개 이상이어도 NonUniqueResultException
+        TypedQuery<Member> query4 = em.createQuery("select m from Member m Where m.age = 100 ", Member.class);
+        Member findMember = query4.getSingleResult();
+    - 파라미터 바인딩
+        Member bindingMember = em.createQuery("select m from Member m Where m.userName = :userName ", Member.class)
+                .setParameter("userName", "member1")
+                .getSingleResult();
+    - Select 절에 Distinct 설정 가능
+    - Entity 프로젝션은 모두 영속성 컨텍스트에서 관리가 됨
+
+        - 프로젝션 종류 m  : Member 객체
+            - m
+            - m.team
+            - m.Address ( 임베디드 타입 프로젝션)
+            - m.age, m.name ... (스칼라 타입)
+    - 복수 값 조회 방법
+        1. 타입을 모를때 Object 로 받음
+            List resultObjectList = em.createQuery("select m.userName, m.age from Member m")
+                    .getResultList();
+            Object o = resultObjectList.get(0);
+            Object[] result = (Object[]) o;
+
+        2. 간단하게
+            List<Object[]> simpleObjectList = em.createQuery("select m.userName, m.age from Member m")
+                    .getResultList();
+
+        3. Dto 로 값 조회시
+            Dto 로 매핑할 객체 생성해 놓아야 함
+            List<MemberDTO> memberDTOList = em.createQuery("select new jpql.MemberDTO( m.age, m.userName) from Member m", MemberDTO.class)
+                    .getResultList();
+    - 페이징 처리
+        List<Member> pagingList = em.createQuery("select m from Member m Order by m.age desc", Member.class)
+                .setFirstResult(10)
+                .setMaxResults(20)
+                .getResultList();
+    - 타입 표현
+        - 문자 '나나', 'they''re'
+        - 숫자 10L, 10D, 10F
+        - Boolean : true, false
+        - Enum 패키지명.Enum이름.Enum필드 (패키지명 포함 필요)
+            .setParameter() 로 바인딩 처리를 해주면 패키지명 필요없음
+        - 엔티티 타입 :
+    - 조건식 및 사용 가능 함수
+        - coalesce(m.username, '디폴트값')
+        - case 식 가능
+        - nulllif 사용 가능
+        - CONCAT
+        - SUBSTRING
+        - TRIM
+        - LOWER/UPPER
+        - LENGTH
+        - LOCATE
+        - ABS, SQRT, MOD
+        - SIZE, INDEX(JPA 용)
+    - 사용자 정의 함수
+        extends H@Dialect 등 사용하는 DB extends 받은 클래스에
+        registerFunction("함수이름", new StandardSQLFunction("함수이름", StandardBasicTypes.STRING)) 을 생성해 놓음
+        select function("이름") from 테이블 i
+
+    - 서브쿼리
+        - DB 랑 동일함
+        - EXISTS, ALL, ANY, SOME, IN, NOT IN 등 사용 가능
+        - JPA 는 WHERE, HAVING 절 서브쿼리 사용가능
+        - 하이버네이트에서 SELECT 절 서브쿼리 사용 가능
+        - FROM 절에서의 서브쿼리는 사용 불가
+    - 조인
+        - On 사용 가능
+            - 연관관계 존재하는 Entity
+                JPQL : SELECT m, t FROM Member m LEFT JOIN m.team t ON t.name = 'A'
+                SEL : SELECT m.*, t.* FROM Member m LEFT JOIN Team t ON m.TEAM_ID = t.id and t.name = 'A'
+            - 연관관계 없는 엔티티 외부 조인
+                JPQL : SELECT m, t FROM Member m LEFT JOIN Team t ON m.username = t.name
+                SQL SELECT m.*, t.* FROM Member m LEFT JOIN Team t ON m.username = t.name
