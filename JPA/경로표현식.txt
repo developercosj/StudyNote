@@ -1,0 +1,12 @@
+- 상태 필드 (state field)
+    - 정의 : 단순히 값을 저장하기 위한 필드 int String 등등 필드값
+    - 경로탐색이 끝이기 때문에 더이상 탐색하지 않음
+- 연관필드 (association field)
+    - 단일 값 연관 필드 : @ManyToOne, @OneToOne, Entity
+        - 묵시적 내부 조인(inner join) 발생, 탐색이 가능
+
+    - 컬렉션 값 연관 필드 : @OneToMany, @ManyToMany, Collection
+        - 묵시적 내부 조인이 발생하며 탐색이 불가능
+            -> 탐색이 가능하게 하려면 실제로 join 쿼리를 직접 작성해 주어서 명시적 조인으로 만들어줌
+               select t.member from Team t (t.member.username 불가) -> select m.username  from Team t join t.member m;
+#묵시적 조인은 위험 -> 왠만하면 명시적 조인으로 작성하기
