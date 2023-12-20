@@ -1,0 +1,5 @@
+- @Entity 클래스 생성시 기본 생성자가 필수
+- @Entity를 붙여서 매핑할 수 없는 객체 : final 클래스, enum, interface, inner 클래스 사용불가
+- 저장할 필드에 final 사용이 불가함
+- JPA 사용할때는 쿼리를 날리거나 commit 할때 flush()가 자동으로 되서 DB에 반영이 되는데, JDBC 커넥션을 직접 사용하거나 스프링 JdbcTemplate, Mybatis 를 사용할 때는
+      영속성 컨텍스트를 강제로 flush 해줄 필요가 있음
