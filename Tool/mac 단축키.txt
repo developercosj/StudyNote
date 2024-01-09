@@ -1,0 +1,17 @@
+- find 단축키
+    https://dev.drawyourmind.com/posts/terminal-find-commad/
+- 환경변수
+    - 수정
+        vim ~/.zshrc
+        export PATH="[경로명]:$PATH"
+    - 적용
+        source ~/.zshrc
+
+
+- 하위 폴터에서 모든 텍스트 찾기
+    grep -r "찾으려는 단어"
+- 현재 디렉토리(.) 내 ‘.txt’를 포함한 모든(*) 파일 검색
+    $find . -name "*.txt"
+
+
+
