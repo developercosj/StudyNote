@@ -1,0 +1,40 @@
+- 파이썬 가상환경 이란
+    - 시스템에 설치된 파이썬과 별도로 디렉토리에 파이썬 인터프리터, 라이브러리 설치
+
+사용 이유
+    - 특정 버전의 파이썬 또는 파이썬 라이브러리 사용필요
+
+
+- Python 가상환경 설정
+  awork #cd /app/super
+  sudo apt-get update
+
+  sudo apt-get install python3.9-distutils #파이썬 모듈설치
+  sudo apt install pip
+  sudo apt-get install python3.9-venv
+  sudo apt install virtualenv
+
+  python3 -m venv .venv
+    # 가상환경 활성화
+  . /app/super/.venv/bin/activate # venv
+    # 가상환경 비활성화
+  deactivate # vde
+
+
+
+- pip
+    - pip는 파이썬으로 작성된 패키지 소프트웨어를 설치 · 관리하는 패키지 관리 시스템
+- venv
+    - Python의 표준 라이브러리 중 하나로, 별도의 패키지나 모듈 환경을 제공하는 가상 환경을 만들기 위해 사용
+
+- virtualenv
+    - virtualenv는 어플리케이션별로 독립된 가상 환경을 사용할 수 있게 해준다.
+
+- 인터프리터
+- 라이브러리
+
+- 기본 설치 폴더 : /usr/bin
+
+- 궁금한 폴더역할 알아보기
+/usr/bin/python3-futurize
+/usr/bin/python3-pasteurize
