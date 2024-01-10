@@ -1,0 +1,10 @@
+- 자료형
+    - int, String, Float
+
+- 변수 선언 방식
+    - val(value) - 불변형(immutable)
+        val username : String = ""
+        선언키워드 변수이름: 자료형 = "값"
+        * 초기값을 설정하고 나면 변경이 불가하다.
+
+    - var(variable) - 가변형(mutable)
