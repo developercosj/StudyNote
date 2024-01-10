@@ -14,4 +14,15 @@
     $find . -name "*.txt"
 
 
+- ls -altr
 
+- 위치 경로 확인
+    which python3 (파이썬예)
+
+- 강제종료
+    option + command + esc
+
+- 파일 권한까지 확인
+    ls -l
+
+    ./SECRET_KEY
