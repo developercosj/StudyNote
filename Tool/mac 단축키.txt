@@ -26,3 +26,6 @@
     ls -l
 
     ./SECRET_KEY
+
+- homebrew 로 설치한 프로그램 위치 및 정보 파악하기
+    - brew info {설치한 APP 이름}
