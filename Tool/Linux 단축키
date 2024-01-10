@@ -1,0 +1,10 @@
+- sudo apt update
+    우분투 운영체제 패키지 정보 업데이트
+- sudo apt install openssh-server
+    ssh 서버 설치
+- chown/chmod -R
+    -R 을 넣으면 하위 폴더 모두에 적용
+- netstat -an
+- grep
+- grep LISTEN
+
