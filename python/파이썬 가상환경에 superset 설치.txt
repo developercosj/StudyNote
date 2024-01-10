@@ -1,11 +1,41 @@
 - 파이썬 가상환경 이란
     - 시스템에 설치된 파이썬과 별도로 디렉토리에 파이썬 인터프리터, 라이브러리 설치
 
-사용 이유
+- 사용 이유
     - 특정 버전의 파이썬 또는 파이썬 라이브러리 사용필요
 
+- 아나콘다를 사용해서 가상환경 구축하는 방법 존재
 
-- Python 가상환경 설정
+- 종류
+안녕하세요
+
+    - venv (표준 라이브러리)
+        - python 3 만 지원
+        - 가상환경 생성
+            python -m venv 경로/가상환경이름
+            -> 루트 디렉토리에 .venv(일반적인 이름) 이름으로 폴더 생성
+        -가상환경 활성화
+            source 가상환경이름/Scripts/activate #bin 폴더 아래에서 찾아볼 수 있다.
+            -> 루트 디렉토리에 여러개의 가상환경 생성, 원하는 것 활성화하여 프로그램 실행
+        - 모듈 설치방법은 동일하고 단지 가상환경안에 설치한것이 된다.
+        - requirements.txt  파일안에 모듈 파일이 있고 이 파일이 있다면 pip install numpy 로 모듈을 설치해도 된다.
+        - 모듈은 Lib/site-packages 안에 저장이 된다.
+        - 가상환경 비활성화
+            source 가상환경이름/Scripts/deactivate
+        - 가상환경 삭제
+            - 가상환경 삭제는 아나콘다에서는 명령어가 존재하고 직접 운영시에는 해당 폴더를 삭제하면 됨
+    - virtualenv( 비표준 라이브러리)
+        - python 2,3 모두 지원
+
+
+
+
+- scratch
+
+
+
+
+- Python 가상환경 설정 for linux
   awork #cd /app/super
   sudo apt-get update
 
@@ -20,6 +50,9 @@
     # 가상환경 비활성화
   deactivate # vde
 
+
+source superset3.9/bin/activate
+/Users/isujeong/superset_local/superset/superset-frontend/superset3.9/bin/python
 
 
 - pip
@@ -38,3 +71,6 @@
 - 궁금한 폴더역할 알아보기
 /usr/bin/python3-futurize
 /usr/bin/python3-pasteurize
+
+
+
