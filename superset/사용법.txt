@@ -1,0 +1,14 @@
+- superset 서버 띄우기
+    - superset run -p 8088 --with-threads --reload --debugger --debug
+
+-> Cs 가 안나와서 아래처럼 빌드하고 서버 띄울것
+- superset-frontend 폴더의 종속 항목을 설치하고 자산을 빌드한다.
+    cd superset
+    cd superset-frontend
+    npm ci
+    npm run build
+- frontend dev-server를 띄워준다.
+    npm run dev-server
+    *localhost:설정포트 로 접근
+
+
