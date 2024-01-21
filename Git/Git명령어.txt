@@ -1,0 +1,124 @@
+- git init
+    기존 디렉토리를 git 저장소로 생성
+    원하는 기존 디렉토리로 이동(cd) 해서 명령어 git init 작성
+    - .git 이라는 하위 디렉토리 생성
+    - .git
+- git add / git commit
+    - Git이 파일을 관리하게 하기 위해 저장소에 파일을 추가(git add) 하고 커밋해한다. (git coomit)
+    - Git add 명령어는 파일을 새로 추적할때도 사용하며 수정한 파일을 Staged 상태로 만들때도 사용
+
+- git clone <url>
+    - 기존 저장소를 clone Git 저장소를 복사
+    - 프로젝트 히스토리를 모두 복사해옴
+    - .git 디렉토리도 생성
+    - 가장 최신버전으로 Checkout 해놓음
+
+- git status -s or git status --short
+    간략하게 보여주며 새로 생성한 파일 A, 수정한파일 M , 아직 추적하지 않는 새 파일 ??
+
+- git diff
+    어떤 내용이 변경되었는지 살펴보기
+    워킹 디렉토리에 있는 것과 Staging Area
+- git diff --staged (--cached)
+    저장소에 커밋한 것과 Staging Area에 있는 것을 비교
+    Unstaged 상태인 파일들만 보여줌
+
+- git commit -m "메시지"
+    Git은 Staging Area에 속한 스냅샷을 커밋한다.
+    Staging Area에 없는 것은 커밋안됨
+    - -a 옵션을 넣으면 Tracked 상태의 파일을 git add 하지 않아도 자동으로 Staging Area 에 넣어줌
+
+- git rm
+    - Git 에서 파일 삭제하는 명령어로 Tracked 상태 파일을 Staging Area에서 삭제
+    - git coomit 으로 적용 필요
+    - 워킹디렉토리에 있는 파일도 실제로 삭제됨
+    - 삭제한 파일은 Staged 상태
+    - -f 옵션은 강제
+    - -cached 옵션은 Staging Area에서만 제거하고 워킹 디렉토리에 있는 파일은 지우지 않고 남겨둘 때 사용 하드디스크에 있는 파일은 그대로 두고 Git 만 추적 금지
+
+- git mv old_file new_file
+    - 파일 이름 변경하기
+
+- git log
+    - 히스토리 보기
+    - --decorate 옵션을 사용하면 쉽게 브랜치가 어떤 커밋을 가리키는지도 확인가능
+
+
+- git commit --amend
+    되돌리기
+    완료한 커밋을 수정
+    다시 커밋하고 싶을때 파일 수정 작업을 한 뒤 Staging Area에 추가한 뒤 --amend 옵션을 사용하여 커밋 재작성 가능
+    amend 옵션으로 커밋을 고치는 것은 이전 새 커밋으로 분리하지 않고 하나의 커밋에서 처리
+
+- git reset Head 파일이름
+    staged 파일을 Unstaged 상태로 변경
+    - 옵션없이 사용하면 워킹 디렉토리의 파일은 건드리지 않는다.
+
+- git checkout -- 파일이름
+    꽤 위험
+    원래 파일로 덮어쓰기 때문에 수정한 내용이 전부 사라짐
+    최근 커밋된 버전으로 되돌림
+
+- git remote
+    - 현재 프로젝트 폴더에서 등록된 리포트 저장소를 확인 가능
+    - clone 을 하면 origin 이라는 리모트 저장소가 자동으로 등록됨
+    - -v 옵션을 주어 단축이름과 URL을 함께 볼 수 있음
+
+- git remote add <단축이름> <url>
+    - 기존 워킹 디렉토리에 새리모트 저장소 추가 가능
+    - 기존 url 대신 단축이름으로 사용가능
+    - git fetch pb을 사용하여 로컬 저장소에는 없지만 다른 저장소에 있는 것을 가져오는 것이 가능
+
+
+- git fetch <remote>
+    리모트 저장소 pull 하거나 fetch 하기
+
+- git push <리모트 저장소 이름> <브랜치 이름>
+    푸시하기
+- git remote show <리모트 저장소 이름>
+    - 리모트 저장소의 구체적인 정보 확인
+
+- git pull
+    - 리모트 저장소 브랜치의 모든 데이터를 가지고오고 자동으로 Merge 함
+
+- git remote rename <원래브랜치> <변경브랜치>
+    - 리모트 저장소 이름 변경
+    - 로컬에서 관리하던 리모트 저장소의 브랜치 이름도 바뀐다.
+- git remote remove/ git remote rm
+    - 리모트 저장소 삭제
+    - 해당 리모트 저장소에 관련된 추적 브랜치 정보나 모든 설정 내용도 함께 삭제됨
+
+- git tag
+    - 이미 만들어진 태그 확인
+    - 예시 : git tag -l "v1.8.5*"
+
+- git tag -a v1.4 -m "메시지 작성"
+    - Annotated 태그를 만들려면 -a 옵션 추가
+    - -m 옵션으로 태그를 저장시 메시지 함께 저장 가능
+
+- git show 태그이름
+    - 태그 정보와 커밋 정보 모두 확인 가능
+
+- git push origin <태그이름>
+    - git push 는 태그를 전송하지 않기 때문에 서버에 별도로 push 필요
+    - --tags 옵션은 한번에 전송
+
+- git checkout <태그이름>
+    - 태그를 체크하웃하면(브랜치가 아닌) detached HEAD 상태가 되며 일부 Git 작업이 브랜치작업과 다르게 동작할 수 있음
+
+- git checkout -b <브랜치이름>
+    - 새로운 브랜치 생성 + Checkout 한번에
+
+- git branch <브랜치 이름>
+    - 브랜치를 새로 생성
+
+- git branch -d <브랜치이름>
+    - 브랜치이름 브랜치를 삭제
+
+- git checkout <브랜치 이름>
+    - 다른 브랜치로 이동가능
+
+- git branch
+    아무런 옵션 없이 실행하면 브랜치의 목록을 보여줌
+    *이 붙어있는 브랜치는 현재 checkout 하여 작업하는 브랜치
+    - --v 는 마지막 커밋 메시지도 함께 보여줌
