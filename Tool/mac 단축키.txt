@@ -29,3 +29,18 @@
 
 - homebrew 로 설치한 프로그램 위치 및 정보 파악하기
     - brew info {설치한 APP 이름}
+
+
+- 터미널 창 분할
+    # 선행 : brew install iterm2
+    창 세로 분할: Command + D
+    창 가로 분할: Command + Shift + D
+
+- node 버전 변경하기 (다운받은 후)
+    brew unlink node@16
+    brew link --overwrite node@14
+
+
+- 포트 KILL
+    lsof -i :포트번호
+    kill -9 PID
