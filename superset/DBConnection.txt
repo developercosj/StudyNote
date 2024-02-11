@@ -1,0 +1,25 @@
+
+- docker container에서 superset 운영시에 docker container는 하나의 분리된 서버처럼 되기 때문에 로컬에 있는 DB 에서 연결시 localhost 로 접근 불가
+
+- postgresql 설치
+    brew install postgresql@16
+    * postgresql 11,12,13,14, 15 등 Btree 성능이 향상되고 있음 -> 14로 결정
+- postgresql 실행
+    brew services start postgresql@14
+- psql (postgresql 쉘) 접속
+    psql postgres
+    #postgres=# 접속 완료
+
+- postgresql 시작 종료
+    - pg_ctl은 postgresql 서비스를 시작하거나 중지 및 재시작, 환경설정 적용 가능
+    - pg_ctl start
+    - pg_ctl stop
+
+
+- plsql 재시동
+    - brew services stop postgresql
+    - brew services start postgresql
+
+
+
+
