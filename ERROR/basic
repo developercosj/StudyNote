@@ -1,0 +1,6 @@
+- @RequestBody 어노테이션이 있는 메서드에 통신할때는 raw 데이터로 만들어 주기
+    - ex)
+        {
+            "query": "오라클이 뭔가요",
+            "modelName": "gpt-3.5-turbo"
+        }
