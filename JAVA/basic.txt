@@ -272,6 +272,11 @@ StringBuffer(String str) : str의 값을 갖는 StringBuffer를 생성한다.
 - 변수 값 write 할 때 Main memory에 까지 저장
 
 
+13. Entity와 Value Object 차이
+    - Entity는 식별성(pk나 주민번호등의 식별자가짐)과 연속성(변경가능)을 지님
+    - value object는 식별성이 없이 도메인적인 객체를 나타내고 있다.
+
+
 
 
 
