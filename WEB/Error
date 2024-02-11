@@ -3,3 +3,8 @@
 - 300번대 : Redirection 필요
 - 400번대 : 클라이언트 오류
 - 500번대 : 서버 오류
+
+
+
+2. CORS
+    Cross-Origin Resource Sharing 교차 출처 리소스 공유
