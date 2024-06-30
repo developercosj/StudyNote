@@ -1,0 +1,13 @@
+- Spring log 정리
+
+- 로그를 사용하기 위해서 세팅이 필요하다.
+- logback-spring.xml 파일을 만든다.
+    1. 파일 생성 위치 : ...../src/main/resources
+        ex) ./logback-spring.xml -> 현재 폴더 아래에 있음
+
+    2. ..../src/main/resources/application.properties 에 설정
+
+         logging.config=classpath:/logback-spring.xml
+
+
+
