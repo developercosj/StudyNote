@@ -1,0 +1,28 @@
+1. fetch 를 이용해서 QueryDsl 의 결과 반환 방법 : fetch, fetchOne, fetchFirst, fetchResults, fetchCount
+
+
+    - fetch()
+        - 리스트로 결과를 반환하는 방법 (데이터가 없으면 빈 리스트로 반환)
+    - fetchOne()
+        - 단건 조회 결과 없을시 null 반환 결과가 둘 이상일때는 NonUniqueResultException 발생
+    - fetchFirst()
+        - 처음 한건 쿼리 조회
+    - fetchResults()
+        - 페이징 처리시 사용 가능
+    - fetchCount() : count 쿼리 가능
+
+
+
+2. QueryDsl 사용시 필요한 컬럼으로 이루어진 리턴 클래스를 Projections.constructor 로 생성하는데 해당 클래스의 생성자에 조회 결과의 컬럼 리턴 타입과 리턴 개수가 정확해야 한다.
+
+
+3. 패치조인은 SQL 에서 제공하는 기능은 아니고 SQL 조인을 활용해 지연로딩으로 설정된 엔티티를 한번에 조회하는 기능
+    따라서 페치 조인(fethchJoin()) 을 적용하지 않고 일반 조인으로 조인하면 연관관계 매핑이 되어 있더라도 조회 x
+
+
+4. 즉시로딩(EAGER) 로 설정하면 해당 엔티티를 조회하는 다른 쿼리
+    대부분 지연 로딩(LAZY)로 설정하고 필요한 경우에는 페치조인을 사용하는 것을 권장
+
+5. 다이나믹 쿼리 생성시 파라미터 null 처리
+
+참고 : https://www.inflearn.com/questions/94056
