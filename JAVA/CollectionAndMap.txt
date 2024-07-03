@@ -8,7 +8,7 @@
             *red-black 트리 : 이진 트리 구조
         - LinkedHashSet : 해쉬 테이블에 데이터를 담으며 저장된 순서에 따라 결정
         *데이터의 크기를 미리 알고 있을때는 선언시 미리 설정하는게 좀 더 좋음
-- [List] : 순서가 있는 집합 처리, 중복 허용,
+- [List] : 순서가 있는 집합 처리,
     - List를 구현한 클래스 : ArrayList, LinkedList, Vector
         - Vector : 객체 생성시 크기 지정 필요 없는 배열 클래스
         - ArrayList : Vector 와 비슷하지만 동기화 처리가 안됨
@@ -17,11 +17,14 @@
     - 데이터를 담아 두었다가 먼저 들어온 데이터 부터 처리
     - Queue 인터페이스를 구현한 클래스 : LinkedList, PriorityQueue, concurrent 패키지 내부 클래스 (컨커런트 큐 클래스)
         - PriorityQueue : 큐에 추가된 순서가 아니라 먼저 생성된 객체가 먼저 나오는 클래스
+                            힙을 기반으로 하는 완전이진트리로 우선순위를 정하게 된다.
+
         - LinkedBlockingQueue : 저장할 데이터의 크기를 선택적으로 정할 수 있음
         - ArrayBlockingQueue : 데이터의 크기가 정해져 있는 큐
         - PriorityBlockingQueue : 저장되는 데이터의 크기가 정해져있지 않음 객체 생성 순서에 따라 저장
         - DelayQueue : 대기 시간 지정하여 처리하는 큐
         - SynchronousQueue: put() 메서드 호출시 다른 스레드에서 take() 메서드가 호출될 때까지 대가하여 동기화 처리
+
 2. Map
 - [SortedMap] : 키를 오름차순으로 정렬
 - Map 을 구현한 클래스 : HashMap, TreeMap, LinkedHashMap, HashTable
@@ -46,4 +49,18 @@
     - 메서드 전체에 synchronized 키워드가 존재한다.
     - Muiti-Thread 환경에서는 Thread-safe 할 수도 있으나 Lock 을 가지고 있기 때문에 병목현상이 발생한다.
       멀티스레드 환경에서는 속도적으로 느릴 수 있다.
+
+
+5. 트리 구조
+    - N링크 표현법 (N-Link Expression)
+        - 시간 복잡도가 우수하다는 것
+        - 구현이 복잡함 (자식 갯수는 최대 N 개로 고정됨) ---> 모름...
+        - 동적배열을 사용해서 만들면 알고리즘이 매우 복잡해짐
+    - 왼쪽 자식/오른쪽 형제 표현헙(Left Child/Right Sibling Expression)
+        - 구현이 매우 쉬운편
+        - 동적배열로 만듬
+        - 단점
+        - 부모노드에서 자식노드를 한번에 방문할 방법이 전무함
+
+
 
