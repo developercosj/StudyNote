@@ -1,0 +1,29 @@
+1. OrderSpecifier 구현 동기
+    - QueryDsl 에서 Pageable을 넣어서 조회시 sort 를 사용하기 위해서는 Q 객체의 컬럼으로 order 를 하는 것이 가장 쉬우나 Pageable 에 들어있는 sort 를 이용해서
+    orderBy 할 수 있는 방법을 찾기 위해서 작업 필요
+
+2. QueryDsl 에서 orderBy 의 필요 인자 : OrderSpecifier 클래스 구현 필요
+
+
+3. 필요 인자
+    private final Order order;
+    private final Expression<T> target;
+    private final NullHandling nullHandling;
+
+
+4. NullHandling
+    Default, -> 기본으로 사용
+    NullsFirst,
+    NullsLast;
+
+5. Order
+    ASC,
+    DESC;
+
+    Pageable 에 있는 것으로 사용
+
+6. Expression
+
+
+
+
