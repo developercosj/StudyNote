@@ -62,3 +62,62 @@
                 Team team = member.getTeam();
                 String teamName = team.getName();
 
+
+7. JPQL QueryDsl
+
+- 사용시기
+    - (인프런 김영한 선생님 답변을 기준으로)
+        단순한 기능은 JPA
+        조금 복잡해지면
+            JPQL : 단순한것들이면 스프링 데이터 JPA 가 제공하년 @Query 어노테이션으로 작성하여 끝내는 것이 가능
+            QueryDsl : 동적쿼리라면 반드시 사용, 커스텀 리포지터리 만들어서 사용해야함
+
+
+    - JPQL 실제 구현 방식 (Spring)
+        1. EntityManager (em.createQuery("select * from ...."))
+        2. Repository interface 활용 (@Query)
+    - JPQL 문제
+        1. String 형태이기 때문에 개발자 의존적
+        2. Compile 단계에서 Type Check 불가능 Runtime 에서 오류 발견 가능
+
+
+
+    - QueryDsl 실제 구현 방식 (Spring)
+        1. Spring Data Jpa Custom Repository
+            - JpaRepository 인터페이스 생성
+            - JpaRepository 인터페이스를 상속하여 Repository 인터페이스 생성
+            - 기존 JpaRepository 를 상속받는 Custom repository 인터페이스 생성
+            - 커스텀 구현 클래스의 경우 이름을 반드시 interface 이름 + Impl 로 만들어야 한다. (Jpa 에서 Injection을 할 때 해당 이름으로 생성된 클래스 기준으로 객체 삽입)
+        2. QueryRepositorySupport
+        3. JPAQueryFactory
+            - QueryDsl 의 핵심 클래스
+            - JPA 기반으로 쿼리 작성을 더욱 편리하게 해줌 EntityManager를 기반으로 JPA 쿼리를 생성하고 실행하는 기능을 제공해준다.
+            - 동적쿼리, 재사용, 복잡한 쿼리등 장점을 많이 가지고 있음
+            - config 생성
+
+                @Configuration
+                @EnableJpaRepositories("com.example.repository")
+                public class JpaConfig {
+
+                    @PersistenceContext
+                    private EntityManager entityManager;
+
+                    @Bean
+                    public JPAQueryFactory jpaQueryFactory() {
+                        return new JPAQueryFactory(entityManager);
+                    }
+                }
+            - 사용하고자 하는 곳에 빈으로 등록해 놓은 JPAQueryFactory 를 선언해서 사용하면 됨
+                private final JPAQueryFactory queryFactory;
+
+    - QuerydslRepositorySupport (현재 소스 코드에 적용된 것 )
+        1. 추상 클래스로서 QueryDsl 을 편하게 사용하기 위해 구현한 클래스
+
+
+        - APT(Annotaion Processing Tool) : 어노테이션으로 정의된 코드를 기반으로 새로운 코드를 생성하는 기능 JDK 1.6 이상
+        - Q도메인 클래스 생성됨
+        - QueryDSL은 Entity 클래스와 Q Doimain 이라는 쿼리 타입의 클래스를 자체적으로 생성해서 메타데이터로 사용 -> SQL 쿼리 생성 제공
+
+        - FetchResult deprecated
+            : https://junuuu.tistory.com/894
+
