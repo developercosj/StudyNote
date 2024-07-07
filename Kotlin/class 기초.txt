@@ -1,0 +1,21 @@
+- abstract class
+    abstract class는 그 자체로 인스턴스화 될 수 없는 클래스
+    여러 클래스에서 공통으로 쓰는 프로퍼티와 메서드를 모아놓는 용도
+    * concrete type은 그 자체로 인스턴스화 할 수 있는 타입
+    미완성됨 -> 인스턴스가 불가능
+    미완성된 변수나 함수에는 abstract modifier 가 앞에 추가됨
+    내부 변수나 함수 또한 abstract으로 만들 수 있음
+    -> 미완성된 값들은 abstract을 구현하면서 반드시 구현이 필요하다.
+        구현방법 : 생성자에 넣어서 생성함, custom get 사용하여 구현
+        abstract fun 은 override 되어 구현되어야 한다.
+        나머지 abstract가 붙지 않은 것들을 구현이 필수적이지 않다.
+        abstract class 는 내부에 구현체가 있으면 구현체에 의존적이게 될 수 밖에 없어 유연성이 감소할 수 있다.
+- open
+
+    * 코틀린에서의 클래스와 메서드는 기본적으로 final
+    어떤 클래스의 상속을 허용하려면 해당 클래스 앞에 open 변경자 필요
+    오버라이드가능한 메서드나 프로퍼티 앞에서도 open 변경자 필요
+
+
+- data class
+    데이터 클래스는 toString(), hashCode(), equals(), copy() 메서드를 자동으로 만들어주는 클래스다.

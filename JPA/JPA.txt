@@ -142,3 +142,7 @@
     - em.setFlushMode(FlushModeType.AUTO) 로 EntityManager(em) 에 타입을 저장할 수 있음
     - FlushModeType.AUTO : 디폴트
     - FlushModeType.COMMIT : 커밋할 때만 플러시
+
+
+
+- JPA JpaRepository 상속받아서 repository 생성시 추가 함수 작성시 이름지을때 컬럼의 이름으로 지정해 줘야 한다.@JoinColumn 이나 @Column에 있는 name (name = "user_id") 을 카멜형태로 작성

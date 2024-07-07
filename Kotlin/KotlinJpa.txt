@@ -1,0 +1,26 @@
+- data class 로 선언하는 것보다는 일반 클래스로 선언하는 것이 더 좋다.
+data class 는 open, abstract 키워드 사용지 못하기 떄문에 다른 클래스의 부모클래스가 될 수 없음
+
+- 지연로딩 시 데이터 클래스에서 작동하지 않는 문제
+- JPA 지향하는 Entity 객체는 Entity끼리도 상속성 이룰 수 있어야 한다.
+
+- Entity
+    - Entity는(클래스, 메서드, 인스턴스변수등 모두) final 클래스이면 안된다.
+    - Entity는 최상위 클래스여야 한다.
+    - Entity는 추상클래스, 구체 클래스 모두 될 수 있다.
+    - Entity는 public 또는 protected 접근제한자를 가진 인수없는 생성자(no-arg)가 있어야 한다.
+        (추가적으로 생성자를 정의 할 수도 있다.)
+    - Enum 또는 interface 는 Entity가 될 수 없다.
+
+- Entity 생성시 주의해야 할 점
+    - 무분별한 mutable property 사용하지 말것
+    - Kotlin 은 불변지향
+    - Entity를 var 변수로 선언하고 외부에서 상태를 변경하도록 하지 말것 (캡슐화 필요) ㅌ
+
+
+- 코틀린 클래스는 기본이 final (상속불가) 지연로딩을 위한 프록시 객체를 생성할 수 없기 때문에 클래스와 프로퍼티에 open 변경자 붙여줘야 한다.
+- data class 를 사용하여 엔티티를 정의하게 되면 setter 의 개방을 막을 수 없음
+    - 연관관계 매핑으로 인해 발생가능한 toString() 함수의 순환참조 문제 방지 못함
+    - 동등한 엔티티에 대하여 예상치 못한 결과를 나타낼 수 있는 equals(), hashCode() 함수 문제
+
+- var(variable)과 val(value)로 프로퍼티를 선언하며 var 로 선언하면 getter와 setter를 자동으로 생성, val 로 선언시 getter만 생성하고 불변

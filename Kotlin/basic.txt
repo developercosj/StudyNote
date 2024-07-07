@@ -346,3 +346,84 @@
 
 
     람다식, 고차 함수, 순수함수
+
+
+- primary constructor, second constructor
+    - 생성자는 primary constructor, second constructor 존재한다.
+    - second constructor 는 primary constructor 를  상속해서 생성
+    - class 선언에 있는 consructor 는 primary constructor
+    - primary constructor 인자가 1개이면 second 인자는 1개 이상 필수
+    - this() 함수를 통해서 상속을 표시한다.
+
+- primary constructor
+    // 1번
+    class A constructor(_nickname: String){
+        val nickname: String
+        init {
+            nickname = _nickname
+        }
+    }
+
+    // 2번
+    class A(_nickname: String){
+        val nickname = _nickname
+    }
+
+    // 3번
+    class A(val nickname: String)
+
+- 생성자 호출
+    - val su = A("닉네임")
+
+
+
+- ::class.java
+
+    - :: 기호는 리플렉션을 의미
+        코드작성시점에서 런타임시 프로그램의 클래스를 조사하기 위해 사용
+        코드 작성시에는 런타임되어 컴파일된 바이트코드에서 작성하고 있는 코드를 사용할 수 없음
+        클래스 리플렉션을 바로 불러오거나 class이름::class 인스턴스를 통해 클래스를 리플렉션 instance이름::class 할 수 있다.
+
+    - .java : KClass 로부터 자바 클래스값을 받아옴
+    - 코틀린에서의 클래스와 자바에서 쓰는 클래스는 다름
+
+- KClass
+    KClass 레퍼런스 객체를 통해 클래스가 추상클래스인지 데이터 클래스인지나 생성자, 멤버변수등의 정보를 얻을 수 있음
+
+
+- mutableListOf()
+
+
+- 삼항연산자처럼 사용하기
+
+     var 변수 = if (조건) 값1 else 값2
+
+
+- companion object
+    - 싱글톤
+
+
+
+- 내부 클래스(inner) 와 중첩 클래스(nested)
+    코틀린에서는 한 클래스 안에 다른 클래스를 정의하면 기본적으로 중첩클래스이고 내부 클래스로 하려면 inner 키워드로 선언 필요
+    내부 클래스에서는 기본적으로 외부 클래스를 참조하게 되지만 중첩 클래스는 그렇지 않는다.
+    중첩 클래스에서는 외부 클래스를 참조하지 않고 내부에 입력된 값이 됨
+    내부 클래스에서는 항상 외부 클래스를 참조하고 있다. -> 객체가 삭제되는 시점인 더이상 사용하지 않을때는 내부 클래스에서 통용되지 않는다. 내부 클래스를 사용하면 항상 외부 클래스의 객체를 참고 하기 때문에 객체가 적절한 시점에 삭제되지 못하고 메모리 누수가 발생한다.
+    내부 클래스 사용을 지양하고 중첩 클래스를 사용하는 것이 권장 된다.
+
+    - 중첩 클래스 예시)
+        class Outer {
+            private val bar: Int = 1
+            class Nested {
+                fun foo() = 2
+            }
+        }
+
+    - 내부 클래스 예시)
+        class Outer {
+            private val bar: Int = 1
+            inner class Inner {
+                fun foo() = bar
+            }
+
+        }
