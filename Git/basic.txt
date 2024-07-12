@@ -1,0 +1,2 @@
+1. 한개의 컴퓨터에 git 계정 2개 사용할 것
+    - https://yjleekr.tistory.com/124
