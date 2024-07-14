@@ -1,0 +1,93 @@
+Swagger(OAS(Open API Specification)) 는 RestFul Api 문서화, 사용자가 쉽게 테스트 할 수 있도록 함
+
+- 특징
+    - Swagger Ui 를 사용하여 API 를 쉽게 테스트 가능하다.
+    - 회사 내부 시스템에 구축이 가능해서 외부에 노출 위험을 줄일 수 있다
+
+- 구성방법
+    - YAML 파일로 독립적인 서버 구성
+        - Swagger UI를 위한 서버를 따로 두고 Swagger 에서 API 요청을 하면 그 요청을 해당 서버로 전달
+        - 백엔드 API 서버와 Swagger UI를 별도로 배포 및 관리하는 경우에 적합하다.
+        - 서버 프로그래밍 언어를 거치지 않고 Swagger API 를 독립적인 별도의 문서로 만드는 것
+        - yaml 파일을 사용하여 API 명세
+        - https://app.swaggerhub.com/home 스웨거 허브를 사용해서 yaml 샘플 데이터 작성 가능
+        - 스웨거 허브를 사용하여 작성하며 이렇게 했을시 개인이 아닌 팀/회사는 돈이 들 수 있음(다수 사용자)
+        - https://velog.io/@jwpark06/Swagger-API-%EB%AA%85%EC%84%B8-%EB%A7%8C%EB%93%9C%EB%8A%94-%EB%B2%95-feat.-yaml-%ED%8C%8C%EC%9D%BC
+
+    - 소스코드 내에서 Swagger 를 설정하여 구성
+        - 백엔드 서버 자체가 Swagger 서버이기도 함
+        - Swagger API 에 코드 종속
+        - 어노테이션을 추가해서 API 명세
+        - 스프링 프레임워크
+            - JAVA 코드 사용위해 springfox 라이브러리 사용
+            - 설정 클래스 구성 필요
+            - build.gradle 에 추가
+                -
+    # 라이브러리 제공중
+
+
+- 장점
+    - API 정보 현행화(자동 갱신) : Web API가 수정되더라도 문서가 자동으로 갱신
+
+
+- 스프링 부트 사용 호환성 문제 참고
+    - https://jackyee.tistory.com/24
+
+
+- 스웨거 기능
+    - API Design (API 설계)
+
+        · Swagger-editor를 통해 api를 문서화하고 빠르게 명세 가능
+
+    - API Development
+
+        · Swagger-codepen을 통해 작성된 문서를 통해 SDK를 생성하여 빌드 프로세스를 간소화할 수 있도록 도와준다.
+
+    - API Documentation
+
+        · Swagger-UI를 통해 작성된 API를 시각화시켜준다.
+
+    - API Testing
+
+        · Swagger-Inspector를 통해 API를 시각화하고 빠른 테스팅을 진행할 수 있다.
+
+    - Standardize
+
+        · Swagger-hub를 통해 개인, 팀원들이 API 정보를 공유하는 Hub
+
+
+
+- Swagger 는 코드가 복잡해지고 지저분해지는 단점이 있음
+- 자세한 기능을 사용하기 위해 많은 어노테이션이 코드에 추가되어야 한다.
+
+-
+    - openAPI(open API와 다름)
+        - OpenAPI또는 OpenAPI Specification(OAS) : RESTful API를 기 정의된 규칙에 맞게 API spec을 json이나 yaml로 표현하는 방식
+        RESTful API 디자인에 대한 정의(Specification) 표준
+         OpenAPI 2.0 = Swagger 2.0
+    - swagger 2.0
+
+    - swagger : openAPI를 implement 하기 위한 도구 (SmartBear사의 tool)
+    Swagger는 API들이 갖고 있는 specification을 정의할 수 있는 툴들 중 하나
+
+    - OpenAPI Specification을 json또는 yaml로 기술한 문서를 swagger-ui를 통해 띄우게되면 브라우저에서 API 문서 보는 것 가능
+
+
+
+- SpringDoc, SpringFox 라이브러리
+    - Swagger UI 생성
+    - Swagger 어노테이션을 유저가 쓰기 쉽게 만들어주는 역할
+    - @Tag(name = "Member", description = "Member API") 을 사용 하여 class 별로 묶는 것 가능
+    - @ApiResponses 함수에 붙여서 사용
+- 직접 작성해보기 ( 테스트)
+    - https://velog.io/@nefertiri/Spring-Swagger-%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-API-%EB%AA%85%EC%84%B8%EC%84%9C-%EC%9E%91%EC%84%B1-%EC%9E%90%EB%8F%99%ED%99%94%ED%95%98%EA%B8%B0
+
+    1. springdoc-openapi-starter-webmvc-ui (build.gradle) 의존성 추가
+        # swagger-annotations, swagger-ui 라이브러리 의존
+        # https://colabear754.tistory.com/130
+    2. http://localhost:8080/swagger/index.html 페이지 접근
+참고
+
+https://yozm.wishket.com/magazine/detail/2195/
+https://velog.io/@hwjeong95/Swagger
+https://gruuuuu.github.io/programming/openapi/
