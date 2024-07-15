@@ -5,7 +5,7 @@ Swagger(OAS(Open API Specification)) 는 RestFul Api 문서화, 사용자가 쉽
     - 회사 내부 시스템에 구축이 가능해서 외부에 노출 위험을 줄일 수 있다
 
 - 구성방법
-    - YAML 파일로 독립적인 서버 구성
+    - YAML(또는 json) 파일로 독립적인 서버 구성
         - Swagger UI를 위한 서버를 따로 두고 Swagger 에서 API 요청을 하면 그 요청을 해당 서버로 전달
         - 백엔드 API 서버와 Swagger UI를 별도로 배포 및 관리하는 경우에 적합하다.
         - 서버 프로그래밍 언어를 거치지 않고 Swagger API 를 독립적인 별도의 문서로 만드는 것
@@ -15,6 +15,7 @@ Swagger(OAS(Open API Specification)) 는 RestFul Api 문서화, 사용자가 쉽
         - https://velog.io/@jwpark06/Swagger-API-%EB%AA%85%EC%84%B8-%EB%A7%8C%EB%93%9C%EB%8A%94-%EB%B2%95-feat.-yaml-%ED%8C%8C%EC%9D%BC
 
     - 소스코드 내에서 Swagger 를 설정하여 구성
+        - 서버 프로그래밍 언어를 이용해서 Swagger API 종속적 형태 생성
         - 백엔드 서버 자체가 Swagger 서버이기도 함
         - Swagger API 에 코드 종속
         - 어노테이션을 추가해서 API 명세
@@ -22,7 +23,8 @@ Swagger(OAS(Open API Specification)) 는 RestFul Api 문서화, 사용자가 쉽
             - JAVA 코드 사용위해 springfox 라이브러리 사용
             - 설정 클래스 구성 필요
             - build.gradle 에 추가
-                -
+        - swagger-jsdoc
+             -  swagger-jsdoc 는 다른 파일을 참조할 수 없음
     # 라이브러리 제공중
 
 
@@ -87,8 +89,63 @@ Swagger(OAS(Open API Specification)) 는 RestFul Api 문서화, 사용자가 쉽
         # swagger-annotations, swagger-ui 라이브러리 의존
         # https://colabear754.tistory.com/130
     2. http://localhost:8080/swagger/index.html 페이지 접근
+
+- 공식문서등 참조
+    - https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md
+
+
+
+    - https://springdoc.org/
+    - https://github.com/swagger-api/swagger-ui
+    - https://github.com/springdoc/springdoc-openapi-demos/tree/master
+    - https://github.com/springdoc/springdoc-openapi
+
+- URL
+    - Swagger UI page :
+        - http://server:port/context-path/swagger-ui.html
+            (-> http://server:port/context-path/swagger-ui/index.html)
+    - OpenAPI description :
+        - http://server:port/context-path/v3/api-docs
+        # 기타
+            - Documentation can be available in yaml format as well, on the following path : /v3/api-docs.yaml
+
+    - YAML 파일로 만들어주는 아주 편리한 url
+    http://localhost:8080/v3/api-docs.yaml
+
+
+- Configuration
+    - # swagger-ui custom path (configuration file 에 사용)
+      springdoc.swagger-ui.path=/swagger-ui.html
+  Spring WebMvc support
+    - 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0")
+      # This dependency is relevant if you want to generate the OpenAPI description without using the swagger-ui.
+      # /api-docs endpoint custom path
+        springdoc.api-docs.path=/api-docs
+  Spring WebFlux support
+    -
+
+
+
+- 기타
+    - 재사용 가능한 파라미터, 응답, 스키마 분리하여 참조하는 형식 사용하면 코드 길이 줄일 수 있다. ()
+    - yaml 을 여러개로 분리하여 명세, 개발 진행 -> UI 로 보여줄때 하나의 yaml 파일로 합쳐서 보내줌
+    -> yaml 파일이 변경되면 직접 파일 생성 필요
+    - yamljs, swagger-cli, swagger-ui-express (다른 언어 라이브러리인데 자바에서도 가능한지 찾기)
+
+
+
+
+
+
+
+
+
+
+
 참고
 
-https://yozm.wishket.com/magazine/detail/2195/
-https://velog.io/@hwjeong95/Swagger
-https://gruuuuu.github.io/programming/openapi/
+- https://yozm.wishket.com/magazine/detail/2195/
+- https://velog.io/@hwjeong95/Swagger
+- https://gruuuuu.github.io/programming/openapi/
+- https://velog.io/@hwjeong95/Swagger
+- https://happy-jjang-a.tistory.com/164 [jjang-a 블로그:티스토리]
