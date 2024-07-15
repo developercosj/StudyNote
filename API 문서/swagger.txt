@@ -134,7 +134,9 @@ Swagger(OAS(Open API Specification)) 는 RestFul Api 문서화, 사용자가 쉽
 
 
 
-
+- Swagger Editor 사용
+- 설정 파일
+    - https://stackoverflow.com/questions/65612026/how-to-point-springdoc-swagger-ui-to-my-own-yaml-file-instead-of-the-auto-genera
 
 
 
