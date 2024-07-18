@@ -1,0 +1,52 @@
+# 필수 명시 (버전 종류 : 3.0.0, 3.0.1, 3.0.2)
+openapi: 3.0.2
+#info section (title, description(optional), version)
+info:
+  title: goyoai backend API
+  # https://spec.commonmark.org/0.27/#html-blocks (Html blocks 참고)
+  description: Backend Api Document
+  # 문서 버전 (major.minor.patch 등의 방법 가능)
+  version: 0.0.1
+# server 여러개 가능
+servers:
+  - url: https://dev.goyoai.com/api/v1
+    description: Backend development Server API
+  #- url: ~~
+# individual endPoints and HTTP methods 정의
+paths:
+  /faq/{faqId}:
+    get:
+      summary: return a list of faq
+      #Optional
+      description: faq list
+      parameters:
+        - name: faqId
+          in: path
+          required: true
+          description: Parameter of faq list
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: A JSON array user info
+          content:
+            application/json:
+              schema:
+              type: array
+              items:
+                type: String
+
+
+
+
+
+
+
+
+# 작성 규칙 참고: https://swagger.io/docs/specification/basic-structure/
+# 파라미터 작성 정보 상세 : https://swagger.io/docs/specification/describing-parameters/
+# path 작성 정보 상세 : https://swagger.io/docs/specification/paths-and-operations/
+# Request Body 작성 정보 상세 : https://swagger.io/docs/specification/describing-request-body/
+# github code : https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md
