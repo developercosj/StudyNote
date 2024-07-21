@@ -63,7 +63,89 @@
         - Object 를 Json 으로 변환
             - Json.stringify(오브젝트명);
             - Json.parse(Json 형태 객체) -> 읽을 수 있도록 한다.
-    -
+    - forEach
+        ex) animals.forEach(funtion (animal) {
+            console.log(animal)
+        })
+    - map
+        const mappedAnimal = animals.map(funtion (animal) {
+            return animal.name
+        })
+        console.log(mappedAnimal)
+    -  arrow funtion 위와 동일, 인덱스를 넘기지 않는 경우 인자가 1개이면 생략 가능
+        const mappedAnimal = animals.map(animals) => {
+            return animal.name
+        })
+
+        const mappedAnimal = animals.map(animals => animal.name)
+
+    - filter 필터
+       const filteredAnimal = animals.filter(animal => {
+        return animal.size === 'big' && animal.weight > = 200
+       })
+
+      const filteredAnimal = animals.filter(animal => animal.size === 'big' && animal.weight > = 200)
+
+    - reduce
+        const reducedAnimal = animals.reduce((acc, cur) => {
+
+            return acc + cur.weight
+
+        }, 0)
+        -> 0 을 초기값을 주는 것이 중요 (꼭은 아니나 나중에 오류가 나올 수 있음)
+        console.log(filteredAnimal)
 
 
+    - 비교
+        - === : 값, 자료형 모두 같을때
+        - == : 값이 같을때
+        - !===
+        - !=
+    - 조건문
+        - if , else if , else 로 표현한다.
+
+    - 삼항 연산자
+        조건 ? 참일경우 : 거짓일 경우 ;
+
+    - switch (animal) {
+        case "lion" :
+            console.log("big");
+            break;
+        case "cat" :
+            console.log("small");
+            break;
+        default:
+            console.log("null");
+            break;
+
+    }
+
+
+    funtion add(a,b) {
+        return a + b;
+    }
+
+
+    - NaN
+    - funtion add(a = 0, b = 0) [
+        return a + b;
+    }
+        -> 작성을 하면 윈도우 객체에 등록이 되어 버림
+        -> 초기값을 줄 수도 있음
+
+    - 익명함수를 만들 수도 있음 (변수에 담음)
+        const add = funtion(a,b) {return a + b}
+
+
+    - arrow funtion
+        - () => {}
+        - 예시
+            const sum = (a,b) => {
+                return a + b
+            }
+
+        - Window 객체에 등록되지 않아서 안정적임
+        - 추가 예시
+            - 중괄호 생략 가능
+              const sum = a => a + 5;
 
