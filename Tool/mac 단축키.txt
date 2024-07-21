@@ -135,3 +135,6 @@ PCB (process control block)
 
 
 
+- 개발자 도구 열기 (크롬)
+    - cmd + option + i
+
