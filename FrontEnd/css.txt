@@ -1,0 +1,50 @@
+방식
+    - 인라인 : 태그에 들어가도록 개발
+    - Style 태그에 작성
+    - Link 태그 : 외부에서 가져옴
+
+
+style 설정
+    - 태그 안에 또 태그만 적용하도록 설정
+     div > p {
+        color: green;
+    }
+    - nth-chard(1/2/3/4/odd/even)
+    p 테그 안의 자식중 2번 자식만
+    div > p:nth-child(2) {
+        color: red;
+    }
+    - class 선택
+    .inner-p {
+        color : red;
+    }
+    - margin
+    - padding
+    - text-align
+
+
+
+Flex 와 Grid
+
+- Flex
+    - Float 없이 정렬
+    - 반응형 친화적
+    - 자식 요소 위치 잡기가 쉬움
+    - 마진에서 자유로움
+    - 작은 단위의 레이아웃 잡을 때
+        - 상단 헤더 로고 네비 위치 잡기등
+    - 속성
+        - display
+        - flex-direction
+        - flex-wrap
+        - flex-basis
+        - justify-contents
+        - align-self
+        - align-items
+        - align-contents
+
+        - flex-grow
+        - flex-shrink
+        - flex
+        - order
+
