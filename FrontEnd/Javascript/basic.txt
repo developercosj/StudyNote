@@ -149,3 +149,42 @@
             - 중괄호 생략 가능
               const sum = a => a + 5;
 
+    - OOP (객체지향) 프로그래밍
+        - funtion Song() {
+            const title = "All I want is Charistmas";
+            const singer = "Mariah Carrey"
+        }
+        console.log(song)
+        - new 키워드를 사용해서 constructor funtion 만들기
+        - 인스턴스 만들기
+
+            - funtion Song(title, singer) {
+                this.title = title;
+                this.singer = singer;
+                console.log(this)
+                # Object 가 반환된다.
+                this.getInfo = funtion () {
+                    return "리턴리턴 ${this.title}"
+                }
+              }
+            - const song1 = new Song();
+
+    - proto
+        : protoType 등록되어 있는것
+        song.prototype.getDate = funtion() {
+
+        }
+
+    - class 로 작성
+        - class Song {
+            constructor(title, singer, year) {
+                this.title = title;
+                this.singer = singer;
+                this.year = year;
+            }
+            getInfo() {
+                return "${this.title} 입니다."
+            }
+        }
+        const song1 = new Song("Christmas", "Mariah", "2020-12-16");
+        console.log(song1.getInfo()) 
