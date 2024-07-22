@@ -114,3 +114,7 @@ UUID 타입이라도 자동으로 생성 가능
 
 14. @ModelAttribute
 
+15. @Configuration
+    - 스프링 IoC 컨테이너가 초기화 될 때 실행
+    - 스프링 IoC 컨테이너는 애플리케이션 구동 시점에 초기화되어 @Configuration 어노테이션 클래스를 Bean 으로 등록
+
