@@ -42,3 +42,11 @@
 
 -  중첩클래스(Nested Class)
  : https://engineer-gyu.tistory.com/27
+
+
+- 형변환
+
+    - Kotlin 의 기본 자료형들은 변수에 대입 시 자동 형변환 지원하지 않음
+    - to자료형() 함수로 형변환
+        -> 반환하고자 하는 자료형으로 변환할 수 없을떄 NumberFormatException 을 던진다.
+
