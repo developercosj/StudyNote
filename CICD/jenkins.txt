@@ -1,0 +1,55 @@
+Jenkins 설치
+    Java 기반 이며 다양한 운영체 설치 가능
+    - 설치 패키지 다운 or Docker 이미지 사용
+    - 설치 (mac Os  Homebrew)
+        Install the latest LTS version: brew install jenkins-lts
+        Start the Jenkins service: brew services start jenkins-lts
+        Restart the Jenkins service: brew services restart jenkins-lts
+        Update the Jenkins version: brew upgrade jenkins-lts
+        # https://www.jenkins.io/download/lts/macos/
+    - 설치 ( Linux)
+        https://www.jenkins.io/doc/book/installing/linux/
+
+- pipeline
+    - 젠킨스 파이프라인이란 소프트웨어 개발과 배포 과정 자동화하는 스크립트
+    - Jenkins Pipeline : Blue Ocean, classic UI, SCM
+    - Build, Test, Deploy 단계 정의 가능
+    - Jenkinsfile 이라고 불리는 파일로 정의된다. -> 가장 추천
+        - Groovy DSL(Domain-specific Language) 사용하여 작성
+        - git(source control) 에 저장 가능
+        - web ui 와 같다고 할 수 있음
+        - 파이프라인 정의 방법
+            - Declarative Pipeline Syntax (선언적)
+                - Groovy DSL 을 사용
+                - 구조화된 문법
+            - Scripted Pipeline Syntax
+                - Grrovy 스크립트 사용
+                - 자유로운 문법
+                - 세밀한 조정
+                - 적용 범위 넓음
+    - Blue Ocean
+        - 사용자 인터페이스 플러그인
+        - Blue Ocean UI 로 전환시 시각적으로 개선된 파이프라인 관리화면이 나옴
+    - 사용법
+        - Jenkins 2.x 이상
+        - pipeline plugin
+
+    - 보안
+        - controller 분리
+            Build should not be executed on the build in node
+            # https://www.jenkins.io/doc/book/security/controller-isolation/
+            Any builds running on the built-in node have the same level of access to the controller file system as the Jenkins process.
+            Using agents(statically configured or provided by clouds) to run builds
+            - 설정
+                - To prevent builds from running on the built-in node directly, navigate to Manage Jenkins » Nodes and Clouds. Select Built-In Node in the list, then select Configure in the menu. Set the number of executors to 0 and save. Make sure to also set up clouds or build agents to run builds on, otherwise builds won’t be able to start.
+        - 빌드를 master node(build-in node) 에서 실행하지 말것
+        - 전용 빌드 에이전트 사용
+            빌드를 agent 또는 slave 노드에서 실행하는 것을 권장
+            -> 별도의 컴퓨터나 가상머신에서 Jenkins 작업을 실행하도록 설정된 노드
+            - 부하 줄이고 성능 향상
+        - 노드 분리 : 빌드와 Jenkins 서버의 관리 작업을 서로 다른 노드에서 실행 -> 서버의 안정성 유지
+            ex) 빌드를 전용 에이전트에서 실행, Jenkins 의 관리 및 사용자 인터페이스 작업은 master node 에서 수행
+
+    - Initial Settings
+        - user Interface
+        - configuration as code plugin
