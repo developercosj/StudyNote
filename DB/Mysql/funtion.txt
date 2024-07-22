@@ -1,0 +1,28 @@
+1. 문자열에서 숫자만 빼내는 방법
+SELECT REGEXP_REPLACE('abc123def456ghi789', '[^0-9]+', '') AS numbers;
+
+2. 위 1 번에서 특정 글자는 제외하고 함수를 사용하는 방법
+SELECT CONCAT( REGEXP_REPLACE(LEFT( 'abc123def456ghi789' , LENGTH('abc123def456ghi789') -1 ), '[^0-9]+', ''), RIGHT('abc123def456ghi789', 1)) AS numbers;
+
+
+3. mysql 에서는 update 시 Sub Query 로 복잡하게 표현해야 적용됨
+
+    1. sub 쿼리를 사용해서 처리해야 하는데 괄호가 많아지는 단점이 있음
+
+        Update gy_auth_content_group_mapping m1 Set auth_content_code = (select temp.auth_content_code from ((select  Concat('AC' , REGEXP_REPLACE(LEFT(m2.auth_content_code, LENGTH(m2.auth_content_code) -1 ), '[^1-9]+', ''), RIGHT(m2.auth_content_code, 1)) as auth_content_code, id
+                                                                            from gy_auth_content_group_mapping m2
+                                                                            )) as temp
+                                                                            where temp.id = m1.id )
+        where  m1.auth_content_code in (select code from gy_auth_content_list);
+
+    2. JOIN 을 써서 좀 더 간결하게 표현도 가능하다.
+
+        Update gy_auth_content_group_mapping AS m1
+        INNER JOIN
+        (
+        select  Concat('AC' , REGEXP_REPLACE(LEFT(m2.auth_content_code, LENGTH(m2.auth_content_code) -1 ), '[^1-9]+', ''), RIGHT(m2.auth_content_code, 1)) as auth_content_code, id
+        from gy_auth_content_group_mapping m2
+        )  AS temp
+        ON temp.id = m1.id
+        SET m1.auth_content_code = temp.auth_content_code ;
+
