@@ -187,4 +187,37 @@
             }
         }
         const song1 = new Song("Christmas", "Mariah", "2020-12-16");
-        console.log(song1.getInfo()) 
+        console.log(song1.getInfo())
+
+    - DOM 다루기
+        - const output = document.getElementById("output")
+          console.log(output)
+          # {} 를 씌우면 object 형태로 보인다.
+          console.log({output})
+        - const wrapper = document.getElementsByClassName("wrapper")
+          - 클래스는 하나가아닌 여러개를 가질 수 있기 때문에 HTMPCollection 으로 출력 된다.
+        - const button = document.querySelector("#button")
+        - const items = document.querySelectorAll(".item")
+        - const target = document.querySelector(".target")
+            target.style.color = "red";
+            target.style.fontSize = "red";
+            console.log({target})
+
+        - const title = document.querySelector("h1")
+
+        title.addEventListener("click", funtion() {
+            title.style.color = "red"
+        })
+        userId.addEventListener("input", funtion(e) {
+            console.log(e)
+            console.log(this.value)
+            target.innerText = this.value
+        })
+
+        button.addEventListener("click", () => {
+            # arrow 에서 this 는 window 를 가리킨다.
+            target.style.width = "50px"
+             target.style.height = "50px"
+             target.style.backgroundColor = userId.value;
+             target.style.borderRadius = "50%"
+        })
