@@ -221,3 +221,19 @@
              target.style.backgroundColor = userId.value;
              target.style.borderRadius = "50%"
         })
+
+
+        - 특정 이벤트 발생했을때 처리
+            .addEventListener("발생하는 이벤트", function(e) {
+
+            })
+        - 함수
+            - function 함수명() {
+
+            }
+            - const 변수명 = function(){}
+            - const 변수명 = () => {}
+
+        - eventListener
+
+
