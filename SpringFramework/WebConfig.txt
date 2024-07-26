@@ -1,0 +1,6 @@
+- WebConfig
+    - WebConfig 파일은 웹 구성에 대해 지정하는 내용이 담겨있는 설정 파일
+    - 스프링 부트에서는 WebMvcConfigure 인터페이스를 구현하여 WebConfig 파일을 작성한다.
+- WebMvcConfigurer 인터페이스
+    - Spring MVC 구성을 사용자 정의하는데 사용되는 인터페이스
+    - 이 인터페이스 중에서 커스텀을 원하는 부분만 override 해서 처리
