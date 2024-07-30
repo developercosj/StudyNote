@@ -1,0 +1,30 @@
+- fork : collection, environments, parent element flows
+- pull request : merge forked element into the parent element
+- workspace
+- API key
+    - You must include an API key in each request to the Postman API with the X-API-Key request header
+    - If Api key is not working you can get 401 Unauthorized error
+- Json format
+- IDs : An ID is the unique ID assigned to a Postman item
+    ex) ec29121c-5203-409f-9e84-e83ffc10f226 is the item's id
+- UIDs : full ID of a Postman item
+
+
+- postman 의 API documentation 에서 facebook 예시
+    : https://www.postman.com/meta/workspace/facebook-marketing-api/overview
+
+
+- workspace
+    - Personal 은 Enterprise team 으로 사용한다면 Super Admin 은 볼 수 있음
+    - Private 은 나랑 내가 초대한 멤버만 볼 수 있음
+    - https://learning.postman.com/docs/collaborating-in-postman/using-workspaces/creating-workspaces/
+
+    - workspace templates
+        -  select Explore workspace templates -> Apply Template
+
+
+
+** - workspace (detail description)
+    - workspace's Overview : description and workspace
+        - pinned collections
+    -  Pending requests tab : Request managing
