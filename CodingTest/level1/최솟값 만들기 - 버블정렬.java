@@ -1,4 +1,4 @@
-class Scratch {
+class 최솟값만들기버블정렬 {
     public static void main(String[] args) {
         int []A = {1,4,2};
         int []B = {5,4,4};

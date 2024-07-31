@@ -1,4 +1,4 @@
-class Scratch {
+class 최솟값만들기퀵정렬 {
     public static void main(String[] args) {
         int a[] = {1, 4, 2};
         int b[] = {5, 4, 4};
