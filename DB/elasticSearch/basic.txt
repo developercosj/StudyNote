@@ -1,0 +1,18 @@
+Elasticsearch stores complex data structures that have been serialized as JSON documents
+and that can be accessed immediately from any node
+
+- data structure : an inverted index 역색인 (very fast full-text searches)
+    *inverted index : 단어와 해당 단어가 나타나는 문서의 위치를 효율적으로 찾을 수 있음
+- schema-less
+- index
+    - automatically detects and adds new fields to the index
+
+- key-value pairs
+- text fields are stored in inverted indices, and numeric and geo fields are stored in BKD trees
+
+- Apache Lucene search engine library 를 기반
+
+- test use tool
+    - command line
+    - Developer Console in Kibana
+    - Elasticsearch client
