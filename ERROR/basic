@@ -4,3 +4,31 @@
             "query": "오라클이 뭔가요",
             "modelName": "gpt-3.5-turbo"
         }
+
+
+
+-  @JdbcType(value = VarbinaryJdbcType::class)
+
+    - mysql 으로 사용할때는 이미지 저장시 binaryArray 형태로 저장 가능 아래와 같이 사용
+    @Lob 를 사용하여 BLOB(큰 양의 바이너리 데이터를 저장하는 데 사용 이미지나 비디오 파일등), CLOB 등을 매핑한다.
+
+        @Lob
+        @Column(name = "logo_image")
+        var logoImage: ByteArray? = null,
+
+    - postgresql 에서는 사용이 불가하게 됬다.
+     @Column(columnDefinition = "bytea") 속성을 사용해 컬럼 타입 지정해보았지만
+     postgresql 에서는 작동이 어려웠다.
+        -> 오류 내용 : ERROR: column "컬럼이름" is of type bytea but expression is of type bigint
+                     Hint: You will need to rewrite or cast the expression.
+         -> 해결 : @JdbcType 어노테이션 사용하여 하이버네이트 프레임워크에게 타입에 대한 힌트 제공
+
+                 @Lob
+                 @JdbcType(value = VarbinaryJdbcType::class)
+                 @Column(name = "logo_image")
+                 var logoImage: ByteArray? = null,
+
+        * @Type 어노테이션에 타입을 명시하면 해결되지 않음 하이버네이트 5버전에서 가능한 것
+
+
+
