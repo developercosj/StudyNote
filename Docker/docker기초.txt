@@ -89,3 +89,6 @@ containers
 
 11. docker postgresql
     - https://hub.docker.com/_/postgres
+
+12. docker-compose.yml
+    - docker-compose.yml 파일은 일반적으로 프로젝트 루트에 위치해 있고 docker-compose up 명령어 실행시 자동으로 해당 파일을 찾아 컨테이너를 세팅함
