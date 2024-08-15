@@ -86,3 +86,6 @@ containers
     If your project is outside this directory then it must be added to the list,
     otherwise you may get Mounts denied or cannot start service errors at runtime.
     # 출처 : https://docs.docker.com/desktop/settings/mac/?uuid=90c10b31-676a-4e10-a1bc-f7f42e973e36%0A#file-sharing
+
+11. docker postgresql
+    - https://hub.docker.com/_/postgres
