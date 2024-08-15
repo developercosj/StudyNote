@@ -139,3 +139,12 @@
                 System.setProperty("user.timezone", "Asia/Seoul");
                 runApplication<QuizApplication>(*args)
             }
+
+
+7. FeignClient
+    - Spring Cloud 에서 사용되는 HTTP 클라이언트 바인더
+    - 주로 마이크로서비스 아키텍처에서 서로 다른 서비스 간의 통신을 간편하게 할 수 있도록 돕는다.
+    - 인터페이스를 통해 HTTP 요청 정의
+    - RestTemplate 보다 훨씬 간편 하게 HTTP 요청 보낼 수 있음
+    - 자동으로 요청 데이터를 인코딩하고 응답 받을 시 디코딩해줌
+    - Spring Cloud 의 다른 컴포넌트와 결합시 로드 밸런싱과 장애 허용 (서킷 브레이커) 기능 지원 가능
