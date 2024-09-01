@@ -1,0 +1,15 @@
+- enum
+만약 postgresql 에서 enum 을 사용하려면 custom enum 을 만들어야 하고 아래와 같이 columnDefinition 과  @JdbcTypeCode(SqlTypes.NAMED_ENUM) 를 붙여줘야 한다.
+
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "init_yn", columnDefinition = "t_state_yn")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    var initYn : StateYn = StateYn.N,
+
+
+
+https://www.baeldung.com/java-enums-jpa-postgresql
+https://stackoverflow.com/questions/75595407/spring-boot-3-hibernate-6-postgressql-enum-mapping-issue
+https://github.com/vladmihalcea/hypersistence-utils/issues/519

@@ -285,8 +285,74 @@ StringBuffer(String str) : str의 값을 갖는 StringBuffer를 생성한다.
 15. SQL
     - 자바로 작성한 애플리케이션은 JDBC API 를 사용해서 SQL 을 데이터베이스에 전달 -> 자바 서버 개발자들에게 이것은 너무나 당연한 이야기
 
+14. JVM
+    - JVM is a virtual machine that allows computers to run programs written in Java, Kotlin, Scala, Groovy, and other JVM languages.
+    - The JVM reads the bytecode and translates it into machine code for the underlying operating system.
+        - bytecode가 만들어지는것
+            - javac 가 컴파일하는 작업을 한다.
+            - 라이브러리등을 관리하는 것이 그래들이나 메이븐
+            - 근본적으로 javac 가 컴파일을 한다.
+    - This process allows JVM applications to be platform-independent; they can run on any system that has a JVM installed.
+    - JVM applications are often packaged into JAR (Java ARchive) files or WAR (Web Application Archive) files.
+    - Component
+        - Class Loader: Loads class files.
+        - Memory Area: Manages memory for running applications, including stack, heap, and method area.
+        - Execution Engine: Executes the bytecode.
+        - Interpreter: Reads and executes the bytecode instructions.
+        - JIT Compiler (Just-In-Time): Compiles bytecode into native machine code to improve performance.
+        - Garbage Collector: Manages memory by automatically freeing up space used by objects that are no longer in use.
+    - Environment
+        JRE (Java Runtime Environment): Contains the JVM, core libraries, and other components to run a Java application.
+        JDK (Java Development Kit): Includes the JRE plus development tools like a compiler and debugger.
+    - Challenges
+        - Memory Consumption: JVM can be resource-intensive.
+        - Startup Time: JVM applications may have slower startup times compared to native applications.
+    - java
+        - write java code -> javac compile code to bytecode -> jvm can read bytecode and translate to machine code
 
-5. Hibernate 데이터 매핑 프레임워크
+15. Jar War
+
+        - JAR 파일 (Java ARchive)
+            - JAR 파일은 일반적인 Java 애플리케이션을 배포하는 데 사용됩니다.
+            - 기본적으로 Java 클래스 파일, 리소스 파일(예: 이미지, 텍스트 파일) 및 메타데이터를 포함
+            - ZIP 형식으로 압축
+            - 모든 파일들이 압축된 상태
+            - META-INF 디렉토리에는 애플리케이션에 대한 메타데이터가 포함되며, 가장 중요한 파일은 MANIFEST.MF 파일입니다. 이 파일은 메인 클래스 등과 같은 중요한 정보를 포함할 수 있습니다.
+            - 톰캣이 안에 들어있음
+
+        - War 파일 (Web Application Archive)
+            - WAR 파일은 Java 웹 애플리케이션을 배포하는 데 사용됩니다.
+              이 파일은 웹 서버나 애플리케이션 서버(예: Apache Tomcat, JBoss, WebSphere)에 배포될 웹 애플리케이션의 모든 리소스를 포함합니다.
+            - WAR 파일도 ZIP 형식으로 압축되어 있지만, 웹 애플리케이션의 구조에 맞게 특별한 디렉토리 구조 가짐
+            - 일반적으로 다음과 같은 디렉토리와 파일이 포함:
+              /WEB-INF/ 디렉토리:
+              web.xml: 배포 서술자(deployment descriptor)로, 서블릿 및 필터 설정, 보안 구성 등을 정의.
+              /classes/: Java 클래스 파일이 위치하는 디렉토리.
+              /lib/: 웹 애플리케이션에서 사용되는 라이브러리 JAR 파일들이 위치.
+              /META-INF/: 애플리케이션 메타데이터.
+              /: 정적 콘텐츠(HTML, JSP 파일, 이미지, CSS 파일 등)가 위치하는 루트 디렉토리.
+            -  웹 애플리케이션, 웹 서비스에서 사용
+               WAR 파일은 일반적으로 애플리케이션 서버에 배포되어 실행
+       - 차이점
+        용도: JAR 파일은 일반적인 Java 애플리케이션이나 라이브러리를 배포하는 데 사용되며, WAR 파일은 Java 웹 애플리케이션을 배포하는 데 사용됩니다.
+        구조: WAR 파일은 웹 애플리케이션의 구조와 연관된 특정 디렉토리 구조를 가지고 있으며, JAR 파일은 보다 일반적인 Java 애플리케이션 구조를 따릅니다.
+        배포: JAR 파일은 독립적으로 실행되거나 다른 애플리케이션에서 참조될 수 있지만, WAR 파일은 웹 서버 또는 애플리케이션 서버에서 배포되어야 실행됩니다.
+
+16. class path
+    - 정의
+        - Java 애플리케이션이 실행될 때, JVM이 클래스 파일(.class)이나 라이브러리(JAR 파일)를 찾는 데 사용되는 경로를 지정하는 매커니즘입니다.
+        클래스 파일이나 JAR 파일이 어디에 있는지를 JVM에 알려주는 역할을 합니다.
+        - 기본적으로 JVM은 JRE의 rt.jar 파일에 포함된 표준 라이브러리에서 클래스를 찾지만, 사용자 정의 클래스나 외부 라이브러리는 classpath에 지정된 경로에서 찾아야 합니다.
+    - 설정 방법
+        - 명령줄
+            - Java 애플리케이션을 실행할 때, -classpath 또는 -cp 옵션을 사용하여 classpath를 지정할 수 있습니다.
+            - java -cp /path/to/classes:/path/to/jarfile.jar com.example.Main
+        - 환경 변수 지정
+            - export CLASSPATH=/path/to/classes:/path/to/jarfile.jar
+        - 디폴트
+            - classpath를 명시적으로 설정하지 않으면, JVM은 현재 디렉토리(.)를 기본 classpath로 사용합니다. 즉, 현재 디렉토리에 있는 클래스 파일을 참조하게 됩니다.
+
+17.
 
 
 

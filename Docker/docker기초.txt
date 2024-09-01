@@ -1,4 +1,4 @@
-docker : separate your application from your infrastructure
+separate your application from your infrastructure
 
 
 containers lifecycle
@@ -91,3 +91,10 @@ containers lifecycle
 
 12. docker compose watch
     - 도커 컴포즈에서 파일 변경 자동 감지, 변경사항이 발생할 때 마다 컨테이너를 다시 빌드하거나 재시작하는 기능 제공 도구
+
+
+13. docker postgresql
+    - https://hub.docker.com/_/postgres
+
+14. docker-compose.yml
+    - docker-compose.yml 파일은 일반적으로 프로젝트 루트에 위치해 있고 docker-compose up 명령어 실행시 자동으로 해당 파일을 찾아 컨테이너를 세팅함
