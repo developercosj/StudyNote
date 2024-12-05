@@ -3,8 +3,6 @@ separate your application from your infrastructure
 
 containers lifecycle
 
-containers
-
 1. docker architecture
     - The Docker client talks to the Docker Deamon
         -> heavy lifting of building, running, and distributing your Docker containers
@@ -28,7 +26,7 @@ containers
     - Credential Helper
 
 
-4. Dccker registries
+4. Docker registries
     - A docker registry stores Docker images
     - Docker Hub is a public registry
 
@@ -64,9 +62,6 @@ containers
 
             6. When you run exit to terminate the /bin/bash command, the container stops but isn't removed. You can start it again or remove it.
 
-
-
-
 7. 도커 이미지
     - 컨테이너 만드는데 사용하는 읽기 전용 템플릿
     - 컨테이너를 운영할때 사용됨
@@ -87,8 +82,19 @@ containers
     otherwise you may get Mounts denied or cannot start service errors at runtime.
     # 출처 : https://docs.docker.com/desktop/settings/mac/?uuid=90c10b31-676a-4e10-a1bc-f7f42e973e36%0A#file-sharing
 
-11. docker postgresql
+
+11. 도커 실행
+    : docker run -d -p 8080:80 docker/welcome-to-docker
+    -  -d : 컨테이너를 백그라운드에서 실행
+    - 8080 은 호스트 머신에서 접근할 포트
+    - 80은 컨테이너 내부에서 사용되는 포트로 컨테이너 내부에서 애플리케이션이 수신 대기하는 포트
+
+12. docker compose watch
+    - 도커 컴포즈에서 파일 변경 자동 감지, 변경사항이 발생할 때 마다 컨테이너를 다시 빌드하거나 재시작하는 기능 제공 도구
+
+
+13. docker postgresql
     - https://hub.docker.com/_/postgres
 
-12. docker-compose.yml
+14. docker-compose.yml
     - docker-compose.yml 파일은 일반적으로 프로젝트 루트에 위치해 있고 docker-compose up 명령어 실행시 자동으로 해당 파일을 찾아 컨테이너를 세팅함
