@@ -13,3 +13,85 @@
 https://www.baeldung.com/java-enums-jpa-postgresql
 https://stackoverflow.com/questions/75595407/spring-boot-3-hibernate-6-postgressql-enum-mapping-issue
 https://github.com/vladmihalcea/hypersistence-utils/issues/519
+
+
+- collate
+    - 정렬이 되어야 한다.
+    - collate 는 데이터베이스의 정렬 순서를 결정
+    - the local settings defined for the database
+    - 지원되는 collation 확인이 가능하다.
+        - select * from pg_collation;
+    - default collate
+        - SHOW lc_collate;
+    - collation 은 별도로 설정하지 않았다면 OS 의 default 방식 사용
+    그 외에 C, POSIX 방식 사용 가능 -> character code byte 값으로 정렬
+    - 만약 DB 생성을 했다면 다시 해야함
+        postgres=# DROP DATABASE <db_name>
+        postgres=# CREATE DATABASE <db_name> LC_COLLATE 'C';
+
+    - 쿼리를 조회시마다 collate 를 지정할 수 있다
+    - postgres=# SELECT * FROM <table> ORDER BY <field> COLLATE "C";
+    - postgresql 설치 전에 환경 변수 LC_COLLATE 를 넣어주면 initdb 가 호출되면서 재세팅이 된다.
+        $ export LC_COLLATE="C"
+        # install postgres
+        $ brew install postgresql
+
+        참고
+          #export LANG=ko_KR.UTF-8
+          #export LC_COLLATE=C
+    - jpa 에서 수동으로
+        - 네이티브 쿼리 사용
+            -  @Query(
+                      value = "SELECT * FROM your_entity ORDER BY your_column COLLATE C",
+                      nativeQuery = true
+                  )
+        -  JPQL
+            -  @Query("SELECT e FROM YourEntity e ORDER BY function('COLLATE', e.yourColumn, 'C')")
+                -> 하이버네이트에서 function wldnjstldp tkdyd rksmd
+        - 뷰를 만들어서 사용 가능하다.
+            - CREATE VIEW your_entity_collate_view AS
+              SELECT id, your_column COLLATE C AS your_column_collate_c, other_columns
+              FROM your_entity;
+       -  커스텀 Hibernate Dialect 사용하기
+            - Dialect 를 커스터마이징하면 전체 애플리케이션의 쿼리에 영향을 줄 수 있으므로 신중하게 적용 필요
+      - 어노테이션
+        -  @Column(name = "your_column", columnDefinition = "VARCHAR(255) COLLATE \"C\"")
+        - columnDefinition = "COLLATE \"C\"" 으로 설정했던 것은 잘 작동이 안됬음
+        따라서 다른 방식으로 우회함 아래 방식은 작동함
+        - @ColumnTransformer(read = "your_column_name COLLATE \"C\"")
+
+
+
+
+
+
+
+
+- 그 데이터베이스의 문자 정렬 규칙이 C 가 아닌 경우, like 연산에서 인덱스를 사용하려면,
+  그 인덱스를 만들 때 like 연산이 가능하도록 연산자 클래스를 지정해 주어야 합니다.
+  이렇게 연산자 클래스를 지정하지 않은 인덱스를 사용해서 자료를 탐색하려면,
+  범위 연산만 허용합니다.
+
+- 여느 다른 관계형 데이터베이스에서처럼 between 연산이나, like 연산을 사용하는데 있어 문자열 칼럼을 사용하는 인덱스를 편하게 사용하려면,
+  PostgreSQL 데이터베이스의 lc_collate 값은 C 여야합니다.
+  문제는 initdb 작업부터 이것을 염두해 두지 않았다면,
+  사용할 데이터베이스를 만들 때 template 데이터베이스로 template0 를 사용해야합니다.
+  : create database mydb template template0 lc_collate "C";
+
+  initdb 작업 전 그 명령을 실행할  OS 환경 설정이 문자세트는 utf8 로 문자정렬은 C로 하는 것이 정신건강에 좋습니다.
+
+
+
+
+
+    https://postgresql.kr/blog/collate_for_pg.html
+
+
+
+- 시퀀스 재설정
+
+    - 재설정
+        ALTER SEQUENCE tbb3.gy_ai_sub_category_id_seq restart with 81;
+
+    - 조회
+        SELECT last_value FROM tbb3.gy_ai_sub_category_id_seq;
