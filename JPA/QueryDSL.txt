@@ -26,3 +26,16 @@
 5. 다이나믹 쿼리 생성시 파라미터 null 처리
 
 참고 : https://www.inflearn.com/questions/94056
+
+
+
+6. Projection
+    Query DSL 에서 Projections 는 특정 필드들만 선택해서 DTO(Data Transfer Object) 나 사용자 정의 객체로 데이터를 매핑할 때 사용하는 기능
+    Projections 는 다양한 형태로 결과를 반환할 수 있으며, 특정 필드를 선택해 필요한 데이터만 효율적으로 조회 가능
+    이를 통해 엔티티 전체가 아닌 필요한 필드들만 선택해서 가져오는 것이 가능하다.
+
+    Projections.bean(): 자바 빈(Java Bean) 스타일의 DTO 매핑.
+    Projections.fields(): 필드 기반 매핑.
+    Projections.constructor(): 생성자를 통해 매핑.
+    Projections.list() 및 Projections.map(): 리스트나 맵 형태로 결과를 반환.
+
