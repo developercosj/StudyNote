@@ -1,2 +1,29 @@
 1. 한개의 컴퓨터에 git 계정 2개 사용할 것
     - https://yjleekr.tistory.com/124
+
+2. git 현재 사용자 정보 확인
+    - git config --list
+    - git config -l
+
+3. 현재 사용자 이름, 이메일 바로 확인하기
+
+    3-1. 전역으로 사용하고 있는 사용자 이름 및 이메일 찾기
+        - git config --global user.name
+        - git config --global user.email
+
+    3-2. 로컬로 사용하고 있는 사용자 이름 및 이메일
+
+        - git config --local user.name
+        - git config --local user.email
+        - git config user.name
+        - git config user.email
+
+4. git 현재 사용자 수정
+
+    4-1. 전역
+        - git config --global user.name "이름 입력"
+        - git config --global user.email "이메일 입력"
+    4-2. 로컬로 사용하고 있는 사용자 이름 및 이메일
+        - git config --local user.name "이름 입력"
+        - git config --local user.email "이메일 입력"
+
