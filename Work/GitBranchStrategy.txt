@@ -1,0 +1,53 @@
+1. 목적
+
+- Git branch 전략을 통해 브랜치에 대한 팀원들간의 공통의 이해 달성 및 효율적 관리
+- 각 Branch 가 어떤 역할을 하는지 팀원들 모두의 공통의 이해를 가지도록 함
+** 하나의 브랜치는 하나의 PR 단위를 관리할 수 있기 때문에 여러개의 PR 을 구분하여 작업이 가능하다.
+
+2. 레퍼런스
+
+- GitHub Flow 를 따라서 간단하면서도 효율적인 Branch 전략을 따른다.
+- 여러개의 버전이 필요한 앱 어플리케이션과는 상황이 다른 Web 은 Git Flow를 사용하기로 한다.
+
+3. Main 브랜치** (Stable 상태) - Mainline
+
+- Main 브랜치의 모든 커밋은 언제 배포하든 문제가 없어야 한다.
+- 장애 혹은 버그 수정이 필요한 경우 빠르게 적용가능하도록 Stable 한 상태로 만든다.
+- 자동화된 CI빌드를 통과해야 한다. (현재는 실행되지 않음)
+
+4. Topic 브랜치 - feature
+
+- 새로운 기능을 개발시 Topic 브랜치는 Main 브랜치로부터 생성한다.
+- Topic 브랜치는 자주 Push 한다.
+- Pr 을 올려 다른사람들의 Approval 을 받으면 Main 브랜치에 자신의 Topic 브랜치를 머지한다.
+
+5. 기본 Process
+
+1. main 에서 새로운 branch 생성 (브랜치명 규칙 참고)
+2. 생성한 브랜치에서 작업이 끝나면 main 으로 PR 요청
+3. PR 리뷰 후 main 으로 merge (CI/CD)
+4. 사용하지 않는 브랜치는 필히 삭제한다.
+
+6. feature 브랜치명 생성 규칙**
+
+- master, develop, release-, hotfix- feature- 등의 이름은 사용하지 않는다.
+- feature/{issue-number}-{feature-name}
+    - *issue-number* : 현재 git issue 와 연결하여 작성
+    - *feature-name* : 기능에 맞춰서 작성
+
+예시 : feature/`54-increase-test-timeout` or feature/`35-add-code-of-conduct`
+
+### **브랜치 관리 규칙**
+
+- 더이상 필요하지 않은 feature 브랜치는 바로 삭제한다.
+
+### **Feature Flag**
+
+작업이 복잡해질 시 적용 고려 예정
+
+참고 :
+
+- https://docs.github.com/en/get-started/using-github/github-flow
+- [https://git-scm.com/book/ko/v2/Git-브랜치-브랜치-관리](https://git-scm.com/book/ko/v2/Git-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EA%B4%80%EB%A6%AC)
+- [https://medium.com/daangn/매일-배포하는-팀이-되는-여정-1-브랜치-전략-개선하기-1a1df85b2cff](https://medium.com/daangn/%EB%A7%A4%EC%9D%BC-%EB%B0%B0%ED%8F%AC%ED%95%98%EB%8A%94-%ED%8C%80%EC%9D%B4-%EB%90%98%EB%8A%94-%EC%97%AC%EC%A0%95-1-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EC%A0%84%EB%9E%B5-%EA%B0%9C%EC%84%A0%ED%95%98%EA%B8%B0-1a1df85b2cff)
+- [https://medium.com/daangn/매일-배포하는-팀이-되는-여정-2-feature-toggle-활용하기-b52c4a1810cd](https://medium.com/daangn/%EB%A7%A4%EC%9D%BC-%EB%B0%B0%ED%8F%AC%ED%95%98%EB%8A%94-%ED%8C%80%EC%9D%B4-%EB%90%98%EB%8A%94-%EC%97%AC%EC%A0%95-2-feature-toggle-%ED%99%9C%EC%9A%A9%ED%95%98%EA%B8%B0-b52c4a1810cd)
