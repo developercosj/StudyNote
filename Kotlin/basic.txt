@@ -433,3 +433,40 @@
             }
 
         }
+
+
+- 타입 추론 Type inference
+: 프로그래머 대신 프로그램 구성 요소의 타입을 정해주는 기능
+    - 코틀린은 정적 타입 지정 언어이므로 컴파일 시점에 모든 식의 타입을 지정해야 한다. 하지만 식이 본문인 함수의 경우 굳이 사용자가 반환 타입을 적지 않아도 컴파일러가 함수 본문 식을 분석하여 타입을 결정해줌
+    - 식이 본문인 함수의 반환 타입만 생략 가능하며 블록이 본문인 함수가 값을 반환한다면 반드시 반환 타입을 지정하고 return 문을 사용해 반환 값을 명시해야 한다.
+    - 초기화 식이 없다면 변수에 저장될 값에 대한 정보가 없기 때문에 컴파일러가 타입 추론이 어렵다. 반드시 타입 지정 필수
+
+
+- 코틀린에서 클래스를 상속하는 경우 반드시 부모 클래스의 생성자를 호출해야한다. 부모 클래스의 생성자가 여러 형태일 경우, 클래스 선언부에서 부모 클래스의 생성자를 호출하는 대신 별도의 생성자 선언에서 부모 클래스의 생성자를 호출하도록 구현가능
+    -> constructor(...): super(...)
+    - 코틀린에서는 상속받거나 구현한 함수의 앞에 무조건 override 키워드를 붙이도록 강제한다.
+
+
+
+- open
+    - 자바에서는 클래스나 메서드에 final 키워드를 붙여 클래스를 더 이상 상속받지 못하게 하거나, 메서드를 재정의하지 못하게 할 수 있으나 코틀린에서는 그와 반대로 open 키워드를 붙인 클래스나 함수가 아니라면 클래스를 상속하거나 함수를 재정의할 수 없다.
+
+
+
+- Kotlin Multiplatform Project : allows developers to share code across multiple platforms (Android, IOS, Web, Desktop ) by writing it once in Kotlin
+
+- JVM/Gradle vs JVM/Maven
+    -> Both are tools for building and managing JVM-based projects, but they differ in approach and features
+
+- Kotlin/Native : compiles Kotlin code to native binaries that can run without a JVM
+    - IOS development, embedded systems, desktop applications
+    - Cross-platform apps or systems without a JVM
+
+
+** JVM : https://doozi0316.tistory.com/entry/1%EC%A3%BC%EC%B0%A8-JVM%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EB%A9%B0-%EC%9E%90%EB%B0%94-%EC%BD%94%EB%93%9C%EB%8A%94-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%8B%A4%ED%96%89%ED%95%98%EB%8A%94-%EA%B2%83%EC%9D%B8%EA%B0%80
+
+
+
+
+
+
