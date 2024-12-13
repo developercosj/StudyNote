@@ -1,0 +1,84 @@
+독립된 함수로 분리
+
+언제 -> 길이 기준, 재사용성 기준, 코드가 하는 일을 명확히 함, 목적과 구현을 분리
+
+함수의 목적이 눈에 확 들어오고, 본문 코드에 대해서는 더 이상 신경 쓸 필요가 없도록
+
+
+함수명으로 함수의 목적을 나타내고, 그 목적을 이루기ㅐ 위한 구현 코드를 분리한다.
+
+
+
+1. Extract Function
+    함수의 목적이 명확
+
+2. Inline Function
+    과도하게 분리한 함수를 하나로 합치기
+
+3. Extract Variable
+    표현식이 너무 복잡하여 이해하기 어려울 때 지역 변수를 활용하여 표현식 쪼개기
+
+4. Inline Variable
+    변수 이름이 원래 표현식과 다를 바가 없을 때
+
+5. Change Function Declaration
+    함수의 이름 변경, 시그니처 바꾸기
+
+6. Encapsulate Variable
+    데이터의 사용 범위가 넓을 수록 캡슐화 필요
+
+7. 변수 이름 명확하게 할 것
+
+8. 매개 변수 객체 생성
+    데이터 무리를 데이터 구조로 변경해준다.
+
+9. 여러 함수를 클래스로 묶기
+
+10. 내부 클래스 (inner class)
+
+11. 코틀린 : 함수에서 분리한 작은 함수를 원래 함수 내부에 중첩 ->
+
+12. 코틀린 - 로컬 함수
+검증코드를 로컬 함수로 분리하여 코드 중복을 없앤다.
+로컬 함수는 자신이 속한 바깥 함수의 모든 파라미터와 변수를 사용 가능
+
+13. 모듈화
+
+14. 테스트 케이스 작성
+
+스프링자바에서 사용하던것 코틀린 사용 가능 : Junit, AssertJ, Mockito -> Mocking 이나 Assertion 과정에서 코틀린 DSL 을 활용할 수 없다.
+코틀린 진영 : Kotest Mockk
+
+
+Kotest :
+- 코틀린 진영에서 가장 많이 사용되는 테스트 프레임워크
+- 다양한 테스트 레이아웃(String Spec, Describe Spec, Behavior Spec)
+- Kotlin DSL 스타일의 Assertion 기능 제공
+- 각각의 레이아웃을 상속해서 사용하는 것으로 보임
+    - Kotest Annotation Spec
+    - Kotest Behavior Spec
+        - Given, When, Then 패턴을 사용이 가능하도록 한다.
+    - Kotest Describe Spec
+        - DCI(Describe, Context, It) 패턴 형태의 레이아웃 제공함
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
