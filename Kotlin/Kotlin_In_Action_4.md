@@ -213,19 +213,37 @@ open class RichButton : Clickable {
     ```
 
 ### 4.2.2 부 생성자: 상위 클래스를 다른 방식으로 초기화
-    - 코틀린은 디폴트 파라미터 값을 이용하는 등으로 부 생성자를 여러개 만들 필요가 없다. 
-    - 부 생성자는 constructor 키워드로 시작한다. 
-    - this() 를 통해 클래스 자신의 다른 생성자를 호출 할 수 있다. 
-        ```
+- 코틀린은 디폴트 파라미터 값을 이용하는 등으로 부 생성자를 여러개 만들 필요가 없다. 
+- 부 생성자는 constructor 키워드로 시작한다. 
+- this() 를 통해 클래스 자신의 다른 생성자를 호출 할 수 있다. 
+
+     
         class MyButton: View (
         constructor (ctx: Context): this (ctx, MY_STYLE) {
         }
        constructor (ctx: Context, attr: AttributeSet): super (ctx, attr) {
         }
-        ```
+      
 ![Screenshot 2024-12-26 at 2.07.53 AM.png](..%2F..%2F..%2F..%2F..%2F..%2Fvar%2Ffolders%2Fpm%2Fmc91xbw16t34jtpdz2hrby4r0000gn%2FT%2FTemporaryItems%2FNSIRD_screencaptureui_Rxyy32%2FScreenshot%202024-12-26%20at%202.07.53%E2%80%AFAM.png)
         
-    - 클래스에 주 생성자가 없다면 모든 부 생성자는 반드시 상위 클래스를 초기화하거나 다른 생성자에게 생성을 위임(다른 생성자가 상위클래스를 생성자를 호출)해야함 
+- 클래스에 주 생성자가 없다면 모든 부 생성자는 반드시 상위 클래스를 초기화하거나 다른 생성자에게 생성을 위임(다른 생성자가 상위클래스를 생성자를 호출)해야함 
 
 ### 4.2.3 인터페이스에 선언된 프로퍼티 구현 
-    - 
+    
+- 인터페이스에 있는 프로퍼티 선언 (추상 프로퍼티 선언) 에는 필드나 게터등의 정보가 들어있지 않음
+- 인터페이스는 아무 상태도 포함할 수 없기 때문에 상태를 저장하기 위해 하위 클래스에서 프로퍼티등을 만들어야 한다. 
+
+
+### 4.2.4 게터와 세터에서 뒷받침하는 필드에 접근
+
+- 코틀린 프로퍼티를 2가지로 나눈다면
+    - 값을 저장하는 프로퍼티: 단순히 값을 저장하고 읽는 프로퍼티.
+    - 커스텀 접근자를 사용하는 프로퍼티: 값을 계산하거나 특정 로직을 실행하는 프로퍼티.
+
+### 4.2.5 접근자의 가시성 변경 
+    
+- 접근자의 가시성은 기본적으로는 프로퍼티의 가시성과 같다.
+- get, set 앞에 가시성 변경자를 추가해서 접근자의 가시성 변경 가능 
+![Screenshot 2024-12-26 at 2.14.15 AM.png](..%2F..%2F..%2F..%2F..%2F..%2Fvar%2Ffolders%2Fpm%2Fmc91xbw16t34jtpdz2hrby4r0000gn%2FT%2FTemporaryItems%2FNSIRD_screencaptureui_Bdu7s3%2FScreenshot%202024-12-26%20at%202.14.15%E2%80%AFAM.png)
+- 클래스 내부에서만 길이를 변경 -> 세터의 가시성을 Private dmfh wlwjd 
+- lateinit : 널이 될 수 없는 프로퍼티에 지정하여 프로퍼티를 생성자가 호출된 다음에 초기화 
