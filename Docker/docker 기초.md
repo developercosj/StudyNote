@@ -1,15 +1,17 @@
+
 separate your application from your infrastructure
 
 
-containers lifecycle
+1. Docker 기본
+    - 개발 환경을 통일할 수 있다. -> 로컬마다 다른 환경
+    - 컨테이너에 필요한 OS, 라이브러리, 설정 등을 포함하기 때문에 환경 차이가 없음 
+    - 컨테이너 이미지 하나로 개발 -> 테스트 -> 배포
+    - CI/CD 파이프라인에서 도커는 표준 
+    - 기존 가상머신보다 훨씬 가볍고 빠르게 실행
+    - OS 전체를 가상화하지 않고 호스트 OS 커널 공유 
+    - 버전 관리와 롤백 용이 
+    - 멀티 플랫폼 지원 : 한번 만든 도커 이미지를 리눅스, 맥, 윈도우 등 다양한 환경에서 재사용 가능 
 
-1. docker architecture
-    - The Docker client talks to the Docker Deamon
-        -> heavy lifting of building, running, and distributing your Docker containers
-        - operation
-            - docker client, deamon can be run on the save system or can connect a Docker client to a remote Docker daemon (using a REST API, over UNIX socket or network interface)
-    - Docker Compose
-        - another Docker client (applications consisting of a set of containers)
 
 2. The Docker Daemon
     - listens for Docker API requests
@@ -98,3 +100,12 @@ containers lifecycle
 
 14. docker-compose.yml
     - docker-compose.yml 파일은 일반적으로 프로젝트 루트에 위치해 있고 docker-compose up 명령어 실행시 자동으로 해당 파일을 찾아 컨테이너를 세팅함
+      containers lifecycle
+
+15. docker architecture
+    - The Docker client talks to the Docker Deamon
+      -> heavy lifting of building, running, and distributing your Docker containers
+        - operation
+            - docker client, deamon can be run on the save system or can connect a Docker client to a remote Docker daemon (using a REST API, over UNIX socket or network interface)
+    - Docker Compose
+        - another Docker client (applications consisting of a set of containers)
