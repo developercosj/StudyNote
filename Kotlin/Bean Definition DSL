@@ -1,0 +1,85 @@
+Spring Kotlin Bean Definition DSL 은 Kotlin 의 DSL 스타일 문법을 활용해서
+Spring 의 빈(Bean) 설정을 코드로 선언적으로 작성할 수 있게 해주는 기능
+기존 XML 이나 @Bean 메서드 대신 Kotlin 스럽게 선언적으로 빈을 등록할 수 있다.
+
+
+Spring Framework 빈 등록 방법
+
+1. Annotation 기반
+   - @Component, @Service, @Repository, @Controller 등
+   - @Configuration + @Bean 메서드
+
+2. XML 기반
+    - XML 파일에 빈 정의를 작성
+    - 예시 : <bean id="myService" class="com.example.MyService"/>
+
+
+3. Kotlin DSL 방식 (Bean Definition DSL)
+
+
+    - GenericApplicationContext Kotlin extensions 사용
+    - ApplicationContextInitializer 사용
+    예시 1)
+    class Foo
+    class Bar(private val foo: Foo)
+    class Baz(var message: String = "")
+    class FooBar(private val baz: Baz)
+
+    val myBeans = beans {
+    	bean<Foo>()
+    	bean<Bar>()
+    	bean("bazBean") {
+    		Baz().apply {
+    			message = "Hello world"
+    		}
+    	}
+    	profile("foobar") { // The FooBar bean will be registered only if the foobar profile is active
+    		bean { FooBar(ref("bazBean")) }
+    	}
+    	bean(::myRouter)
+    }
+
+    fun myRouter(foo: Foo, bar: Bar, baz: Baz) = router {
+    	// ...
+    }
+
+
+
+
+    예시 2)
+    3-1.
+        val myAppModule = beans {
+            bean { MyService() }
+            bean { MyController(ref()) } -> ref() 는 의존성 주입을 위한 참조
+
+        }
+
+    3-2. 이 모듈을 Spring 컨텍스트에 등록
+    fun main() {
+       val context = runApplication<MyApp> {
+        addInitializer(myAppModule)
+       }
+    }
+
+
+    3-3. 의존성 추가 (Spring Boot + Kotlin DSL)
+    build.gradle.kts
+    dependencies {
+        implementation("org.springframework.boot:spring-boot-starter")
+        implementation("org.springframework.boot:spring-boot-starter-web")
+        implementation("org.springframework:spring-context-indexer") // 선택
+        implementation("org.springframework.boot:spring-boot-autoconfigure")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+    }
+
+
+    3-4. Application 에 등록
+    @SpringBootApplication
+    class MyApplication
+
+    fun main(args: Array<String>) {
+        runApplication<MyApplication>(*args) {
+            addInitializers(myBeans)
+        }
+    }
+
