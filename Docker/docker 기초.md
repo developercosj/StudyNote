@@ -109,3 +109,14 @@ separate your application from your infrastructure
             - docker client, deamon can be run on the save system or can connect a Docker client to a remote Docker daemon (using a REST API, over UNIX socket or network interface)
     - Docker Compose
         - another Docker client (applications consisting of a set of containers)
+
+
+16. Docker Compose 
+
+    - .env 파일을 찾는 순서
+    1. docker-compose.yml 이 있는 폴더 내부의 .env 파일
+    2. 환경변수 (Window/Mac Linux OS 환경변수)
+    3. docker-compose.yml 내부의 직접 입력된 값 
+    -> compose.yml 과 같은 폴더에 .env 파일만 있으면 자동으로 적용됨 
+
+    
