@@ -1,1 +1,53 @@
 Entity 코드 정리 사이트 : https://entitycode.com/
+
+## 프론트앤드 React 프로젝트 구조
+
+- App.tsx 가 하는 역할
+    - 전역 네비게이션
+    - 페이지 컨테이너
+    - 라우터 Provider
+    - 전역 Alert/Toast
+    - 전역 상태 초기화
+    - 전체 공통 레이아웃
+
+*개별 페이지 내용은 App.tsx 가 아니라 따로 관리한다.
+
+
+## 전체 구조 정리
+- App.tsx : 서버 전체 골격 (전역 미들웨어)
+- pages : 라우트 핸들러
+- componets : 부분 뷰
+- api/ : axios 기반 서비스 코드
+- stores : 전역 상태(store)
+- hooks : 재사용 가능한 비즈니스 로직(helper)
+
+
+
+
+src/
+  api/               ← axios, API 연결
+  components/        ← 버튼, 카드, 레이아웃 같은 재사용 컴포넌트
+  pages/             ← 페이지 단위 (Home, Login, About)
+  routes/            ← 라우터 설정
+  stores/            ← zustand (상태 관리)
+  hooks/             ← 재사용 가능한 custom hooks
+  utils/             ← 유틸 함수
+  assets/            ← 이미지/SVG
+  App.tsx            ← 앱 전체 Layout
+  main.tsx           ← 렌더링 시작점
+
+
+
+
+  ## 화면 흐름
+
+
+  main.tsx
+     ↓
+  App.tsx    ← ✨ 전체 틀 (레이아웃 + 라우터)
+     ↓
+  Router (routes/index.tsx)
+     ↓
+  pages/ (Home.tsx, Login.tsx, ...)
+     ↓
+  components/ (Button.tsx, Header.tsx, ...)
