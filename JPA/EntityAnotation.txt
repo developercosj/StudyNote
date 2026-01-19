@@ -36,6 +36,8 @@
     - @ID : 직접 할당
     - @GeneratedValue : 자동생성
         - 식별자 전략
+            - AUTO : DB 마다 생성 방식이 달라도 코드 변경이 불필요
+                - JPA 가 DB 방언(Dialect) 을 보고 적절한 전략을 자동 선택
             - IDENTITY : 데이터베이스에 위임, MYSQL의 Auto Increment
                 - 기본키 생성을 데이터 베이스에 위임
                 - 기본적으로는 commit() 하는 시점에 insert 쿼리가 적용된다 따라서 ID값을 알려면 insert 쿼리가 저장하는 시점인 .commit() 시점에 알게 되기 때문에
@@ -60,6 +62,11 @@
                 - 특징
                     - 'call next value for 시퀀스이름'을 하여 DB에서 id 값을 얻어와서 영속성 컨텍스트에 저장
                     - IDENTITY 전략이 persist() 때 쿼리를 날려서 ID 값을 가져오는것과는 다르게 실제 commit() 할때 쿼리를 날림
+                - DB 시퀀스의 특징
+                    - 시퀀스는 row 단위가 아니라 객체 단위라 다른 트랜잭션 끼리 충돌이 거의 없다.
+                    - AUTO_INCREMENT 보다 성능이 더 좋을 수 있다. -> AUTO_INCREMENT 는 테이블 insert 시점에 락을 유도할 수 있지만 시퀀스는 별도로 관리된다.
+                - 분산 환경에서도 유리
+                    - 시퀀스는 db 자체가 정수 생성 규칙을 책임지므로 다중 서버 환경에서도 충돌 위험 없음
 
             - TABLE : 키 생성용 테이블 사용, 모든 DB에서 사용, @TableGenerator(name="", table="", pkColumnValue="", allocationSize = 1, initialValue=0) 필요
                 - 데이터베이스 시퀀스를 흉내내며 키 생성 전용 테이블을 하나 만들어서 관리하는 전략으로 모든 데이터베이스에 적용이 가능해진다.
