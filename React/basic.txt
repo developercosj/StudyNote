@@ -19,4 +19,28 @@
 4. React Router
 
 
+* React 는 SPA 이고 Spring Security 의 formLogin 은 SSR 기반이다.
+렌더링 방식과 인증 흐름이 서로 맞지 않아서 충돌이 생기고 개발이 매우 번거로워진다.
+SPA 는 페이지 리로드 없이 자체적으로 화면을 관리함
+formLogin 은 전통적인 서버 템플릿 기반 흐름을 강하게 전제로 한다.
+
+JWT 는 서버가 세션을 기억하지 않아도 되는 구조
+- 서버 여러 대 띄워도 세션 공유 필요 없음
+- 모바일 앱, React Native, Flutter, 웹 등 모든 클라이언트에서 동일한 방식으로 동작
+- 쿠키 대신 로컬스토리지/메모리에서 관리가능
+
+React 는 모든 요청을 Axios 또는 fetch 로 보내서 토큰을 쉽게 헤더에 넣기가 가능하다.
+Spring Security formLogin 은 서버 렌더링 상황일 때만 적합
+
+React 처럼 SPA 에서는 302 Redirect + HTMP 렌더링이 문제가 된다.
+
+성공하여 /home 으로 redirect, 실패하여 error 페이지로 redirect 를 위해 서버에서 HTML 페이지를 렌더링해 보내는 구조를 React 는 맞지 않는다.
+React Router 가 관리하는 SPA URL 과 서버 redirect 는 완전 충돌 -> 로그인 성공/실패 처리가 React 안에서 제어되지 않음
+
+세션 기반은 CSRF 방어가 필수이다.
+Spring Security 는 기본적으로 CSRF 토큰을 폼 hidden input 으로 JSP/Thymeleaf 에 넣어서 처리한다.
+React 는 HTML form 을 서버에서 렌더링하지 않기 떄문에 CSRF 토큰을 받거나 갱신하는 매커니즘을 직접 구현해야 한다.
+
+React 는 페이지 이동을 클라이언트가 담당하는데 formLogin 은 서버가 담당하여 맞지 않음
+
 
