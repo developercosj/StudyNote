@@ -303,3 +303,16 @@ SecurityContext에 Authentication 저장
 
 
 
+## 
+
+React (프론트엔드)
+- 로그인 폼에서 사용자 입력(아이디/비밀번호) -> API 호출
+- 성공시 JWT 토큰을 로컬 스토리지나 쿠키에 저장 
+- 이후 요청 시 Authorization: Bearer <token> 헤더 추가
+
+Spring Boot (백엔드)
+- Spring Security 설정
+- 로그인 요청 처리 -> JWT 발급 
+- JWT 검증 필터 추가 -> 인증된 사용자만 접근 가능 
+
+
