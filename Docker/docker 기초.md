@@ -119,4 +119,160 @@ separate your application from your infrastructure
     3. docker-compose.yml 내부의 직접 입력된 값 
     -> compose.yml 과 같은 폴더에 .env 파일만 있으면 자동으로 적용됨 
 
-    
+
+17. Dockerfile
+
+Dockerfile 만 쓸때 
+- 앱 하나만 컨테이너로 만들때 
+- CI/CD 에서 이미지 빌드할때 
+
+
+
+Dockerfile 
+- 이미지 설계도 
+- Docker 자체 전용 문법이라 별도 확장자 불필요 
+docker-composel.yml 
+- 컨테이너 실행 설정 
+
+
+
+
+전체 흐름 
+로컬 -> Docker 이미지 빌드 -> GCP 서버에 올려서 실행 
+
+1. Dockerfile 작성 
+2. 로컬에서 Docker 이미지 빌드 & 테스트 
+# 이미지 빌드
+docker build -t my-spring-app .
+
+# 로컬에서 테스트 실행
+docker run -p 8080:8080 my-spring-app
+3. GCP 서버로 이미지 전달 
+3-1. Docker Hub 이용 
+# 로컬에서
+docker tag my-spring-app 도커허브아이디/my-spring-app:latest
+docker push 도커허브아이디/my-spring-app:latest
+
+# GCP 서버에서
+docker pull 도커허브아이디/my-spring-app:latest
+docker run -d -p 8080:8080 도커허브아이디/my-spring-app:latest
+
+3-2. GCP Artifact Registry 이용 (GCP 정석)
+
+# 로컬에서
+docker tag my-spring-app asia-northeast3-docker.pkg.dev/[프로젝트ID]/[저장소명]/my-spring-app:latest
+docker push asia-northeast3-docker.pkg.dev/...
+
+# GCP 서버에서
+docker pull asia-northeast3-docker.pkg.dev/...
+docker run -d -p 8080:8080 ...
+
+4. GCP 서버에 Docker 설치 
+# GCP VM SSH 접속 후
+sudo apt-get update
+sudo apt-get install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# sudo 없이 docker 쓰려면
+sudo usermod -aG docker $USER
+# 로그아웃 후 재접속
+
+
+유용한 Docker 명령어 
+
+docker ps                         # 실행 중인 컨테이너 확인
+docker logs [컨테이너ID]           # 로그 확인
+docker stop [컨테이너ID]           # 중지
+docker rm [컨테이너ID]             # 삭제
+docker run -d ...                 # 백그라운드 실행 (-d 옵션)
+
+
+
+# Docker 의 전체 구조 
+2단계(멀티 스테이지)로 나뉜다. 
+1단계 (Builder) : 소스코드 -> JAR 파일로 빌드 
+2단계 (runtime) : JAR 파일만 가져와서 실행 
+
+빌드도구(Gradle, JDK 등)는 빌드할 때만 필요하고 실제 서버 실행 시엔 불필요하다. 
+2단계로 나누면 최종 이미지 용량이 훨씬 작아진다. 
+
+
+# 예시로 파일 알아보기 
+
+
+## 1단계: Build Stage
+
+1-1.FROM gradle:8.12-jdk21 AS builder
+Gradle + JDK 12 이 설치된 환경을 베이스로 사용. builder 라고 이름 붙임
+1-2. WORKDIR /app
+컨테이너 안에서 작업할 디렉토리를 /app 으로 지정 (cd /app 과 같은 효과)
+Docker 컨테이너는 독립된 가상 리눅스 환경입니다. 
+그 가상환경 안에서 앞으로 작업할 디렉토리를 /app 입니다라고 지정하는 것 
+
+1-3. COPY build.gradle.kts settings.gradle.kts gradle.properties ./
+   COPY gradle ./gradle
+로컬의 Gradle 설정 파일들을 컨테이너로 복사 
+
+1-4. RUN gradle dependencies --no-daemon --quiet
+build.gradle.kts에 정의된 라이브러리들을 미리 다운로드.
+
+1-5. COPY src ./src
+   RUN gradle bootJar --no-daemon -x test
+실제 소스코드를 복사한 뒤 빌드. -x test는 테스트 실행을 건너뜀.
+결과물로 /app/build/libs/aify-1.0.0.jar 같은 JAR 파일이 생성됨.
+
+
+## 2단계: Run Stage
+
+2-1.FROM eclipse-temurin:21-jre-jammy
+JRE(실행 전용, JDK 아님)만 있는 가벼운 이미지를 베이스로 사용.
+1단계의 Gradle, JDK 컴파일러 등은 여기엔 없음 → 이미지가 가벼워짐.
+
+2-2.RUN groupadd -r aify && useradd -r -g aify aify
+보안을 위해 aify라는 전용 사용자 계정 생성.
+기본적으로 Docker는 root로 실행되는데, root로 서버를 돌리면 보안상 위험함.
+
+2-3. COPY --from=builder /app/build/libs/*.jar app.jar
+1단계(builder) 에서 만든 JAR 파일만 가져옴.
+소스코드, Gradle 등은 가져오지 않음.
+
+2-4. RUN chown aify:aify app.jar
+USER aify
+jar 파일 소유자를 aify 유저로 변경하고 이후 명령을 aify 유저로 실행 
+
+2-5. ENV TZ=Asia/Seoul 
+서버 타임존을 한국 시간으로 설정 (application.yml 설정과 맞춤) 
+
+2-6. EXPOSE 8080
+이 컨테이너가 8080 포트를 사용한다고 선언. (실제로 포트를 여는 건 docker run 시 -p 옵션)
+
+2-7. ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
+컨테이너가 시작될 때 실행할 명령어.
+java -jar app.jar와 동일. -Djava.security.egd=...는 난수 생성 속도를 높여 서버 시작 속도를 개선하는 옵션.
+
+
+
+*** 참고 
+EXPOSE 8080 
+EXPOSE 는 실제로 포트를 연느 게 아니라 이 컨테이너는 8080 포트를 쓸 예정이에요 라고 문서화하는 선언이다. 
+실제로 포트를 열러면 docker run 할때 -p 옵션이 필요하다 
+
+내 PC (호스트)              컨테이너 내부
+:9090          ←→         :8080
+
+docker run -p 9090:8080 aify-backend
+#              ↑     ↑
+#           내 PC   컨테이너
+
+# 보통은 같은 포트로 맞춰서 씁니다
+docker run -p 8080:8080 aify-backend
+
+EXPOSE 8080	"나는 8080 쓸 거야" 선언만 함 (실제로 열지 않음)
+-p 8080:8080	실제로 포트를 연결함
+EXPOSE 없이 -p만 써도 동작은 하지만, 다른 개발자가 Dockerfile을 봤을 때 어떤 포트를 쓰는지 바로 알 수 있도록 관습적으로 작성합니다.
+
+
+
+
+
