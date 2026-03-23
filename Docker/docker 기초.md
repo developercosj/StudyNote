@@ -273,6 +273,222 @@ EXPOSE 8080	"나는 8080 쓸 거야" 선언만 함 (실제로 열지 않음)
 EXPOSE 없이 -p만 써도 동작은 하지만, 다른 개발자가 Dockerfile을 봤을 때 어떤 포트를 쓰는지 바로 알 수 있도록 관습적으로 작성합니다.
 
 
+# 로컬에서 실행하기 
+
+STEP1. 이미지 빌드 
+1. docker build -t my-spring-app .
+-> my-spring-app : 이미지 이름 지정 가능 (원하는 이름으로 바꿔도 됨)
+. : 현재 디렉토리의 Dockerfile 사용 
+Docker 엔진이 이미지를 자체 저장소에 보관한다.
+   Mac 기준으로는 ~/Library/Containers/com.docker.docker/ 같은 곳에 저장되는데, 직접 건드릴 일은 없다. 
+
+2. docker images 
+이미지 목록을 확인할 수 있다. 
+
+
+3. docker run -d -p 8080:8080 --name my-app my-spring-app 
+실제로 실행해보기 
+
+4. 실행 후 로그 확인하기 
+
+
+# GCP 에서 실행하기 
+Cloud Run : 컨테이너 그대로 배포, 서버리스, 소규모에 적합
+GKE (Kubernetes) : 어려움, 대규모, 마이크로서비스에 적합
+Compute Entine 보통 : VM 에 직접 설치, 가장 자유도 높음 
+
+
+Cloud Run 기준 큰 흐름 
+
+1. GCP 프로젝트 생성
+2. Docker 이미지를 Artifact Registry 에 push 
+3. Cloud Run 에 배포 
+
+
+gcloud 란 
+Google Cloud SDK 의 CLI (커멘드라인 인터페이스)로서 터미널에서 GCP 를 조작할 수 있는 도구 
+ex) Docker 이미지를 GCP 에 올리기, Cloud RUn 에 배포하기, GCP 리소스 관리하기 등의 작업들을 GCP 웹 콘솔에서 클릭하는 대신 터미널 명령어로 처리 
 
 
 
+. gcloud init 완료 (지금 진행중)
+↓
+2. Artifact Registry 생성 (Docker 이미지 저장소)
+   ↓
+3. Docker 이미지 빌드 & push
+   ↓
+4. Cloud Run 배포
+
+
+# 이미지에 GCP 주소로 태그를 붙임
+docker tag my-app asia-northeast3-docker.pkg.dev/aify-backend-dev/aify/my-app:latest
+
+# GCP Artifact Registry에 push
+docker push asia-northeast3-docker.pkg.dev/aify-backend-dev/aify/my-app:latest
+
+# Cloud Run에 그 이미지 주소를 지정해서 배포
+gcloud run deploy my-app --image asia-northeast3-docker.pkg.dev/aify-backend-dev/aify/my-app:latest
+
+# 전체 재설정
+gcloud init
+
+# 프로젝트만 변경
+gcloud config set project 프로젝트명
+
+# 계정만 변경
+gcloud config set account 이메일
+
+# 리전만 변경
+gcloud config set run/region asia-northeast3
+
+# 현재 설정 확인
+gcloud config list
+
+
+
+aify-backend-dev (프로젝트)
+└── Artifact Registry (서비스)
+└── aify (저장소) ← 지금 만드는 것
+├── my-app:v1.0
+├── my-app:v1.1
+└── my-app:latest
+
+프로젝트 = 전체 GCP 리소스를 담는 큰 그릇
+Artifact Registry = Docker 이미지 전용 저장 서비스
+저장소(repository) = 그 안에서 이미지를 실제로 보관하는 폴더
+
+내 PC (이미지 빌드)
+↓ push
+Artifact Registry (이미지 저장)
+↓ pull
+Cloud Run (이미지로 서버 실행)
+
+
+# GCP 에 올려보기
+docker build -t aify-backend:latest .
+
+GCP Cloud Run 에는 docker-compose 가 필요가 없다.
+docker-compose는 주로 Compute Engine(VM) 에 올릴 때 사용합니다.
+
+흐름 : docker build -> docker push (Artifactt Registry) -> gcloud run deploy 
+
+1. Cloud Run 
+- 컨테이너를 그대로 올리는 서비스 
+- GCP가 서버 관리를 다 해줌 (OS, 보안패치, 스케일링 등)
+- 요청이 들어오면 컨테이너 실행 -> 없으면 꺼짐
+- 설정 거의 없이 바로 배포 가능
+2. Compute Engine 
+- VM(가상 서버)을 빌려서 그 위에 도커 실행
+- 서버 직접 관리(OS 설치, 보안 설정, 도커 설치 등)
+- VM 이 켜져 있는 동안 계속 실행 
+
+
+
+* 맥, 윈도우 환경에서는 각각 빌드하는것이 x 명령어를 써야 할때가 있다. 
+
+지금까지 온 단계:
+
+✅ 1. gcloud 로그인
+✅ 2. 필요한 API 활성화
+✅ 3. Artifact Registry 레포 확인
+✅ 4. Docker 인증 설정
+✅ 5. 이미지 빌드 (aify-backend:test)
+✅ 6. GCP 태그 붙이기
+✅ 7. docker push (GCP에 업로드)
+✅ 8. Cloud Run 배포 (gcloud run deploy)
+
+
+GCP 클라우드에 올리기 
+
+0. 현재 어떤 프로젝트로 세팅되어 있는지 알기
+   gcloud config get-value project
+
+1. 클라우드 ID 알기 
+gcloud projects list 로 조회하기 
+
+
+2. gcloud 로그인 & 프로젝트 설정
+    gcloud auth login
+    gcloud config set project hyperlounge-dev
+
+3. 필요한 API 활성화 (처음 한 번만으로 프로젝트 전체에 적용하며, 중복실행에도 에러가 없어)
+   gcloud services enable artifactregistry.googleapis.com run.googleapis.com
+
+4.  Artifact Registry 레포 생성 (처음 한 번만)
+    gcloud artifacts repositories create aify-backend \
+    --repository-format=docker \
+    --location=asia-northeast3
+
+    * 다른 팀원이 만들었을 수도 있어 밑에 artifacts repositories list 에 있으면 된거야 
+      gcloud artifacts repositories list --location=asia-northeast3
+    Artifact Registry 레포는 이미지를 저장하는 GCP 내 저장소다. 
+    
+GCP 프로젝트 (hyperlounge-dev)
+Artifact Registry 레포 : aifybusiness-dev 
+
+
+5. gcloud auth configure-docker asia-northeast3-docker.pkg.dev
+Docker 는 기본적으로 Docker Hub 에만 이미지를 푸시/풀 할 수 있다.
+GCP Artifact Registry 는 외부 저장소라서 이 주소로 갈때는 GCP 인증을 쓰라고 로컬 Docker 에 등록해주는 작업
+Docker 푸시할 때 자동으로 gcloud 인증을 사용하도록 로컬에 등록
+
+
+값	의미	왜 이 값?
+asia-northeast3	서울 리전	한국 서비스라서
+docker	저장소 타입	도커 이미지 저장
+pkg.dev	Artifact Registry 도메인	GCP 고정값
+aifybusiness-dev	프로젝트 ID	우리 프로젝트
+
+
+6. 이미지 빌드
+docker build -t aify-backend:test .
+
+[+] Building 346.3s (20/20) FINISHED 나오면 잘 끝난거고, 
+지금 로컬에 이미지가 있는 상태야 ! 
+
+
+7. GCP 주소 형식의 별명(태그) 붙이기 
+아까 빌드할때 붙인거는 로컬용 태그다. GCP 에 푸시하려면 gcp 주소 형식의 태그가 별도로 필요하다. 
+Docker 는 태그를 보고 어디에 푸시할지 결정하기 때문에 GCP 주소 형식으로 태그를 추가해줘야 한다. 
+
+docker tag aify-backend:test asia-northeast3-docker.pkg.dev/hyperlounge-dev/aifybusiness-dev/aify-backend:test
+
+
+명령어 설명
+docker tag aify-backend:test \
+asia-northeast3-docker.pkg.dev/hyperlounge-dev/aifybusiness-dev/aify-backend:test
+#                                 └── 프로젝트ID   └── 레포이름      └── 이미지이름:태그
+
+
+*asia-northeast3-docker.pkg.dev : 서울 Artifact Registry 주소 
+
+
+
+GCP 프로젝트 (hyperlounge-dev)
+└── Artifact Registry (저장소 이름, 예: aifybusiness-dev)
+└── 패키지 (= 도커 이미지 이름, 예: aify-backend)
+└── 태그/버전 (예: latest, v1.0, v1.1)
+
+
+이미지 = 설계도 (정적)
+컨테이너 = 이미지를 실행한 인스턴스 (동적)
+
+
+
+* 도커 이미지 확인 명령어 : docker images | grep aify-backend  / PowerShell : docker images 
+
+
+
+8. GCP 에 이미지 푸시
+   docker push asia-northeast3-docker.pkg.dev/hyperlounge-dev/aifybusiness-dev/aify-backend:test
+
+
+
+9. Cloud Run 배포 
+
+gcloud run deploy aify-backend \
+--image asia-northeast3-docker.pkg.dev/hyperlounge-dev/aifybusiness-dev/aify-backend:test \
+--region asia-northeast3 \
+--platform managed \
+--allow-unauthenticated
+****
