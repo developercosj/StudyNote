@@ -492,3 +492,26 @@ gcloud run deploy aify-backend \
 --platform managed \
 --allow-unauthenticated
 ****
+
+
+
+
+
+# yaml 파일 (규약)
+리소스가 뭐고, location
+서버를 띄우라는 명령 
+도커이미지 경로가 들어감
+레플리카 설정도 가능 
+DB : Cloud SQL 
+
+프록시 서버를 하나 내부적으로 띄우고, 
+**container** -> Cloud SQL 프록시 정의로 yaml 에 넣어서 
+
+
+Artifact Registry: 도커 이미지 저장소
+Cloud SQL : 관리형 데이터베이스 (PostgreSQL, MySQL 등)
+Cloud Run : 컨테이너 실행 서비스
+
+
+
+
