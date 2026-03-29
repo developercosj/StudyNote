@@ -118,3 +118,53 @@ Indexing API 또는 기본 제공 커넥터를 통해 외부 데이터를 색인
 
 
 
+# Cloud Search 
+
+- Gemini for Google Workspace"와 연동
+- Gemini for Workspace 플랜 사용어드민 설정만으로 연동 가능Gemini API + Cloud Search API직접 개발해서 커스텀 연동
+- 방법 
+Gemini for Workspace 플랜 사용어드민 설정만으로 연동 가능
+Gemini API + Cloud Search API직접 개발해서 커스텀 연동
+
+
+# Google Cloud AI Engine 
+구글 클라우드는 컴퓨팅 서버(Cloud Run, Compute Engine), 저장소(데이터) (Cloud Storage, BigQuery), 뿐만 아니라 AI/ML 서비스 (구글 AI 기술을 가져다 쓰는것 : Vertax AI, Gemini API, Cloud Search) 도 지원한다. 
+- Gemini API : AI 모델, Vertex AI (Agent 만들기), Cloud Search (검색), Cloud Run (서버 배포)
+
+- Google Cloud 에서 AI Agent 를 올리는 주요 서비스
+1. Vertex AI Agent Builder 
+역할 : AI Agent 를 만들고 배포하는 플랫폼 
+특징 : 코드 없이도 Agent 만들기 가능 
+연동 : Cloud Search, Gemini, 외부 API 연결 가능
+사용 예: 챗봇, 검색 Agent, 자동화 Agent 
+
+2. Vertex AI 
+역할 : ML 모델 학습, 배포, 관리 
+특징 : 커스텀 모델 올리기 가능
+연동 : Gemini API, Cloud Search 등 
+
+3. Cloud Run Agent 를 서버에 올릴때 사용 
+역할 : 내가 만든 Python 코드를 서버에 배포
+사용 예 : Gemini API 호출하는 서버 올리기 
+
+
+
+
+
+사용자 질문
+↓
+Agent (질문 이해)
+↓
+Cloud Search로 관련 문서 먼저 검색
+↓
+검색 결과 + 질문을 Gemini API에 전달
+↓
+Gemini가 검색 결과를 바탕으로 답변 생성
+↓
+사용자에게 전달
+
+
+RAG (Retrieval Augmented Generation)
+- Retrieval : 검색해서 가져오기 (Cloud Search)
+- Augmented : 검색 결과로 보강하기
+- Generation : AI가 답변 생성 (Gemini)
