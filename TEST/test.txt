@@ -42,6 +42,18 @@ Unit tests
     - GWT 패턴 (given-when-then 행위 주석으로 구분)
 
 
-
-
 출처 : https://tech.inflab.com/20230404-test-code/#%EB%84%A4%EB%B2%88%EC%A7%B8-%EC%A2%8B%EC%9D%80-%EC%BD%94%EB%93%9C%EB%8A%94-%ED%85%8C%EC%8A%A4%ED%8A%B8%ED%95%98%EA%B8%B0-%EC%89%BD%EB%8B%A4
+
+
+# Kotlin 테스트 생성
+
+- 테스트는 동일한 패키지 구조로 생성한다.
+장점
+    - 패키지 접근 권한 : 테스트가 같은 패키지에 있어서 internal 접근 제어자를 가진 멤버도 테스트 가능
+    - 가독성
+
+
+
+
+
+
