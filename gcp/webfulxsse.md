@@ -165,5 +165,8 @@ Context ◀──────────────────
 (구독 시점에 역방향으로 전파)
 
 
+# Reactor Context 랑 TenantContext 저장소의 역할 
 
+Reactor Context  →  파이프라인용 저장소 (스레드 바뀌어도 유지)
+TenantContext    →  애플리케이션용 저장소 (DB 접근할 때 읽음, ThreadLocal 기반)
 
