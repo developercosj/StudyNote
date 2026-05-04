@@ -20,7 +20,7 @@ ID/PW 입력 → 서버에서 해시 비교 → 세션 쿠키 발급
 # 토큰 방식 
 
 1. JWT (JSON Web Token)
-   로그인 성공 시 서버가 서명된 JSON 토큰을 발급. 서버는 세션을 저장하지 않아도 됨.
+   로그인 성공 시 서버가 서명된 JSON 토큰을 발급. 서버는 세션을 저장 하지 않아도 됨.
 구조 : Header.Payload.Signature 3파트로 구성
 검증 : 서버 개인키로 서명 → 공개키로 검증. DB 조회 불필요
 저장 : localStorage 또는 HttpOnly 쿠키 (후자가 더 안전)
