@@ -6,3 +6,47 @@
     - 예외처리와 달리 조건이 True 임을 보증하기 위해서 사용
     - 이 조건이 참일때 코드에 대한 보장의 의미
     - 이 조건이 거짓이면 AssertionError 발생
+
+
+
+# 파이썬 프로젝트 분석
+
+pyproject.toml : 프로젝트 설정 파일 (코틀린의 build.gradle.kts)
+main.py : FastAPI/파이썬 앱의 진입점으로 관례적으로 사용
+config.py : 설정 관련 코드 모아두는 관례
+__init__.py 파일 : 이 파일이 있어야 이 파일이 있는 폴더가 패키지로 인식하게 된다.
+uv.lock : uv 가 자동으로 생성하고 읽는 파일 이름 -> 버전 정해주며, 서버, 로컬등 모두 동일한 환경을 보장
+    - 다른 패키지를 쓰면 각각 쓰는 파일 이름이 달라짐 : poetry.lock, 	requirements.txt (관례), package-lock.json 등으로 사용
+    - 코틀린의 gradle.lockfile 와 같은 역할
+
+
+- await 는 호출하는 함수가 async dev 로 정의되었을때 붙여야 한다.
+
+
+chat_router = APIRouter(prefix="/chat") -> 이 변수를 사용하면 앞에 자동으로 prefix 경로가 붙게 된다.
+tool_call_schedule: NotRequired[deque[ToolNamesEnum]]
+    - NotRequired[] : 코틀린의 nullable 과 같고, 없어도 된다는 뜻
+    - deque (덱) : 앞에서 하나씩 꺼내는 작업에서 빠름 (포인터만 이동) -> 앞에서 하나씩 꺼내는 작업이 반복되면 List 보다 deque 가 적합
+
+
+# 파이썬 코드 분석
+@asynccontextmanager : 시작할 때 준비하고, 끝날 때 정리 하는 패턴을 만드는 데코레이터
+@ (Decorator) : 파이썬에서는 함수를 감싸서 동작을 바꾸는 역할을 하며 런타임시점에 실행을 한다.
+-> 파이썬 데코레이터는 함수를 감싸는 함수이다.
+ex1)
+    @asynccontextmanager
+    async def lifespan(app):
+    아래와 동일
+    async def lifespan(app):
+        ...
+
+    lifespan = asynccontextmanager(lifespan)  # 함수를 감싸서 새로운 함수로 교체
+
+ex2)
+    @app.get("/path")      # FastAPI - "이 함수를 GET 엔드포인트로 등록해라"
+
+
+
+파이썬은 함수가 일급 객체(first-class object) 라서 값처럼 자유롭게 다룰 수 있다. -> 파이썬이 데코레이터를 자연스럽게 지원한다.
+
+
