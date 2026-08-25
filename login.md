@@ -87,3 +87,57 @@ Keycloak이 "그럼 우리 서비스에서 이 사람은 admin이야" 를 결정
 앱을 처음 생성할때 Google Cloud Vertex AI Search 에서 Gemini Enterprise 앱을 새로 만드는 과정 
 
 
+2. 핵심 구성요소
+   용어역할예시
+- IdP (Identity Provider) : 신원을 증명해주는 주체 
+Okta, Azure AD, Google Workspace
+- SP (Service Provider) : 서비스를 제공하는 앱
+Slack, GitHub, Claude, Notion
+- Token/Assertion : 신원 증명서 
+(디지털)SAML Assertion, JWT Token
+
+
+# 주요 IdP 종류
+☁️ Microsoft Azure AD (Entra ID)
+
+귀사처럼 Microsoft 365 사용 기업에서 가장 많이 사용
+Windows 환경과 깊이 통합
+@회사도메인.com 계정으로 로그인
+
+🔐 Okta
+
+전용 IdP 서비스 중 가장 유명
+어떤 앱이든 연동 쉬움
+중소~대기업에서 광범위하게 사용
+
+🟡 Google Workspace
+
+Google 계정(@회사.com)이 IdP 역할
+Google 생태계 중심 기업에서 사용
+
+기타
+
+Ping Identity, OneLogin, Auth0 등
+
+SSO 동작 프로토콜 (90% 이상 : SAML 2.0, OIDC, OAuth 2.0)
+- SAML 2.0 
+  - XML 기반, 무겁지만 안정적 
+- OAuth 2.0 + OIDC 
+  - 인가 프로토콜 
+  - 이 앱이 내 데이터에 접근해도 돼 허가하는 용도 
+- OIDC (OpenID Connect)
+  - OAuth 2.0 위에 인증 레이어를 얹은 것 
+  - OAuth 2.0 만으로 누구인지 알 수 없어서 만들어짐 
+  - 현대 웹/모바일의 사실상 표준 
+- LDAP / Active Directory 
+  - 가장 오래된 방식
+  - 사내 네트워크(온프레미스)환경에서 사용 
+- Kerberos 
+  - 주로 Windows 도메인 환경 내부에서 사용 
+- WS-Federation
+  - Microsoft 생태계에서 주로 사용
+  - SAML 과 유사하지만 MS 전용
+- RADIUS
+  - 주로 네트워크 장비 인증에 사용
+  - VPN, WI-FI 접속 인증
+  - 회사 VPN 로그인 
