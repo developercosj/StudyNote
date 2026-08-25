@@ -55,3 +55,44 @@ isinstance(value, str)
 #          ^^^^^  ^^^
 #          값     타입
 # "value 가 str(문자열) 타입인지 파악"
+
+
+
+
+# ASGI
+
+1. 인터넷 요청
+2. [ASGI 서버] uvicorn, daphne 같은 프로그램이 여기 해당
+3. Django 가 URL 보고 적절한 뷰로 연결
+4. 응답 반환
+
+** ASCI 서버가 application 이라는 이름의 객체를 찾아서 요청을 넘겨줍니다.
+그래서 변수이름이 반드시 application 이어야 한다.
+
+
+# WSGI vs ASGI (안내데스크 같은 역할)
+Django 프로젝트에
+- wsgi.py : WSGI (구, 동기방식)
+- asgi.py : ASGI (신, 비동기방식)
+
+
+# 변수 호출
+파이썬에서는 클래스에 __call__ 메서드를 정의하면 변수처럼 생겼어도 함수처럼 호출가능
+
+application = get_asgi_application()
+
+await application(scope, receive, send) 이 코드는
+await application.__call__(scope, receive, send) 이것과 완전히 동일하다.
+
+
+# Django REST Framework 기본 에러 헨들러 : exception_handler(exc, context)
+알려진 에러면 response 객체 반환, 모르는 에러면 None 반환
+if isinstance(a, B): a 가 B 클래스의 인스턴스인지 확인
+
+DRF : Django REST Framework
+
+
+
+
+
+
