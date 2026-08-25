@@ -183,3 +183,28 @@ IP도 포트도 없습니다. 그냥 "이 리전의 이 Cloud Run 서비스" 라
 즉 NEG는 어댑터 역할입니다 — 부하 분산기 쪽은 "엔드포인트 그룹"을 기대하고, Cloud Run 쪽은 이름으로 식별되는 관리형 서비스인데, 그 둘을 이어주는 것
 
 
+# capacityScaler 
+
+Backend 가 받을 수 있는 용량에 곱하는 계수(0.0 ~ 1.0) 입니다. 
+실효 용량 = 목표 용량(balancingMode 기준) * capacityScaler 
+
+1.0 실효 용량 100% 정상적으로 트래픽 분담, 0.5 실효 용량 50% 절반만 (카나리 배포에 활용 가능), 0 받을 용량이 없음 -> LB 가 다른 backend 로 보낸다. 
+LB 의 동작 원리가 용량이 찬 bacnend 는 다른 곳으로 넘긴다(spillover) capacityScaler=0 은 그 backend 를 영구히 용량이 찬 상태로 만드는 것이고, 그래서 모든 신규 요청이 나머지 backend 로 흘러갑니다. 
+방화벽처럼 막는 게 아니라 라우팅 판단을 바꾸는 것이라서 즉시 반영되고 부작용이 없다. 
+
+
+# 파이프라인에서 쓰이는 흐름 
+
+capacity-scaler=0     ← 신규 요청 차단 (즉시)
+↓ 60초 대기          ← 진행 중 요청은 connectionDraining이 마무리시킴
+gcs-sync + restart    ← 이때 죽여도 영향받는 요청이 없음
+↓
+capacity-scaler=1.0   ← 트래픽 복구
+↓
+LB HEALTHY 확인       ← 실제로 서비스 복귀했는지
+
+
+# connectionDraining
+
+capacity-scaler 이 새 요청을 담당한다면, connectionDraining 은 기존 요청을 담당한다. 
+
